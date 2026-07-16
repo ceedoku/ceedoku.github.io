@@ -1,4 +1,19 @@
+/* ---------------------------
+# Bye Bye Bugs
 
+## Chorus:
+    Ain't no lie,
+    bugs go bye bye bye.
+
+    One more fix,
+    one more try.
+    Green tick says
+    it's time to fly.
+
+    It might sound crazy,
+    but it ain't no lie,
+    bugs go bye bye bye.
+--------------------------- */
         :root {
     color-scheme: dark;
           --bg: #f4f7fb;
@@ -41,10 +56,13 @@
 	background: color-mix(in srgb, var(--delete-save) 60%, var(--surface-2)) !important
 }
 .cancel-button:hover {
-	background: color-mix(in srgb, var(--muted) 70%, var(--surface-2)) !important
+	background: color-mix(in srgb, var(--surface-2) 70%, var(--surface)) !important
 }
 .cancel-button:active {
-	background: color-mix(in srgb, var(--muted) 60%, var(--surface-2)) !important
+	background: color-mix(in srgb, var(--surface-2) 60%, var(--surface)) !important
+}
+.cancel-button {
+	background: var(--surface-2) !important
 }
 #title {
 font-size: clamp(1.20rem, 5vw, 2.5rem)
@@ -1162,8 +1180,7 @@ body.light .whatdoievencallthis {
           display: grid;
           gap: 4px;
         }
-//aaaah
-			button {
+		* {
     -webkit-tap-highlight-color: transparent;
     }
         .erase-button[aria-pressed="true"]:hover {
@@ -1190,7 +1207,7 @@ body.light .whatdoievencallthis {
     
         .menu-item[aria-selected="true"] {
           color: var(--blue);
-          background: var(--surface-2);;
+          background: transparent;
         }
     #timer {
     cursor: default;
@@ -1339,9 +1356,9 @@ body.light .whatdoievencallthis {
 	}
 	
 	.foo {
-		top: 13px !important;
-		width: 95px !important;
-		right: 22px !important
+		top: 10px !important;
+		width: 48px !important;
+		height: 48px !important;
 	}
 	.difficulty-menu {
 		top: 100%;
@@ -1420,15 +1437,9 @@ body.light .whatdoievencallthis {
 		}
 	#pause-btn {
 		width: 50px;
-		transform: translatey(-5px)translatex(0px)
 		}
 	.bar {
 	width: 45%
-	}
-	#pause-btn {
-	width: 45% !important;
-	height: 42.75 !important;
-	padding: 0 5 0 5
 	}
 	.sidebar{
 		border-top-right-radius: 34px;
@@ -1469,6 +1480,10 @@ body.light .whatdoievencallthis {
     	border-radius: 6px
           }
 			.whatdoievencallthis {
-		width: 100%
+		width: 100
+			}
+.sidebar {
+	max-height: unset
+}
 	}
   
