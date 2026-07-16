@@ -1,3 +1,7 @@
+- ### Version 2.3.4:
+  > #### Changes:
+  >> ##### Added:
+  >>> - Added 'Holes' after the number of holes for clarity (Example: '44' becomes '44 Holes').
 - ### Version 2.3.3:
   > #### Changes:
   >> ##### Fixed:
