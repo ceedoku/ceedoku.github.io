@@ -1,3 +1,11 @@
+- ### Version 2.3.3:
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - Fixed the blue tap highlight box existing on mobile.
+  >>> - Fixed the hint button being in the wrong place on mobile.
+  >>> - Fixed the sidebar not being the correct height on mobile.
+  >> ##### Changed:
+  >>> - Changed the color of the cancel button to correctly NOT match with the disabled button color (so people don't get confused).
 - ### Version 2.3.2:
   > #### Changes:
   >> ##### Added:
