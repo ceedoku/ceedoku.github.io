@@ -1,3 +1,8 @@
+- ### Version 2.4.0:
+  > #### Changes:
+  >> ##### Added:
+  >>> - Added hover tooltips some for difficulty buttons.
+  >>> - Added aria labels to those same difficulty buttons for accessibility.
 - ### Version 2.3.4:
   > #### Changes:
   >> ##### Added:
