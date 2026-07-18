@@ -1,3 +1,7 @@
+- ### Version 2.4.3:
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - Fixed a bug where a missing element id was causing the game to creation or continuation of a game.
 - ### Version 2.4.2:
   > #### Changes:
   >> ##### Added:
