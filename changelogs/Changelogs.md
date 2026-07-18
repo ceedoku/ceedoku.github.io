@@ -1,3 +1,8 @@
+- ### Version 4.0.1:
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - Fixed the Main Menu button in the pause menu being positioned outside of the pause menu card.
+  >>> - Fixed difficulty menus incorrectly showing previously selected difficulties.
 - ### Version 4.0.0:
   > #### Changes:
   >> ##### Added:
