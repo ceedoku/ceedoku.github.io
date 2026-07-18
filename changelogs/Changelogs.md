@@ -8,7 +8,7 @@
   > #### Changes:
   >> ##### Added:
   >>> - Added a difficulty selection screen to the main menu.
-  >> #### Fixed:
+  >> ##### Fixed:
   >>> - New game button hover states on mobile.
   >>> - Cancel button hover states.
 - ### Version 2.4.3:
@@ -99,13 +99,10 @@
   >> ##### Added:
   >>> - Added a save deletion screen.
   >>> - Added save deletion console commands.
-  >>
   >> ##### Removed:
   >>> - Removed unnecessary lines of code.
-  >>
   >> ##### Changed:
   >>> - Changed the styling of disabled buttons.
-  >>
   >> ##### Fixed:
   >>> - Fixed ghost save files.
   >>> - Fixed the Continue Save button not turning grey when there is no save.
