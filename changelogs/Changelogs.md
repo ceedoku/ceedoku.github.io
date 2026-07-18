@@ -1,3 +1,9 @@
+- ### Version 4.0.0:
+  > #### Changes:
+  >> ##### Added:
+  >>> - Added a master difficulty.
+  >>> - Added a extreme difficulty.
+  >>> - Added a impossible difficulty.
 - ### Version 3.0.0:
   > #### Changes:
   >> ##### Added:
