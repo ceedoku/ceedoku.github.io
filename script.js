@@ -18,7 +18,7 @@
 	let runninggame = false	        
               let menuOpen = false;			  
 					  function showmainmenu() {
-
+mainmenu.inert = false
             mainmenu.hidden = false;
         
             requestAnimationFrame(() => {
@@ -389,6 +389,7 @@ function pauseTimer() {
                 for (let i = 0; i < 81; i += 1) {
         
                   const cell = document.createElement("button");
+				  cell.tabIndex = -1;
                   cell.className = "cell";
                   cell.type = "button";
                   cell.dataset.index = String(i);
@@ -632,7 +633,7 @@ if (runninggame){
         }
 				        function hidemainmenu() {
             mainmenu.classList.remove("show");
-        
+        mainmenu.inert = true
 
         }
                 function hidepausescreen() {
