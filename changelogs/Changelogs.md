@@ -1,7 +1,16 @@
+- ### Version 2.4.2:
+  > #### Changes:
+  >> ##### Added:
+  >>> - Added aria labels to the pause menu, win menu, continue menu, deletion confirmation menu and main menu.
+- ### Version 2.4.1:
+  > #### Changes:
+  >> ##### Added:
+  >>> - Added hover tooltips for the rest of the buttons.
+  >>> - Added aria labels to those same buttons for accessibility.
 - ### Version 2.4.0:
   > #### Changes:
   >> ##### Added:
-  >>> - Added hover tooltips some for difficulty buttons.
+  >>> - Added hover tooltips for difficulty buttons.
   >>> - Added aria labels to those same difficulty buttons for accessibility.
 - ### Version 2.3.4:
   > #### Changes:
