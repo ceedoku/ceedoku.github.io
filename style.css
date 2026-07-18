@@ -55,9 +55,6 @@
 .delete-button:active {
 	background: color-mix(in srgb, var(--delete-save) 60%, var(--surface-2)) !important
 }
-.cancel-button {
-	background: var(--surface-2) !important
-}
 #title {
 font-size: clamp(1.20rem, 5vw, 2.5rem)
 }
@@ -969,7 +966,16 @@ body.light .whatdoievencallthis {
           color: var(--text);
           background: var(--surface-2);
         }
-    
+
+.menu-item2[aria-selected=true] {
+	border: 2.5px solid;
+	background: color-mix(in srgb, var(--blue-soft2) 25%, var(--surface-2)) !important;
+}
+.menu-item2[aria-selected=true]:hover {
+	border: 2.5px solid;
+	background: color-mix(in srgb, var(--blue-soft2) 85%, var(--surface-2)) !important;
+	color: var(--blue) !important;
+}
         .hint-button:hover,
         .pencil-button:hover,
         .new-main:hover,
@@ -984,9 +990,12 @@ body.light .whatdoievencallthis {
           background: color-mix(in srgb, var(--blue-soft2) 85%, var(--surface-2));
 	  color: var(--muted);
         }
+body.light .menu-item:hover {
+	color: var(--text) !important
+}
     		.menu-item[aria-selected=true]:hover,
 			    		.menu-item[aria-selected=true]:active {
-          background: color-mix(in srgb, var(--blue-soft2) 65%, var(--surface-2));		
+          background: color-mix(in srgb, var(--blue-soft2) 65%, var(--surface-2)) !important;		
 }		  
         .hint-button:active,
         .pencil-button:active,
