@@ -1,7 +1,7 @@
 - ### Version 3.0.0:
   > #### Changes:
   >> ##### Added:
-  >>> - Added a difficulty selection screen on the main menu.
+  >>> - Added a difficulty selection screen to the main menu.
   >> #### Fixed:
   >>> - New game button hover states on mobile.
   >>> - Cancel button hover states.
