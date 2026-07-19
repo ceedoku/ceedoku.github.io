@@ -1,3 +1,16 @@
+- ### Version 4.1.1:
+  > #### Changes:
+  >> ##### Changed:
+  >>> - Changed the timer to display hours when needed instead of continuing to append minutes.
+  >>> - Changed the card info boxes to fit correctly in Impossible difficulty.
+  >> ##### Added:
+  >>> - Added scrolling to the difficulty selection menu on the main game board in mobile mode, allowing all difficulties to remain accessible.
+  >> ##### Fixed:
+  >>> - Fixed an issue where the Ceedoku logo was positioned too close to the edge of the game box in landscape mode.
+- ### Version 4.1.0:
+  > #### Changes:
+  >> ##### Added:
+  >>> - Added difficulty preference saving.
 - ### Version 4.0.1:
   > #### Changes:
   >> ##### Fixed:
@@ -7,8 +20,8 @@
   > #### Changes:
   >> ##### Added:
   >>> - Added a master difficulty.
-  >>> - Added a extreme difficulty.
-  >>> - Added a impossible difficulty.
+  >>> - Added an extreme difficulty.
+  >>> - Added an impossible difficulty.
 - ### Version 3.0.0:
   > #### Changes:
   >> ##### Added:
@@ -19,7 +32,7 @@
 - ### Version 2.4.3:
   > #### Changes:
   >> ##### Fixed:
-  >>> - Fixed a bug where a missing element id was causing the game to creation or continuation of a game.
+  >>> - Fixed a bug where a missing element id caused the game to crash when creating or continuing a game.
 - ### Version 2.4.2:
   > #### Changes:
   >> ##### Added:
@@ -45,7 +58,7 @@
   >>> - Fixed the hint button being in the wrong place on mobile.
   >>> - Fixed the sidebar not being the correct height on mobile.
   >> ##### Changed:
-  >>> - Changed the color of the cancel button to correctly NOT match with the disabled button color (so people don't get confused).
+  >>> - CChanged the cancel button color so it no longer matches the disabled button color, preventing confusion.
 - ### Version 2.3.2:
   > #### Changes:
   >> ##### Added:
@@ -68,7 +81,7 @@
   >> ##### Changed:
   >>> - Changed the border radius of the main box.
   >>> - Changed the sidebar to correctly set its height.
-  >>> - Changed the hint button to try and use solving strategies over using information the player doesnt have.
+  >>> - Changed the hint button to try and use solving strategies over using information the player doesn't have.
 - ### Version 2.1.5:
   > #### Changes:
   >> ##### Fixed:
@@ -85,7 +98,7 @@
   >> ##### Changed:
   >>> - Changed the stylesheet to be located in a separate file.
   >>> - Changed the script to be located in a separate file.
-  >>> - Changed touchscreen detection to use a script.
+  >>> - Changed touchscreen detection to use JavaScript-based methods for improved accuracy.
 - ### Version 2.1.2:
   > #### Changes:
   >> ##### Fixed:
