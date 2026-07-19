@@ -110,7 +110,6 @@ mainmenu.inert = false
               let notes = [];
               let selected = 40;
               let difficulty = "easy";
-              document.title = `Ceedoku - ${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}`;
               let pencilMode = false;
               let eraseMode = false;
               let mistakes = 0;
@@ -309,9 +308,15 @@ function changemode(forceMode) {
               }
         
               function formatTime(seconds) {
-                const minutes = Math.floor(seconds / 60);
-                const secs = seconds % 60;
-                return `${String(minutes).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+				const hours = Math.floor(seconds / 3600);
+				const minutes = Math.floor(seconds / 60) % 60;
+				const secs = seconds % 60;
+				
+				if (hours > 0) {
+				    return `${hours}:${String(minutes).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+				}
+
+				return `${minutes}:${String(secs).padStart(2, "0")}`;
               }
 
 
@@ -1145,8 +1150,9 @@ function getBoardDistances(startIndex) {
 }
 function checkWin() {
     if (finished) return;
-
+	
     if (values.every((value, index) => value === solution[index])) {
+		localStorage.removeItem("save");
         finished = true;   // <-- FIRST thing inside the win block
 		winpauseTimer()
 		
@@ -1367,20 +1373,24 @@ hidemainmenu();
 	renderBoard()
 }
 
-setInterval(saveGame, 5000);
+setInterval(saveGame, 1000);
 
 function newGame(nextDifficulty = difficulty) {
 	localStorage.setItem("difficulty", difficulty);
     runninggame = true
-    localStorage.removeItem("save");
+	finished = false
+
 
     difficulty = nextDifficulty;
+	if (window.matchMedia("(orientation: landscape)").matches){
+ 		 let scaleValue = difficulty === "impossible" ? "1.2" : "1.3";
+ 		 document.querySelectorAll(".win-stat").forEach(el => el.style.scale = scaleValue);
+	}
 
     const built = makePuzzle(DIFFICULTIES[difficulty].holes);
 
     document.title = `Ceedoku - ${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}`;
-difficultyBadge.textContent = DIFFICULTIES[difficulty].label;
-
+	difficultyBadge.textContent = difficulty.charAt(0).toUpperCase() + difficulty.slice(1)
     solution = built.full;
     puzzle = built.draft;
     values = [...puzzle];	
