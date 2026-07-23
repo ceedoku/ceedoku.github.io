@@ -1,178 +1,193 @@
-- ### Version 4.1.1:
+- ### Version 5.0.0
+  > #### Changes:
+  >> ##### Added:
+  >>> - A loading screen.
+  >>> - Sound effects throughout the game.
+  >>> - A new settings menu.
+  >>> - Hint cooldowns, with Move and Time cooldown types. Hint cooldowns are disabled by default.
+  >>> - Confetti to the win screen.
+  >> ##### Fixed:
+  >>> - A bug where pressing certain keys on the main menu could cause the game to crash.
+  >>> - A bug where deleting a save and going back to the main menu after creating a new game would prevent the save stats menu from being opened.
+  >> ##### Improved:
+  >>> - The crash detector. When a crash is detected, the page title now changes to "Ceedoku - Crashed" in addition to displaying the crash screen.
+  >>> - The Fullscreen button's active state so that the button moves down by one pixel when clicked.
+  >>> - The color of the logo on the main menu in light mode to be less... jarring? It is now dark grey instead of black.
+- ### Version 4.1.1
   > #### Changes:
   >> ##### Changed:
-  >>> - Changed the timer to display hours when needed instead of continuing to append minutes.
-  >>> - Changed the card info boxes to fit correctly in Impossible difficulty.
+  >>> - The timer to display hours when needed instead of continuing to append minutes.
+  >>> - The card info boxes to fit correctly in Impossible difficulty.
   >> ##### Added:
-  >>> - Added scrolling to the difficulty selection menu on the main game board in mobile mode, allowing all difficulties to remain accessible.
+  >>> - Scrolling to the difficulty selection menu on the main game board in mobile mode, allowing all difficulties to remain accessible.
   >> ##### Fixed:
-  >>> - Fixed an issue where the Ceedoku logo was positioned too close to the edge of the game box in landscape mode.
-- ### Version 4.1.0:
+  >>> - An issue where the Ceedoku logo was positioned too close to the edge of the game box in landscape mode.
+- ### Version 4.1.0
   > #### Changes:
   >> ##### Added:
-  >>> - Added difficulty preference saving.
-- ### Version 4.0.1:
+  >>> - Difficulty preference saving.
+- ### Version 4.0.1
   > #### Changes:
   >> ##### Fixed:
-  >>> - Fixed the Main Menu button in the pause menu being positioned outside of the pause menu card.
-  >>> - Fixed difficulty menus incorrectly showing previously selected difficulties.
-- ### Version 4.0.0:
+  >>> - The Main Menu button in the pause menu being positioned outside of the pause menu card.
+  >>> - Difficulty menus incorrectly displaying previously selected difficulties.
+- ### Version 4.0.0
   > #### Changes:
   >> ##### Added:
-  >>> - Added a master difficulty.
-  >>> - Added an extreme difficulty.
-  >>> - Added an impossible difficulty.
-- ### Version 3.0.0:
+  >>> - A Master difficulty.
+  >>> - An Extreme difficulty.
+  >>> - An Impossible difficulty.
+- ### Version 3.0.0
   > #### Changes:
   >> ##### Added:
-  >>> - Added a difficulty selection screen to the main menu.
+  >>> - A difficulty selection screen to the main menu.
   >> ##### Fixed:
-  >>> - New game button hover states on mobile.
+  >>> - New Game button hover states on mobile.
   >>> - Cancel button hover states.
-- ### Version 2.4.3:
+- ### Version 2.4.3
   > #### Changes:
   >> ##### Fixed:
-  >>> - Fixed a bug where a missing element id caused the game to crash when creating or continuing a game.
-- ### Version 2.4.2:
+  >>> - A bug where a missing element ID caused the game to crash when creating or continuing a game.
+- ### Version 2.4.2
   > #### Changes:
   >> ##### Added:
-  >>> - Added aria labels to the pause menu, win menu, continue menu, deletion confirmation menu and main menu.
-- ### Version 2.4.1:
+  >>> - ARIA labels to the pause menu, win menu, continue menu, deletion confirmation menu, and main menu.
+- ### Version 2.4.1
   > #### Changes:
   >> ##### Added:
-  >>> - Added hover tooltips for the rest of the buttons.
-  >>> - Added aria labels to those same buttons for accessibility.
-- ### Version 2.4.0:
+  >>> - Hover tooltips for the remaining buttons.
+  >>> - ARIA labels to those same buttons for accessibility.
+- ### Version 2.4.0
   > #### Changes:
   >> ##### Added:
-  >>> - Added hover tooltips for difficulty buttons.
-  >>> - Added aria labels to those same difficulty buttons for accessibility.
-- ### Version 2.3.4:
+  >>> - Hover tooltips for difficulty buttons.
+  >>> - ARIA labels to those same difficulty buttons for accessibility.
+- ### Version 2.3.4
   > #### Changes:
   >> ##### Added:
-  >>> - Added 'Holes' after the number of holes for clarity (Example: '44' becomes '44 Holes').
-- ### Version 2.3.3:
+  >>> - Holes after the number of holes for clarity. (Example: 44 becomes 44 Holes.)
+- ### Version 2.3.3
   > #### Changes:
   >> ##### Fixed:
-  >>> - Fixed the blue tap highlight box existing on mobile.
-  >>> - Fixed the hint button being in the wrong place on mobile.
-  >>> - Fixed the sidebar not being the correct height on mobile.
+  >>> - The blue tap highlight box appearing on mobile.
+  >>> - The hint button being positioned incorrectly on mobile.
+  >>> - The sidebar not having the correct height on mobile.
   >> ##### Changed:
-  >>> - CChanged the cancel button color so it no longer matches the disabled button color, preventing confusion.
-- ### Version 2.3.2:
+  >>> - The Cancel button color so it no longer matches the disabled button color, preventing confusion.
+- ### Version 2.3.2
   > #### Changes:
   >> ##### Added:
-  >>> - Added a border on the sides of the site controls when in dark mode.
-- ### Version 2.3.1:
+  >>> - A border on the sides of the site controls when in dark mode.
+- ### Version 2.3.1
   > #### Changes:
   >> ##### Fixed:
-  >> - Fixed the buttons inside the site controls to look correct on mobile
-- ### Version 2.3.0:
+  >>> - The buttons inside the site controls displaying incorrectly on mobile.
+- ### Version 2.3.0
   > #### Changes:
   >> ##### Changed:
-  >>> - Changed the position of the light/dark mode button to the site controls bar (which was also added in this update).
+  >>> - The position of the light/dark mode button to the site controls bar, which was also added in this update.
   >> ##### Added:
-  >>> - Added a fullscreen button.
-  >>> - Added a site control bar.
+  >>> - A fullscreen button.
+  >>> - A site controls bar.
   >> ##### Removed:
-  >>> - Removed the light/dark mode button from the main menu (since it has been replaced). 
-- ### Version 2.2.0:
+  >>> - The light/dark mode button from the main menu since it has been replaced.
+- ### Version 2.2.0
   > #### Changes:
   >> ##### Changed:
-  >>> - Changed the border radius of the main box.
-  >>> - Changed the sidebar to correctly set its height.
-  >>> - Changed the hint button to try and use solving strategies over using information the player doesn't have.
-- ### Version 2.1.5:
+  >>> - The border radius of the main box.
+  >>> - The sidebar to correctly set its height.
+  >>> - The hint button to attempt to use solving strategies instead of using information the player doesn't have.
+- ### Version 2.1.5
   > #### Changes:
   >> ##### Fixed:
-  >>> - Fixed the last of the active vs hover states for some buttons when in touch mode.
+  >>> - The remaining active versus hover state issues for some buttons when in touch mode.
   >> ##### Changed:
-  >>> - Made disabled buttons not have a hover or active color.
-  >>> - Made disabled buttons not animate when clicked.
-- ### Version 2.1.4:
+  >>> - Disabled buttons to no longer have hover or active colors.
+  >>> - Disabled buttons to no longer animate when clicked.
+- ### Version 2.1.4
   > #### Changes:
   >> ##### Fixed:
-  >>> - Fixed the active vs hover states for some buttons when in touch mode.
-- ### Version 2.1.3:
+  >>> - Active versus hover state issues for some buttons when in touch mode.
+- ### Version 2.1.3
   > #### Changes:
   >> ##### Changed:
-  >>> - Changed the stylesheet to be located in a separate file.
-  >>> - Changed the script to be located in a separate file.
-  >>> - Changed touchscreen detection to use JavaScript-based methods for improved accuracy.
-- ### Version 2.1.2:
+  >>> - The stylesheet to be located in a separate file.
+  >>> - The script to be located in a separate file.
+  >>> - Touchscreen detection to use JavaScript-based methods for improved accuracy.
+- ### Version 2.1.2
   > #### Changes:
   >> ##### Fixed:
-  >>> - Fixed number buttons staying highlighted when in mobile.
-- ### Version 2.1.1:
+  >>> - Number buttons staying highlighted on mobile.
+- ### Version 2.1.1
   > #### Changes:
   >> ##### Changed:
-  >>> - Changed the cells to have rounded corners.
-  >>> - Changed the hover state of buttons in light mode to be a little better
+  >>> - The cells to have rounded corners.
+  >>> - The hover state of buttons in light mode to look better.
   >> ##### Added:
-  >>> - Added hover and active states for new buttons
+  >>> - Hover and active states for new buttons.
   >> ##### Fixed:
-  >>> - Fixed the mistakes showing on the wrong side of the box
-- ### Version 2.1.0:
+  >>> - Mistakes appearing on the wrong side of the box.
+- ### Version 2.1.0
   > #### Changes:
   >> ##### Added:
-  >>> - Added a save deletion screen.
-  >>> - Added save deletion console commands.
+  >>> - A save deletion screen.
+  >>> - Save deletion console commands.
   >> ##### Removed:
-  >>> - Removed unnecessary lines of code.
+  >>> - Unnecessary lines of code.
   >> ##### Changed:
-  >>> - Changed the styling of disabled buttons.
+  >>> - The styling of disabled buttons.
   >> ##### Fixed:
-  >>> - Fixed ghost save files.
-  >>> - Fixed the Continue Save button not turning grey when there is no save.
-- ### Version 2.0.11:
+  >>> - Ghost save files.
+  >>> - The Continue Save button not turning grey when there is no save.
+- ### Version 2.0.11
   > #### Changes:
   >> ##### Fixed:
-  >>> - Fixed the main menu mode button not having the text centered horizontally.
-- ### Version 2.0.10:
+  >>> - The main menu mode button not having its text centered horizontally.
+- ### Version 2.0.10
   > #### Changes:
   >> ##### Fixed:
-  >>> - Fixed the symbol not updating after mode switch in the main menu mode switcher.
-- ### Version 2.0.9:
+  >>> - The symbol not updating after switching modes in the main menu mode switcher.
+- ### Version 2.0.9
   > #### Changes:
   >> ##### Added:
-  >>> - Added a light/dark mode switcher to the main menu.
-- ### Version 2.0.8:
+  >>> - A light/dark mode switcher to the main menu.
+- ### Version 2.0.8
   > #### Changes:
   >> ##### Fixed:
-  >>> - Fixed a bug where some difficulty menus were still displaying wrong.
-- ### Version 2.0.7:
+  >>> - A bug where some difficulty menus were still displaying incorrectly.
+- ### Version 2.0.7
   > #### Changes:
   >> ##### Fixed:
-  >> - Fixed a bug involving most of the difficulty menus displaying wrong.
-- ### Version 2.0.6:
+  >>> - A bug involving most of the difficulty menus displaying incorrectly.
+- ### Version 2.0.6
   > #### Changes:
   >> ##### Changed:
-  >>> - Changed the 'Version:' text to be bold.
-- ### Version 2.0.5:
+  >>> - The Version: text to be bold.
+- ### Version 2.0.5
   > #### Changes:
   >> ##### Fixed:
-  >>> - Fixed a bug in where the version text was not the correct element type.
-  >>> - Fixed a bug in that the version text wasnt being updated.
-  >>> - Fixed a bug that involved a script overwriting its own text content.
-- ### Version 2.0.4:
+  >>> - A bug where the version text was not the correct element type.
+  >>> - A bug where the version text wasn't being updated.
+  >>> - A bug involving a script overwriting its own text content.
+- ### Version 2.0.4
   > #### Changes:
   >> ##### Added:
-  >>> - Added 'Version:' before the version.
-- ### Version 2.0.3:
+  >>> - Version: before the version number.
+- ### Version 2.0.3
   > #### Changes:
   >> ##### Fixed:
-  >>> - Fixed the content of the Main Menu not centering vertically.
+  >>> - The content of the Main Menu not being vertically centered.
   >> ##### Added:
-  >>> - Added version text
-- ### Version 2.0.2:
+  >>> - Version text.
+- ### Version 2.0.2
   > #### Changes:
   >> ##### Tested:
-  >>> - Tested fix of main menu not centering vertically
-- ### Version 2.0.1:
+  >>> - A fix for the Main Menu not being vertically centered.
+- ### Version 2.0.1
   > #### Changes:
   >> ##### Tested:
-  >>> - Tested fix for main menu not centering vertically
-- ### Version 2.0.0:
+  >>> - A fix for the Main Menu not being vertically centered.
+- ### Version 2.0.0
   > #### Changes:
   >> ##### Added:
-  >>> - Added a main menu
+  >>> - A main menu.
