@@ -1,3 +1,7 @@
+- ### Version 5.0.1
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - Crashing bug on click of any button in the windows app.
 - ### Version 5.0.0
   > #### Changes:
   >> ##### Added:
