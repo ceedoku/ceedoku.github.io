@@ -13,21 +13,196 @@
  * Let's keep it that way.
  * If it ain't broke, don't fix it. It WILL break.
  ******************************************************************************/
+
+let canusecurrenthintsystem = false
+let usingsavegame = false
+let cooldownmoves = 0
+let cooldowntime = 0
+const count = 150,
+  defaults = { origin: { y: .7 } };
+
+function fire(particleRatio, opts) {
+  confetti(Object.assign({}, defaults, opts, { particleCount: Math.floor(count * particleRatio) }));
+}
+function fireconfetti() {
+	fire(.25, {
+  spread: 26,
+  startVelocity: 55
+});
+fire(.2, { spread: 60 });
+fire(.35, {
+  spread: 100,
+  decay: .91,
+  scalar: .8
+});
+fire(.1, {
+  spread: 120,
+  startVelocity: 25,
+  decay: .92,
+  scalar: 1.2
+});
+fire(.1, {
+  spread: 120,
+  startVelocity: 45
+});
+}
+let settings = {
+    SFX: {
+        enabled: true,
+        completion: true,
+        win: true
+    },
+
+    VFX: {
+        enabled: true,
+        completion: true,
+        confetti: true,
+    },
+
+    hints: {
+        enabled: true,
+        cooldown: {
+            enabled: false,
+            startinghints: 3,
+            cooldowntype: "time",
+            cooldowntime: 30,
+        }
+    },
+
+    haptics: {
+        enabled: true,
+        buttons: true,
+        cells: true,
+        puzzlecomplete: true
+    }
+};
+function loadSettings() {
+    const saved = localStorage.getItem("settings");
+
+    if (saved) {
+        Object.assign(settings, JSON.parse(saved));
+    }
+}
+
+function saveSettings() {
+    localStorage.setItem("settings", JSON.stringify(settings));
+}
+loadSettings();
+let hintcount = settings.hints.cooldown.startinghints
+const winSound = new Audio("./sounds/win.ogg");
+const popSound = new Audio("./sounds/pop.ogg");
+
+const audioContext = new AudioContext();
+const popSource = audioContext.createMediaElementSource(popSound);
+const popGain = audioContext.createGain();
+
+popSource.connect(popGain);
+popGain.connect(audioContext.destination);
+let audioUnlocked = false;
+
+function unlockAudio() {
+    if (audioUnlocked) return;
+
+    popSound.muted = true;
+
+    popSound.play()
+        .then(() => {
+            popSound.pause();
+            popSound.currentTime = 0;
+            popSound.muted = false;
+            audioUnlocked = true;
+        })
+        .catch(() => {
+            popSound.muted = false;
+        });
+}
+
+document.addEventListener("pointerdown", unlockAudio, { once: true });
+let vibrate;
+
+if ("vibrate" in navigator) {
+    vibrate = function (duration = 10) {
+        if (!isTouchDevice) return;
+		if (!settings.haptics) return;
+        navigator.vibrate(duration);
+    };
+} else {
+    vibrate = function () {};
+}
+
+let popQueue = Promise.resolve();
+let pitchInterval = null;
+
+function playPop(speed = 1) {
+    if (!settings.SFX) return;
+
+    if (pitchInterval) {
+        clearInterval(pitchInterval);
+        pitchInterval = null;
+    }
+
+    popSound.pause();
+    popSound.currentTime = 0;
+
+    popSound.preservesPitch = false;
+    popSound.mozPreservesPitch = false;
+    popSound.webkitPreservesPitch = false;
+
+    let currentSpeed = speed;
+
+    if (currentSpeed > 7) {
+        currentSpeed = 7;
+    }
+
+    popSound.playbackRate = currentSpeed;
+
+    popSound.play().catch(err => {
+        console.log("pop failed", err);
+    });
+
+    pitchInterval = setInterval(() => {
+        currentSpeed += 0.1;
+
+        if (currentSpeed > 7) {
+            currentSpeed = 7;
+        }
+
+        popSound.playbackRate = currentSpeed;
+    }, 50);
+
+    popSound.onended = () => {
+        clearInterval(pitchInterval);
+        pitchInterval = null;
+        popSound.playbackRate = 1;
+    };
+}
+document.addEventListener("pointerdown", (event) => {
+    const button = event.target.closest("button");
+
+    if (!button) return;
+
+    vibrate(button.classList.contains("cell") ? 5 : 10);
+});
 let selectedDifficulty = localStorage.getItem("difficulty") || "easy";
 document.getElementById("mainmenubutton").style.display = "none"
 			  const mainmenu = document.getElementById("mainmenu");	
 	let runninggame = false	        
-              let menuOpen = false;			  
+              let menuOpen = false;		
+let cooldowntypetouse = "just declaring var"
 					  function showmainmenu() {
 						      if (!timerPaused) {
-        // PAUSE
         timerPaused = true;
 
         clearInterval(timerId);
 
         elapsedMs = Date.now() - startTime;
 
-        if (runninggame){saveGame()};
+        if (runninggame) {
+			if (cooldowntypetouse !== settings.hints.cooldown.cooldowntype) {
+				canusecurrenthintsystem = false
+			}
+			saveGame();
+		};
     }
 mainmenu.inert = false
 						  document.getElementById("mainmenubutton").style.display = "none"
@@ -36,6 +211,11 @@ mainmenu.inert = false
                 mainmenu.classList.add("show");
             });
         }
+window.addEventListener('keydown', function (event) {
+  if (event.key === 'Tab') {
+    event.preventDefault();
+  }
+});
 
 			 const DIFFICULTIES = {
 			   	  easy: { holes: 36 },
@@ -46,6 +226,7 @@ mainmenu.inert = false
  			 	  extreme: { holes: 70 },
    			  	  impossible: { holes: 76 }
 			  };
+			  const hintcooldowndisplay = document.getElementById("hintCooldownDisplay")
 
               const boardEl = document.getElementById("board");
 			  
@@ -102,7 +283,190 @@ mainmenu.inert = false
 	          const deleteOverlay = document.getElementById("deleteOverlay")
 
 	          const newoverlay = document.getElementById("newOverlay")
-        
+
+			  const settingsOverlay = document.getElementById("settingsOverlay")
+
+			  const animationToggle = document.getElementById("animationtoggle");
+			  const completionAnimationToggle = document.getElementById("completionanimationtoggle");
+			  const confettiAnimationToggle = document.getElementById("confettianimationtoggle");
+
+			  const sfxToggle = document.getElementById("sfxtoggle");
+			  const winSoundToggle = document.getElementById("winsoundtoggle");
+			  const completionSoundToggle = document.getElementById("completionsoundtoggle");
+
+			  const hapticsToggle = document.getElementById("hapticstoggle");
+			  const buttonHapticsToggle = document.getElementById("buttonhapticstoggle");
+			  const cellHapticsToggle = document.getElementById("cellhapticstoggle");
+			  const winHapticsToggle = document.getElementById("winhapticstoggle");
+
+			  const hintsToggle = document.getElementById("hintstoggle");
+			  const hintCooldownToggle = document.getElementById("hintcooldowntoggle");
+			  const startingHintsInput = document.getElementById("startinghints");
+			  const hintCooldownMethod = document.getElementById("hintcooldownmethod");
+			  const hintCooldownAmount = document.getElementById("hintcooldownamount");
+			  function updateSettingsMenu() {
+    animationToggle.checked = settings.VFX.enabled;
+    completionAnimationToggle.checked = settings.VFX.completion;
+    confettiAnimationToggle.checked = settings.VFX.confetti;
+
+    completionAnimationToggle.disabled = !settings.VFX.enabled;
+    confettiAnimationToggle.disabled = !settings.VFX.enabled;
+
+    sfxToggle.checked = settings.SFX.enabled;
+    winSoundToggle.checked = settings.SFX.win;
+    completionSoundToggle.checked = settings.SFX.completion;
+
+    winSoundToggle.disabled = !settings.SFX.enabled;
+    completionSoundToggle.disabled = !settings.SFX.enabled;
+
+
+    hapticsToggle.checked = settings.haptics.enabled;
+    buttonHapticsToggle.checked = settings.haptics.buttons;
+    cellHapticsToggle.checked = settings.haptics.cells;
+    winHapticsToggle.checked = settings.haptics.puzzlecomplete;
+
+    buttonHapticsToggle.disabled = !settings.haptics.enabled;
+    cellHapticsToggle.disabled = !settings.haptics.enabled;
+    winHapticsToggle.disabled = !settings.haptics.enabled;
+
+    hintsToggle.checked = settings.hints.enabled;
+    hintCooldownToggle.checked = settings.hints.cooldown.enabled;
+
+    startingHintsInput.value =
+        settings.hints.cooldown.startinghints;
+
+    hintCooldownMethod.value =
+        settings.hints.cooldown.cooldowntype;
+
+    hintCooldownAmount.value =
+    	settings.hints.cooldown.cooldowntime;
+
+    hintCooldownToggle.disabled =
+        !settings.hints.enabled;
+
+    startingHintsInput.disabled =
+        !settings.hints.cooldown.enabled;
+
+    hintCooldownMethod.disabled =
+        !settings.hints.enabled ||
+        !settings.hints.cooldown.enabled;
+
+    hintCooldownAmount.disabled =
+        !settings.hints.enabled ||
+        !settings.hints.cooldown.enabled;
+}
+updateSettingsMenu();
+
+animationToggle.addEventListener("change", () => {
+    settings.VFX.enabled = animationToggle.checked;
+
+    if (!settings.VFX.enabled) {
+        settings.VFX.completion = false;
+        settings.VFX.confetti = false;
+    }
+
+    saveSettings();
+    updateSettingsMenu();
+});
+    completionAnimationToggle.addEventListener("change", () => {
+    settings.VFX.completion = completionAnimationToggle.checked;
+    saveSettings();
+    updateSettingsMenu();
+});
+    confettiAnimationToggle.addEventListener("change", () => {
+    settings.VFX.confetti = confettiAnimationToggle.checked;
+    saveSettings();
+    updateSettingsMenu();
+});
+sfxToggle.addEventListener("change", () => {
+    settings.SFX.enabled = sfxToggle.checked;
+
+    if (!settings.SFX.enabled) {
+        settings.SFX.completion = false;
+        settings.SFX.win = false;
+    }
+
+    saveSettings();
+    updateSettingsMenu();
+});
+winSoundToggle.addEventListener("change", () => {
+	settings.SFX.win = winSoundToggle.checked;
+	saveSettings();
+	updateSettingsMenu();
+});
+completionSoundToggle.addEventListener("change", () => {
+	settings.SFX.completion = completionSoundToggle.checked;
+	saveSettings();
+	updateSettingsMenu();
+});
+hapticsToggle.addEventListener("change", () => {
+    settings.haptics.enabled = hapticsToggle.checked;
+
+    if (!settings.haptics.enabled) {
+        settings.haptics.cells = false;
+        settings.haptics.buttons = false;
+		settings.haptics.puzzlecomplete = false;
+    }
+	
+    saveSettings();
+    updateSettingsMenu();
+});
+buttonHapticsToggle.addEventListener("change", () => {
+	settings.haptics.buttons = buttonHapticsToggle.checked;
+	saveSettings();
+	updateSettingsMenu();
+});
+cellHapticsToggle.addEventListener("change", () => {
+	settings.haptics.cells = cellHapticsToggle.checked;
+	saveSettings();
+	updateSettingsMenu();
+});
+winHapticsToggle.addEventListener("change", () => {
+	settings.haptics.puzzlecomplete = winHapticsToggle.checked;
+	saveSettings();
+	updateSettingsMenu();
+});
+hintsToggle.addEventListener("change", () => {
+	settings.hints.enabled = hintsToggle.checked;
+	testHintButton();
+	if (!settings.hints.enabled) {
+        settings.hints.cooldown.enabled = false;
+	}
+	
+	saveSettings();
+	updateSettingsMenu();
+});
+hintCooldownToggle.addEventListener("change", () => {
+	settings.hints.cooldown.enabled = hintCooldownToggle.checked;
+	saveSettings();
+	updateSettingsMenu();
+});
+startingHintsInput.addEventListener("change", () => {
+	settings.hints.cooldown.startinghints =
+    startingHintsInput.value === "" ? 3 : Number(startingHintsInput.value);
+	saveSettings();
+	updateSettingsMenu()
+});
+hintCooldownMethod.addEventListener("change", () => {
+	settings.hints.cooldown.cooldowntype = hintCooldownMethod.value 
+	saveSettings();
+	updateSettingsMenu()
+});
+hintCooldownAmount.addEventListener("change", () => {
+	settings.hints.cooldown.cooldowntime = Number(hintCooldownAmount.value) || 30;
+	saveSettings();
+	updateSettingsMenu()
+});
+
+function updateHintCooldownDisplay() {
+    if (!settings.hints.cooldown.enabled) {
+        hintCooldownDisplay.textContent = "∞";
+        hintCooldownDisplay.style.fontWeight = "800";
+    } else {
+        hintCooldownDisplay.style.fontWeight = "unset";
+        hintCooldownDisplay.textContent = getHintCooldownText();
+    }
+}
               let solution = [];
               let puzzle = [];
               let values = [];
@@ -123,6 +487,12 @@ mainmenu.inert = false
 			let pausemenuOpen = false;
 			let pageMode = localStorage.getItem("theme") || "dark";
               function showWinScreen() {
+						winpauseTimer();
+				  		vibrate([20, 50, 40]);
+			if (settings.SFX.enabled && settings.SFX.win) {
+				winSound.currentTime = 0;
+				winSound.play().catch(() => {});
+			}
             winDifficulty.textContent =
                 difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
 		
@@ -130,10 +500,23 @@ mainmenu.inert = false
             winMistakes.textContent = mistakes;
             winOverlay.hidden = false;
         
-            requestAnimationFrame(() => {
-                winOverlay.classList.add("show");
-            });
-        }
+    		requestAnimationFrame(() => {
+        		winOverlay.classList.add("show");
+    		});
+			setTimeout(() => {
+        		if (settings.VFX.enabled && settings.VFX.confetti) {
+            		fireconfetti();
+        		}
+			}, 200); 
+
+			  }
+function opensettingsmenu() {
+    document.getElementById("settingsOverlay").classList.add("show");
+}
+
+function closesettingsmenu() {
+    document.getElementById("settingsOverlay").classList.remove("show");
+}
 			function showPauseScreen() {
             pauseDifficulty.textContent =
                 difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
@@ -155,9 +538,7 @@ const isAndroidPWA =
   );
 
 if (isAndroidPWA && fullscreenButton) {
-  fullscreenButton.style.width = "0";
-  fullscreenButton.style.height = "0";
-  fullscreenButton.style.visibility = "hidden";
+  fullscreenButton.style.display = "none";
 }
 function fullscreen() {
   if (!fullscreenButton) return;
@@ -199,6 +580,55 @@ document.addEventListener("fullscreenchange", () => {
                 deleteOverlay.classList.add("show");
             });
         }
+function loadgame() {
+    const save = localStorage.getItem("save");
+	    if (save === null) {
+        nosave = true;
+		updateGiveUpButton();
+        return;
+		}
+    const game = JSON.parse(save);
+	   // ---------------- BOARD ----------------
+    solution = game.solution;
+if (solution.length !== 81){localStorage.removeItem("save");nosave=true;updateGiveUpButton();return;}
+    puzzle = game.puzzle;
+    values = game.values;
+    givens = game.givens;
+    notes = game.notes.map(arr => new Set(arr));
+
+    selected = game.selected;
+    difficulty = game.difficulty;
+    pencilMode = game.pencilMode;
+    eraseMode = game.eraseMode;
+    mistakes = game.mistakes;
+
+    undoStack = game.undoStack;
+    redoStack = game.redoStack;
+	
+	if (game.cooldowntypetouse === undefined) {
+		hintcount = settings.hints.cooldown.startinghints;
+		savehintcount = settings.hints.cooldown.startinghints;
+		canusecurrenthintsystem = true
+	} else if (game.cooldowntypetouse !== settings.hints.cooldown.cooldowntype) {
+		canusecurrenthintsystem = false;
+		savehintcount = game.hintcount;
+		cooldowntypetouse = game.cooldowntypetouse;
+		savecooldownmoves = game.cooldownmoves;
+		savecooldowntime = game.cooldowntime
+	} else if (game.cooldowntypetouse == settings.hints.cooldown.cooldowntype) {
+		savehintcount = game.hintcount;
+		canusecurrenthintsystem = true;
+		cooldowntypetouse = game.cooldowntypetouse;
+		savecooldownmoves = game.cooldownmoves
+		savecooldowntime = game.cooldowntime
+	}
+	
+    // ---------------- TIMER ----------------
+    elapsedMs = game.elapsedMs || 0;
+    timerPaused = game.timerPaused || false;
+
+    clearInterval(timerId);
+    }
 
 function changemode(forceMode) {
     console.log("changemode function called");
@@ -316,7 +746,7 @@ function changemode(forceMode) {
 				    return `${hours}:${String(minutes).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
 				}
 
-				return `${minutes}:${String(secs).padStart(2, "0")}`;
+				return `${String(minutes).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
               }
 
 
@@ -326,20 +756,44 @@ let elapsedMs = 0;
 let startTime = 0;
 let timerId = null;
 let timerPaused = false;
-			function startTimer() {
+let hintCooldownCounter = 0;
+
+function startTimer() {
     clearInterval(timerId);
 
     startTime = Date.now() - elapsedMs;
 
     timerId = setInterval(() => {
         elapsedMs = Date.now() - startTime;
-		winTime.textContent = formatTime(Math.floor(elapsedMs / 1000));
-		pauseTime.textContent = formatTime(Math.floor(elapsedMs / 1000));
-		continueTime.textContent = formatTime(Math.floor(elapsedMs / 1000));
+
+        winTime.textContent = formatTime(Math.floor(elapsedMs / 1000));
+        pauseTime.textContent = formatTime(Math.floor(elapsedMs / 1000));
+        continueTime.textContent = formatTime(Math.floor(elapsedMs / 1000));
+
         timerEl.textContent =
             `Time: ${formatTime(Math.floor(elapsedMs / 1000))}`;
+
+        hintCooldownCounter++;
+
+        if (hintCooldownCounter >= 10) {
+            hintCooldownCounter = 0;
+
+            if (
+                settings.hints.cooldown.enabled &&
+                settings.hints.cooldown.cooldowntype === "time" &&
+                cooldowntime > 0
+            ) {
+                cooldowntime--;
+
+                if (cooldowntime === 0) {
+                    hintcount++;
+                }
+
+                updateHintCooldownDisplay();
+            }
+        }
     }, 100);
-};
+}
 function pauseTimer() {
     if (!timerPaused) {
         // PAUSE
@@ -557,7 +1011,11 @@ if (runninggame){
         undoStack,
         redoStack,
         finished,
-        pageMode
+        pageMode,
+		hintcount,
+		cooldownmoves,
+		cooldowntime,
+		cooldowntypetouse
     }));
 }
 }
@@ -614,20 +1072,30 @@ if (runninggame){
                 });
                 return indexes;
               }
-        function showWinScreen() {
 
+              function showWinScreen() {
+						winpauseTimer();
+				  		vibrate([20, 50, 40]);
+			if (settings.SFX.enabled && settings.SFX.win) {
+				winSound.currentTime = 0;
+				winSound.play().catch(() => {});
+			}
             winDifficulty.textContent =
                 difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
-        
-            winTime.textContent = formatTime(Math.floor(elapsedMs / 1000));
+		
+			
             winMistakes.textContent = mistakes;
-        
             winOverlay.hidden = false;
         
-            requestAnimationFrame(() => {
-                winOverlay.classList.add("show");
-            });
-        
+    		requestAnimationFrame(() => {
+        		winOverlay.classList.add("show");
+    		});
+
+    		winOverlay.addEventListener("animationend", () => {
+        		if (settings.VFX.enabled && settings.VFX.confetti) {
+            		fireconfetti();
+        		}
+    		}, { once: true });
         }
 						function showPauseScreen() {
             pauseDifficulty.textContent =
@@ -726,6 +1194,15 @@ if (runninggame){
                 paintBoard();
                 animateNewCompletions(previousCompleted, selected);
                 checkWin();
+				if (!options.fromHistory && cooldownmoves > 0) {
+    				cooldownmoves--;
+					updateHintCooldownDisplay();
+    				if (cooldownmoves === 0) {
+        				hintcount = 1;
+        				enableHintButton();
+        				updateHintCooldownDisplay();
+    				}
+				}
               }
         
               function eraseSelected() {
@@ -773,17 +1250,23 @@ function getCandidates(index) {
 
   const used = new Set();
 
-  for (const i of rows[row]) {
-    if (i !== index && values[i]) used.add(values[i]);
-  }
+for (const i of rows[row]) {
+    if (i !== index && values[i] && values[i] === solution[i]) {
+        used.add(values[i]);
+    }
+}
 
-  for (const i of cols[col]) {
-    if (i !== index && values[i]) used.add(values[i]);
-  }
+for (const i of cols[col]) {
+    if (i !== index && values[i] && values[i] === solution[i]) {
+        used.add(values[i]);
+    }
+}
 
-  for (const i of boxes[box]) {
-    if (i !== index && values[i]) used.add(values[i]);
-  }
+for (const i of boxes[box]) {
+    if (i !== index && values[i] && values[i] === solution[i]) {
+        used.add(values[i]);
+    }
+}
 
   const candidates = [];
 
@@ -909,8 +1392,28 @@ function findMoveForCell(index) {
     null
   );
 }
+function enableHintButton() {
+    document.getElementById("hintButton").classList.remove("disabled");
+    document.getElementById("hintButton").disabled = false;
+}
+function disableHintButton() {
+    document.getElementById("hintButton").classList.add("disabled");
+    document.getElementById("hintButton").disabled = true;
+}
+function testHintButton() {
+    if (!settings.hints.enabled) {
+        disableHintButton();
+    } else {
+        enableHintButton();
+    }
+}
+
+testHintButton();
 
 function hint() {
+  updateHintCooldownDisplay();
+  if (!settings.hints.enabled) return;
+  if (hintcount <= 0 && settings.hints.cooldown.enabled) return;
   if (finished) return;
 
   let move = null;
@@ -937,7 +1440,16 @@ function hint() {
 
   // No logical move found
   if (!move) return;
-
+  if (settings.hints.cooldown.enabled) {
+      hintcount--;
+      if (hintcount <= 0) {
+		  canusecurrenthintsystem = true;
+		  cooldowntypetouse = settings.hints.cooldown.cooldowntype
+          starthintcooldown();
+		  saveGame();
+      }
+      updateHintCooldownDisplay();
+  }
   const target = move.index;
   selected = target;
 
@@ -960,7 +1472,78 @@ function hint() {
   animateNewCompletions(previousCompleted, selected);
   checkWin();
 }
-             
+function starthintcooldown() {
+	if (!usingsavegame) {
+    	if (settings.hints.cooldown.cooldowntype === "move") {
+        	cooldownmoves = settings.hints.cooldown.cooldowntime;
+    	}
+
+    	if (settings.hints.cooldown.cooldowntype === "time") {
+        	cooldowntime = settings.hints.cooldown.cooldowntime;
+        	hintCooldownCounter = 0;
+        	updateHintCooldownDisplay();
+    	}
+	} else {
+		if (!canusecurrenthintsystem) {
+			if (cooldowntypetouse === "move") {
+        		cooldownmoves = savecooldownmoves;
+    		}
+
+    		if (cooldowntypetouse === "time") {
+        		cooldowntime = savecooldowntime;
+        		hintCooldownCounter = 0;
+        		updateHintCooldownDisplay();
+    		}
+		} else {
+			if (settings.hints.cooldown.cooldowntype === "move") {
+        		cooldownmoves = settings.hints.cooldown.cooldowntime;
+    		}
+
+    		if (settings.hints.cooldown.cooldowntype === "time") {
+        		cooldowntime = settings.hints.cooldown.cooldowntime;
+        		hintCooldownCounter = 0;
+        		updateHintCooldownDisplay();
+    		}
+		}
+	}
+}
+function getHintCooldownText() {
+    if (hintcount > 0) {
+		if (settings.hints.enabled) {
+			enableHintButton()
+		}
+        return `${hintcount} hint${hintcount === 1 ? "" : "s"}`;
+    }
+
+    if (settings.hints.cooldown.cooldowntype === "move") {
+		disableHintButton()
+        return `${cooldownmoves} move${cooldownmoves === 1 ? "" : "s"}`;
+    }
+
+    if (settings.hints.cooldown.cooldowntype === "time") {
+		disableHintButton()
+        return `${cooldowntime} sec${cooldowntime === 1 ? "" : "s"}`;
+    }
+	
+	return "It broke?!";
+}
+function updateHintCooldownDisplay() {
+	testHintButton();
+    if (!settings.hints.enabled) {
+        hintcooldowndisplay.textContent = "Disabled";
+        return;
+    }
+
+    if (!settings.hints.cooldown.enabled) {
+        hintcooldowndisplay.textContent = "∞";
+        hintcooldowndisplay.style.fontWeight = "800";
+        return;
+    }
+
+    hintcooldowndisplay.style.fontWeight = "unset";
+    hintcooldowndisplay.textContent = getHintCooldownText();
+}
+updateHintCooldownDisplay();
         
               function updateHistoryButtons() {
                 undoButton.disabled = undoStack.length === 0;
@@ -1003,20 +1586,20 @@ function hint() {
               }
         
 function animateIndexes(indexes, origin, kind) {
+		const playedDistances = new Set();
+		const distancesPlayed = new Set();
+    	const boardDistances =
+        	kind === "board"
+            	? getBoardDistances(origin)
+            	: null;
+    	const maxDistance =
+        	kind === "board"
+           		? Math.max(...boardDistances)
+            	: 8;
 
-    const boardDistances =
-        kind === "board"
-            ? getBoardDistances(origin)
-            : null;
-
-    const maxDistance =
-        kind === "board"
-            ? Math.max(...boardDistances)
-            : 8;
-
-    const fadeDelay = maxDistance * 60 + 500;
-
-    indexes.forEach((index) => {
+    	const fadeDelay = maxDistance * 60 + 500;
+	
+    	indexes.forEach((index) => {
 
         const cell = boardEl.querySelector(`[data-index="${index}"]`);
         if (!cell) return;
@@ -1048,7 +1631,16 @@ function animateIndexes(indexes, origin, kind) {
             distance = boardDistances[index];
 
         }
+		if (settings.SFX.enabled && settings.SFX.completion){
+			if (!distancesPlayed.has(distance)) {
+    			distancesPlayed.add(distance);
 
+    			setTimeout(() => {
+        		playPop(Math.min(1 + distance * 0.5));
+    			}, distance * 60);
+			}
+		}
+		if (settings.VFX.enabled && settings.VFX.completion){
         const animationKind =
             kind === "board"
                 ? "board"
@@ -1077,8 +1669,8 @@ function animateIndexes(indexes, origin, kind) {
 
             effect.remove();
 
-        });
-
+        	});
+		}
     });
 
 }
@@ -1097,28 +1689,49 @@ function animateIndexes(indexes, origin, kind) {
                   if (done && !previous.boxes[index]) animateIndexes(boxes[index], origin, "box");
                 });
               }
-			  function playBoardRipple() {
+function playBoardRipple() {
     const distances = getBoardDistances(selected);
+    const distancesPlayed = new Set();
 
     boardEl.querySelectorAll(".cell").forEach((cell, index) => {
 
-        cell.classList.remove("complete-sweep", "board");
+        const distance = distances[index];
 
-        cell.style.setProperty(
-            "--sweep-delay",
-            `${distances[index] * 60}ms`
-        );
+        // Sound
+        if (settings.SFX.enabled && settings.SFX.completion) {
+            if (!distancesPlayed.has(distance)) {
+                distancesPlayed.add(distance);
 
-        requestAnimationFrame(() => {
-            cell.classList.add("complete-sweep", "column");
-        });
+                setTimeout(() => {
+                    playPop(Math.min(1 + distance * 0.25));
+                }, distance * 60);
+            }
+        }
 
-        setTimeout(() => {
+        // Animation
+        if (settings.VFX.enabled && settings.VFX.completion) {
+
             cell.classList.remove("complete-sweep", "board");
-            cell.style.removeProperty("--sweep-delay");
-        }, 1000 + distances[index] * 60);
+
+            cell.style.setProperty(
+                "--sweep-delay",
+                `${distance * 60}ms`
+            );
+
+            requestAnimationFrame(() => {
+                cell.classList.add("complete-sweep", "board");
+            });
+
+            setTimeout(() => {
+                cell.classList.remove("complete-sweep", "board");
+                cell.style.removeProperty("--sweep-delay");
+            }, 1000 + distance * 60);
+        }
     });
 }
+document.addEventListener("pointerup", () => {
+    updateHintCooldownDisplay();
+});
 function getBoardDistances(startIndex) {
     const distances = Array(81).fill(-1);
     const queue = [startIndex];
@@ -1149,38 +1762,25 @@ function getBoardDistances(startIndex) {
     return distances;
 }
 function checkWin() {
+	
     if (finished) return;
 	
     if (values.every((value, index) => value === solution[index])) {
+		popSound.playbackRate = 2;
+		runninggame = false
 		localStorage.removeItem("save");
-        finished = true;   // <-- FIRST thing inside the win block
-		winpauseTimer()
-		
-        clearInterval(timerId);
+        finished = true;
 
+        clearInterval(timerId);
+		
         playBoardRipple();
 
         const maxDistance = Math.max(...getBoardDistances(selected));
 
         setTimeout(showWinScreen, maxDistance * 60 + 900);
-		function clearSave() {
-    localStorage.removeItem("save");
-	}
     }
 }
-function forcewin() {
-		winpauseTimer()
-        clearInterval(timerId);
 
-        playBoardRipple();
-
-        const maxDistance = Math.max(...getBoardDistances(selected));
-
-        setTimeout(showWinScreen, maxDistance * 60 + 900);
-		function clearSave() {
-    localStorage.removeItem("save");
-}
-		}
         
               function closeDifficultyMenu() {
                 menuOpen = false;
@@ -1289,38 +1889,6 @@ function deletesavefile(){localStorage.removeItem("save");}
 function deletesave(){deletesavefile();}
 function delsave(){deletesave();}
 function delsavefile(){delsave();}
-
-function loadgame() {
-    const save = localStorage.getItem("save");
-	    if (save === null) {
-        nosave = true;
-		updateGiveUpButton();
-        return;
-		}
-    const game = JSON.parse(save);
-	   // ---------------- BOARD ----------------
-    solution = game.solution;
-if (solution.length !== 81){localStorage.removeItem("save");nosave=true;updateGiveUpButton();return;}
-    puzzle = game.puzzle;
-    values = game.values;
-    givens = game.givens;
-    notes = game.notes.map(arr => new Set(arr));
-
-    selected = game.selected;
-    difficulty = game.difficulty;
-    pencilMode = game.pencilMode;
-    eraseMode = game.eraseMode;
-    mistakes = game.mistakes;
-
-    undoStack = game.undoStack;
-    redoStack = game.redoStack;
-
-    // ---------------- TIMER ----------------
-    elapsedMs = game.elapsedMs || 0;
-    timerPaused = game.timerPaused || false;
-
-    clearInterval(timerId);
-    }
 function loadtheme() {
     const savedTheme = localStorage.getItem("theme");
 
@@ -1352,6 +1920,17 @@ loadgame();
 loadtheme();		
 			
 function continueGame() {
+usingsavegame = true;
+if (savehintcount > 0) {
+	hintcount = savehintcount
+	cooldowntime = 0
+	cooldownmoves = 0
+	canusecurrenthintsystem = true
+} else {
+	hintcount = 0;
+	starthintcooldown()
+}
+updateHintCooldownDisplay();
 runninggame = true;
 hidemainmenu();
     pauseBtn.textContent = "❚❚"; 
@@ -1376,6 +1955,14 @@ hidemainmenu();
 setInterval(saveGame, 1000);
 
 function newGame(nextDifficulty = difficulty) {
+	nosave = false
+	cooldowntypetouse = settings.hints.cooldown.cooldowntype
+	usingsavegame = false;
+	cooldownmoves = 0;
+	cooldowntime = 0;
+	hintcount = settings.hints.cooldown.startinghints;
+	canusecurrenthintsystem = true
+	updateHintCooldownDisplay();
 	localStorage.setItem("difficulty", difficulty);
     runninggame = true
 	finished = false
@@ -1542,6 +2129,7 @@ function continuenewGame() {
 				if (timerPaused) return;
               });
 document.addEventListener("keyup", (event) => {
+	if (!runninggame) return;
     console.log(event.key);
 
     if (event.code === "Space") {
@@ -1551,14 +2139,9 @@ document.addEventListener("keyup", (event) => {
 });
               document.addEventListener("keydown", (event) => {
 			   if (timerPaused) return;
-                console.log(event.key);
+		       if (!runninggame) return;
+                // console.log(event.key); disabled logging as it isn't currently needed
                 const key = event.key.toLowerCase();
-                if (key === "escape") {
-                  closeDifficultyMenu();
-                  closewinDifficultyMenu();
-                  closepauseDifficultyMenu();
-                  return;
-                }
  
         
                 if ((event.ctrlKey || event.metaKey) && key === "z") {
@@ -1585,6 +2168,7 @@ document.addEventListener("keyup", (event) => {
         	return;
         	}
 			 if (timerPaused) return;
+			 if (!runninggame) return;
                 if (/^[1-9]$/.test(key)) placeNumber(Number(key));
                 if (key === "backspace" || key === "delete" || key === "0") eraseSelected();
                 if (["arrowup", "arrowdown", "arrowleft", "arrowright"].includes(key)) {
@@ -1601,11 +2185,21 @@ function deleteGame() {
 	delsave()
 	location.reload()
 }
-setTimeout(() => {
-    document.body.style.visibility = "visible";
-}, 100);
-
-
 const defaultItem = document.querySelector(`#mainDifficultyMenu .menu-item[data-difficulty="${selectedDifficulty}"]`);
 defaultItem.setAttribute("aria-selected", "true");
+window.addEventListener("load", () => {
+    const game = document.getElementById("aahtheentiregame");
+    const loader = document.getElementById("loader");
 
+    loader.classList.add("fade-out");
+    setTimeout(() => {
+        loader.style.visibility = "hidden";
+    }, 500);
+	
+    game.style.visibility = "visible";
+    requestAnimationFrame(() => {
+        game.classList.add("loaded");
+    });
+
+	document.title = "Ceedoku"
+});

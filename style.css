@@ -3,8 +3,8 @@
 
 ## Chorus:
     Ain't no lie,
-    bugs go bye bye bye.
-
+    bugs go bye bye bye. (Bye Bugs!)
+	
     One more fix,
     one more try.
     Green tick says
@@ -12,8 +12,199 @@
 
     It might sound crazy,
     but it ain't no lie,
-    bugs go bye bye bye.
+    bugs go bye bye bye. (Bye Bugs!)
 --------------------------- */
+#hintButton:disabled {
+	background-color: var(--disabledbox) !important;
+	cursor: not-allowed !important
+}
+#hintCooldownDisplay {
+	z-index: 2
+}
+#hintButton {
+	z-index: 1
+}
+#hintButton:disabled:active {
+	transform: none !important
+}
+.hint-wrap {
+	max-height: 44px
+}
+#fullscreen {
+	transform: rotate(40deg)
+}
+#fullscreen:active {
+	transform: translatey(1px)rotate(40deg)
+}
+select:disabled {
+	color: var(--muted) !important;
+	cursor: not-allowed !important;
+	background-color: var(--disabledbox) !important
+}
+#hintcooldownamount:disabled,
+#startinghints:disabled {
+	color: var(--muted) !important;
+	cursor: not-allowed !important;
+	background-color: var(--disabledbox) !important
+}
+#hintcooldownamount,#startinghints {
+	color: var(--text2)
+}
+#WHATTHEFUCKDOICALLTHIS\?:hover {
+    color: var(--text) !important;
+}
+
+#WHATTHEFUCKDOICALLTHIS\?:active {
+    color: var(--text) !important;
+    transform: translateY(1px);
+}
+.setting-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 16px 20px;
+    box-sizing: border-box;
+}
+
+.setting-name {
+    font-size: 30px;
+    font-weight: 500;
+}
+.settings-select {
+	width: 160px !important
+}
+@media (orientation:portrait){
+	.setting-name {
+		font-size: 15px !important;
+	}
+}
+@media (width <= 402px){
+	.settings-select{
+		width: 190px
+	}
+}
+.toggle {
+    position: relative;
+    width: 56px;
+    height: 36px;
+    display: inline-block;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.toggle input {
+    display: none;
+}
+
+.toggle-track {
+    position: absolute;
+    width: 56px;
+    height: 20px;
+    top: 8px;
+    left: 0;
+    background: var(--muted);
+    border-radius: 999px;
+    transition: background 0.2s ease;
+}
+
+.toggle-track::before {
+    content: "";
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    top: -6px;
+    left: -2px;
+    background: var(--toggle-thumb);
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    transition: transform 0.2s cubic-bezier(.4,0,.2,1);
+}
+
+.toggle input:checked + .toggle-track {
+    background: var(--blue);
+}
+
+.toggle input:checked + .toggle-track::before {
+    transform: translateX(28px);
+}
+
+.toggle:active .toggle-track::before {
+    transform: scale(0.92);
+}
+
+.toggle:active input:checked + .toggle-track::before {
+    transform: translateX(28px) scale(0.92);
+}
+
+.toggle input:disabled + .toggle-track {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.toggle input:disabled + .toggle-track::before {
+    background: var(--muted);
+}
+
+.restart-button {
+    width: 400px;
+    height: 50px;
+    border-radius: 10px;
+}
+
+@media (max-width: 600px) {
+    .restart-button {
+        width: 90%;
+    }
+	#crashscreenerrormsg {
+		padding-left: 10px;
+		padding-right: 10px
+	}
+}
+.settings-select {
+    width: 100px;
+	display: unset;
+    height: 40px;
+    padding: 0 12px;
+
+    background-color: var(--surface-3);
+    color: var(--text2);
+
+    border: none;
+    border-radius: 10px;
+
+    text-align: center;
+    text-align-last: center;
+
+    font: inherit;
+    font-size: 18px;
+
+    cursor: pointer;
+}
+
+.settings-select:focus {
+    outline: 2px solid var(--text2);
+}
+button {
+	transition: transform 0.1s ease;
+}
+#loader {
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
+
+#loader.fade-out {
+    opacity: 0;
+    pointer-events: none;
+}
+#aahtheentiregame {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+#aahtheentiregame.loaded {
+    opacity: 1;
+}
         :root {
     color-scheme: dark;
           --bg: #f4f7fb;
@@ -30,10 +221,12 @@
           --line: #b7c5d6;
           --line-strong: #4c5867;
           --blue: #1a73e8;
+		  --disabledbox: #b6bcc2;
 	  --delete-save: #ff0000;
           --blue-soft: #d7e8ff;
           --blue-softer: #eaf3ff;
           --lime: #9cff35;
+		  --toggle-thumb: var(--line);
           --lime-soft: #dcffb5;
 		  --pencilerasebutton: #d7e1ee;
           --lime-text: #195700;
@@ -163,7 +356,7 @@ font-size: clamp(1.20rem, 5vw, 2.5rem)
         opacity: 1;
         pointer-events: auto;
         position: fixed;
-        transform: translateY(-1vh);
+        transform: translateY(0vh);
     }
     .win-overlay2.show {
         opacity: 1;
@@ -187,7 +380,7 @@ font-size: clamp(1.20rem, 5vw, 2.5rem)
     
         text-align: center;
     
-        transform: scale(.9) translateY(20px);
+        transform: translateY(20px);
         opacity: 0;
     
         transition:
@@ -264,9 +457,11 @@ font-size: clamp(1.20rem, 5vw, 2.5rem)
           --line: #4e6177;
           --blue: #73a7ff;
           --blue-soft: #203a5f;
+		  --toggle-thumb: white;
 		  --blue-soft2: var(--blue-soft);
           --blue-softer: #1b2c45;
           --lime: #a7ff48;
+		  --disabledbox: #4e5861;
 	      --pencilerasebutton: #26313f;
           --lime-soft: #263d1d;
 	  --text2: #dce3e9;
@@ -529,6 +724,9 @@ position: relative;
           overflow: hidden;
           touch-action: manipulation;
         }
+		body.light .board {
+			background: #9da6b1 !important
+		}
     
         .cell {
           position: relative;
@@ -921,7 +1119,7 @@ position: relative;
             var(--fade-delay,1000ms) forwards;
 }
 body.light .whatdoievencallthis {
-    filter: brightness(0);
+    filter: brightness(0.1);
 }
     
         .control-card {
@@ -1012,7 +1210,7 @@ body.light .menu-item:hover {
 		.cancel-button:active
         .theme-toggle:active,
         .history-button:active:not(:disabled) {
-          transform: translateY(1px);
+          transform: translateY(1px)
         }
 	.disabled {
 		          transform: translateY(0px);
@@ -1168,7 +1366,7 @@ body.light .menu-item:hover {
           box-shadow: var(--shadow);
 		  position: absolute;
 		  right: -65%;
-		  top: -250%
+		  top: -502%
         }
     
         .difficulty-menu.open {
@@ -1493,14 +1691,14 @@ body.light .menu-item:hover {
 			}
 
 @media (orientation: portrait) {
-		.something {
+	.something {
 		height: 230px;
 		overflow: scroll;
 		scrollbar-color: transparent transparent;
 	}
-					.sidebar {
-	max-height: unset
-}
+	.sidebar {
+		max-height: unset
+	}
 }
 
 	}
