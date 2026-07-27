@@ -13,6 +13,18 @@
  * Let's keep it that way.
  * If it ain't broke, don't fix it. It WILL break.
  ******************************************************************************/
+function updateSettingsScale() {
+    const child = document.getElementById("settingsOverlay").firstElementChild;
+
+    if (window.innerHeight < 700) {
+        child.style.transform = "scale(0.87)";
+    } else {
+        child.style.transform = "";
+    }
+}
+
+window.addEventListener("resize", updateSettingsScale);
+updateSettingsScale();
 
 let canusecurrenthintsystem = false
 let usingsavegame = false
@@ -116,15 +128,15 @@ function unlockAudio() {
             popSound.muted = false;
         });
 }
-
+function isTouchDevice() {
+    return window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+}
 document.addEventListener("pointerdown", unlockAudio, { once: true });
 let vibrate;
-const isElectron = !!window.electronAPI;
-
 if ("vibrate" in navigator) {
     vibrate = function (duration = 10) {
         if (typeof isTouchDevice !== "function" || !isTouchDevice()) return;
-        if (!settings.haptics) return;
+        if (!settings.haptics.enabled) return;
 
         navigator.vibrate(duration);
     };
@@ -180,10 +192,14 @@ function playPop(speed = 1) {
 }
 document.addEventListener("pointerdown", (event) => {
     const button = event.target.closest("button");
-
+	
     if (!button) return;
+	
+	const isCell = button.classList.contains("cell");
 
-    vibrate(button.classList.contains("cell") ? 5 : 10);
+	if (isCell ? settings.haptics.cells : settings.haptics.buttons) {
+    	vibrate(isCell ? 5 : 10);
+	}
 });
 let selectedDifficulty = localStorage.getItem("difficulty") || "easy";
 document.getElementById("mainmenubutton").style.display = "none"
@@ -490,7 +506,9 @@ function updateHintCooldownDisplay() {
 			let pageMode = localStorage.getItem("theme") || "dark";
               function showWinScreen() {
 						winpauseTimer();
+				  						if (settings.haptics.puzzlecomplete) {
 				  		vibrate([20, 50, 40]);
+				}
 			if (settings.SFX.enabled && settings.SFX.win) {
 				winSound.currentTime = 0;
 				winSound.play().catch(() => {});
@@ -1076,29 +1094,31 @@ if (runninggame){
               }
 
               function showWinScreen() {
-						winpauseTimer();
+				winpauseTimer();
+				  
+				if (settings.haptics.puzzlecomplete) {
 				  		vibrate([20, 50, 40]);
-			if (settings.SFX.enabled && settings.SFX.win) {
-				winSound.currentTime = 0;
-				winSound.play().catch(() => {});
-			}
-            winDifficulty.textContent =
-                difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
-		
-			
-            winMistakes.textContent = mistakes;
-            winOverlay.hidden = false;
+				}
+				  
+				if (settings.SFX.enabled && settings.SFX.win) {
+					winSound.currentTime = 0;
+					winSound.play().catch(() => {});
+				}
+				  
+            	winDifficulty.textContent = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+            	winMistakes.textContent = mistakes;
+            	winOverlay.hidden = false;
         
     		requestAnimationFrame(() => {
-        		winOverlay.classList.add("show");
-    		});
+        			winOverlay.classList.add("show");
+    			});
 
-    		winOverlay.addEventListener("animationend", () => {
-        		if (settings.VFX.enabled && settings.VFX.confetti) {
-            		fireconfetti();
-        		}
-    		}, { once: true });
-        }
+    			winOverlay.addEventListener("animationend", () => {
+        			if (settings.VFX.enabled && settings.VFX.confetti) {
+            			fireconfetti();
+        			}
+    			}, { once: true });
+        	}
 						function showPauseScreen() {
             pauseDifficulty.textContent =
                 difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
