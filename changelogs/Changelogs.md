@@ -1,3 +1,12 @@
+- ### Version 5.0.2
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - The close settings menu button not appearing correctly in browsers other than Firefox.
+  >>> - The settings menu being too tall on smaller desktop displays.
+  >>> - Haptics not working at all.
+  >>> - The hint cooldown type setting not having correctly aligned text on mobile.
+  >> ##### Improved:
+  >>> - The font size of the headings in the settings menu on mobile, making them more in line with the size of the settings themselves.
 - ### Version 5.0.1
   > #### Changes:
   >> ##### Fixed:
