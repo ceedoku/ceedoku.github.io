@@ -103,7 +103,10 @@ loadSettings();
 let hintcount = settings.hints.cooldown.startinghints
 const winSound = new Audio("./sounds/win.ogg");
 const popSound = new Audio("./sounds/pop.ogg");
-
+popSound.preload = "auto";
+popSound.load();
+winSound.preload = "auto";
+winSound.load();
 const audioContext = new AudioContext();
 const popSource = audioContext.createMediaElementSource(popSound);
 const popGain = audioContext.createGain();
@@ -242,7 +245,8 @@ window.addEventListener('keydown', function (event) {
 		 	  	  expert: { holes: 58 },
  			  	  master: { holes: 64 },
  			 	  extreme: { holes: 70 },
-   			  	  impossible: { holes: 76 }
+   			  	  impossible: { holes: 76 },
+				  godlike: { holes: 76 }
 			  };
 			  const hintcooldowndisplay = document.getElementById("hintCooldownDisplay")
 
@@ -476,14 +480,14 @@ hintCooldownAmount.addEventListener("change", () => {
 	updateSettingsMenu()
 });
 
-function updateHintCooldownDisplay() {
+function updateHintCooldownDisplay() { if (canusehelp) {
     if (!settings.hints.cooldown.enabled) {
         hintCooldownDisplay.textContent = "∞";
         hintCooldownDisplay.style.fontWeight = "800";
     } else {
         hintCooldownDisplay.style.fontWeight = "unset";
         hintCooldownDisplay.textContent = getHintCooldownText();
-    }
+    }}
 }
               let solution = [];
               let puzzle = [];
@@ -600,6 +604,7 @@ document.addEventListener("fullscreenchange", () => {
                 deleteOverlay.classList.add("show");
             });
         }
+let canusehelp = true
 function loadgame() {
     const save = localStorage.getItem("save");
 	    if (save === null) {
@@ -614,6 +619,7 @@ if (solution.length !== 81){localStorage.removeItem("save");nosave=true;updateGi
     puzzle = game.puzzle;
     values = game.values;
     givens = game.givens;
+	if (game.canusehelp !== undefined) { canusehelp = game.canusehelp; } else { canusehelp = true }
     notes = game.notes.map(arr => new Set(arr));
 
     selected = game.selected;
@@ -642,6 +648,7 @@ if (solution.length !== 81){localStorage.removeItem("save");nosave=true;updateGi
 		savecooldownmoves = game.cooldownmoves
 		savecooldowntime = game.cooldowntime
 	}
+	testhistorybuttons();
 	
     // ---------------- TIMER ----------------
     elapsedMs = game.elapsedMs || 0;
@@ -985,7 +992,12 @@ if (value) {
                 cell.classList.toggle("completed", complete);
                 cell.classList.toggle("correct", userValue && value === solution[i] && !complete);
                 cell.classList.toggle("error", userValue && value !== solution[i] && !complete);
-        
+
+				if (!canusehelp) {
+					cell.classList.remove("error")
+					cell.classList.remove("correct")
+				}
+				
                 // Highlight same row, column and box
                 cell.classList.toggle(
                     "related",
@@ -1035,7 +1047,8 @@ if (runninggame){
 		hintcount,
 		cooldownmoves,
 		cooldowntime,
-		cooldowntypetouse
+		cooldowntypetouse,
+		canusehelp
     }));
 }
 }
@@ -1095,30 +1108,30 @@ if (runninggame){
 
               function showWinScreen() {
 				winpauseTimer();
-				  
-				if (settings.haptics.puzzlecomplete) {
+	  						if (settings.haptics.puzzlecomplete) {
 				  		vibrate([20, 50, 40]);
 				}
-				  
-				if (settings.SFX.enabled && settings.SFX.win) {
-					winSound.currentTime = 0;
-					winSound.play().catch(() => {});
-				}
-				  
-            	winDifficulty.textContent = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
-            	winMistakes.textContent = mistakes;
-            	winOverlay.hidden = false;
+			if (settings.SFX.enabled && settings.SFX.win) {
+				winSound.currentTime = 0;
+				winSound.play().catch(() => {});
+			}
+            winDifficulty.textContent =
+                difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+		
+			
+            winMistakes.textContent = mistakes;
+            winOverlay.hidden = false;
         
     		requestAnimationFrame(() => {
-        			winOverlay.classList.add("show");
-    			});
+        		winOverlay.classList.add("show");
+    		});
+			setTimeout(() => {
+        		if (settings.VFX.enabled && settings.VFX.confetti) {
+            		fireconfetti();
+        		}
+			}, 200); 
+			  }
 
-    			winOverlay.addEventListener("animationend", () => {
-        			if (settings.VFX.enabled && settings.VFX.confetti) {
-            			fireconfetti();
-        			}
-    			}, { once: true });
-        	}
 						function showPauseScreen() {
             pauseDifficulty.textContent =
                 difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
@@ -1422,12 +1435,40 @@ function disableHintButton() {
     document.getElementById("hintButton").classList.add("disabled");
     document.getElementById("hintButton").disabled = true;
 }
+function disablehistorybuttons() {
+	redoButton.disabled = true;
+	undoButton.disabled = true;
+}
+function enablehistorybuttons() {
+	redoButton.disabled = false;
+	undoButton.disabled = false;
+}
+function disableotherbuttons() {
+	eraseButton.disabled = true;
+	pencilButton.disabled = true;
+}
+function enableotherbuttons() {
+	eraseButton.disabled = false;
+	pencilButton.disabled = false;
+}
+function testhistorybuttons() {
+	if (canusehelp) {
+		enablehistorybuttons()
+		enableotherbuttons()
+	} else {
+		disablehistorybuttons()
+		disableotherbuttons()
+	}
+}
 function testHintButton() {
     if (!settings.hints.enabled) {
         disableHintButton();
     } else {
         enableHintButton();
     }
+	if (!canusehelp) { 
+		disableHintButton(); 
+	}
 }
 
 testHintButton();
@@ -1555,6 +1596,11 @@ function updateHintCooldownDisplay() {
         hintcooldowndisplay.textContent = "Disabled";
         return;
     }
+    if (!canusehelp) {
+        hintcooldowndisplay.textContent = "Disabled";
+		disableHintButton();
+        return;
+    }
 
     if (!settings.hints.cooldown.enabled) {
         hintcooldowndisplay.textContent = "∞";
@@ -1568,8 +1614,13 @@ function updateHintCooldownDisplay() {
 updateHintCooldownDisplay();
         
               function updateHistoryButtons() {
+				if (canusehelp) {
                 undoButton.disabled = undoStack.length === 0;
                 redoButton.disabled = redoStack.length === 0;
+				} else {
+				undoButton.disabled = true
+				redoButton.disabled = true
+				}
               }
         
               function updateNumberCounts() {
@@ -1975,7 +2026,6 @@ hidemainmenu();
 }
 
 setInterval(saveGame, 1000);
-
 function newGame(nextDifficulty = difficulty) {
 	nosave = false
 	cooldowntypetouse = settings.hints.cooldown.cooldowntype
@@ -1984,13 +2034,19 @@ function newGame(nextDifficulty = difficulty) {
 	cooldowntime = 0;
 	hintcount = settings.hints.cooldown.startinghints;
 	canusecurrenthintsystem = true
-	updateHintCooldownDisplay();
 	localStorage.setItem("difficulty", difficulty);
     runninggame = true
 	finished = false
-
-
     difficulty = nextDifficulty;
+	
+	if (difficulty === "godlike") {
+		canusehelp = false
+	} else {
+		canusehelp = true
+	}
+
+	updateHintCooldownDisplay();
+
 	if (window.matchMedia("(orientation: landscape)").matches){
  		 let scaleValue = difficulty === "impossible" ? "1.2" : "1.3";
  		 document.querySelectorAll(".win-stat").forEach(el => el.style.scale = scaleValue);
@@ -2035,6 +2091,7 @@ function newGame(nextDifficulty = difficulty) {
 	hidecontinuegame();
 	hidemainmenu();
 	document.getElementById("igiveup").classList.remove("disabled", !nosave);
+	testhistorybuttons();
 }
         
         
@@ -2053,17 +2110,20 @@ redoButton.addEventListener("click", () => {
 });
 
 hintButton.addEventListener("click", () => {
+	if (!canusehelp) return;
     if (timerPaused) return;
     hint();
 });
 
 eraseButton.addEventListener("click", () => {
+	if (!canusehelp) return;
     if (timerPaused) return;
     toggleEraseMode();
 });
 
 pencilButton.addEventListener("click", () => {
     if (timerPaused) return;
+	if (!canusehelp) return;
     togglePencilMode();
 });
               newGameButton.addEventListener("click", () => newGame());
@@ -2146,12 +2206,18 @@ localStorage.setItem("difficulty", selectedDifficulty);
 function continuenewGame() {
     newGame(selectedDifficulty);
 }
-              document.addEventListener("click", (event) => {
-                if (!winnewGameBand.contains(event.target)) closeDifficultyMenu();
-				if (timerPaused) return;
-              });
+
+document.addEventListener("click", (event) => {
+    if (!winnewGameBand.contains(event.target)) {
+        closeDifficultyMenu();
+    }
+
+    if (timerPaused) return;
+});
+
 document.addEventListener("keyup", (event) => {
-	if (!runninggame) return;
+    if (!runninggame) return;
+
     console.log(event.key);
 
     if (event.code === "Space") {
@@ -2159,49 +2225,100 @@ document.addEventListener("keyup", (event) => {
         pauseTimer();
     }
 });
-              document.addEventListener("keydown", (event) => {
-			   if (timerPaused) return;
-		       if (!runninggame) return;
-                // console.log(event.key); disabled logging as it isn't currently needed
-                const key = event.key.toLowerCase();
- 
-        
-                if ((event.ctrlKey || event.metaKey) && key === "z") {
-                  event.preventDefault();
-                  if (event.shiftKey) redo();
-                  else undo();
-                  return;
-                }
-                if ((event.ctrlKey || event.metaKey) && key === "y") {
-                  event.preventDefault();
-                  redo();
-                  return;
-                }
-                if (event.ctrlKey || event.metaKey) return;
-        
-                if (key === "p") {
-                  event.preventDefault();
-                  togglePencilMode();
-                  return;
-                }
-        	if (key === "e") {
-          	event.preventDefault();
-         	toggleEraseMode();
-        	return;
-        	}
-			 if (timerPaused) return;
-			 if (!runninggame) return;
-                if (/^[1-9]$/.test(key)) placeNumber(Number(key));
-                if (key === "backspace" || key === "delete" || key === "0") eraseSelected();
-                if (["arrowup", "arrowdown", "arrowleft", "arrowright"].includes(key)) {
-                  event.preventDefault();
-                  const row = Math.floor(selected / 9);
-                  const col = selected % 9;
-                  const nextRow = key === "arrowup" ? Math.max(0, row - 1) : key === "arrowdown" ? Math.min(8, row + 1) : row;
-                  const nextCol = key === "arrowleft" ? Math.max(0, col - 1) : key === "arrowright" ? Math.min(8, col + 1) : col;
-                  selectCell(nextRow * 9 + nextCol);
-                }
-              });   
+
+document.addEventListener("keydown", (event) => {
+    if (timerPaused) return;
+    if (!runninggame) return;
+
+    // console.log(event.key); disabled logging as it isn't currently needed
+    const key = event.key.toLowerCase();
+
+    if ((event.ctrlKey || event.metaKey) && key === "z") {
+        event.preventDefault();
+
+        if (event.shiftKey) {
+            if (!canusehelp) return;
+            redo();
+        } else {
+            if (!canusehelp) return;
+            undo();
+        }
+
+        return;
+    }
+
+    if ((event.ctrlKey || event.metaKey) && key === "y") {
+        event.preventDefault();
+
+        if (!canusehelp) return;
+        redo();
+
+        return;
+    }
+
+    if (event.ctrlKey || event.metaKey) return;
+
+    if (key === "p") {
+        event.preventDefault();
+
+        if (!canusehelp) return;
+        togglePencilMode();
+
+        return;
+    }
+
+    if (key === "h") {
+        event.preventDefault();
+
+        if (!canusehelp) return;
+        hint();
+
+        return;
+    }
+
+    if (key === "e") {
+        event.preventDefault();
+
+        if (!canusehelp) return;
+        toggleEraseMode();
+
+        return;
+    }
+
+    if (/^[1-9]$/.test(key)) {
+        placeNumber(Number(key));
+        return;
+    }
+
+    if (key === "backspace" || key === "delete" || key === "0") {
+        if (!canusehelp) return;
+        eraseSelected();
+        return;
+    }
+
+    if (["arrowup", "arrowdown", "arrowleft", "arrowright"].includes(key)) {
+        event.preventDefault();
+
+        const row = Math.floor(selected / 9);
+        const col = selected % 9;
+
+        const nextRow =
+            key === "arrowup"
+                ? Math.max(0, row - 1)
+                : key === "arrowdown"
+                    ? Math.min(8, row + 1)
+                    : row;
+
+        const nextCol =
+            key === "arrowleft"
+                ? Math.max(0, col - 1)
+                : key === "arrowright"
+                    ? Math.min(8, col + 1)
+                    : col;
+
+        selectCell(nextRow * 9 + nextCol);
+    }
+});
 
 function deleteGame() {
 	delsave()

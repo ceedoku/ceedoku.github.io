@@ -3,13 +3,13 @@
 <head>
 	<meta name="description" content="Ceedoku is a free Sudoku game with multiple difficulty levels, dark mode, hints, saving, and more.">
 	<meta name="google-site-verification" content="TIoixSj4h36QZAk_mHgQDXcUvwi8SHvCRLlZoKBVsbE" />
-    <script id="vervar">const version = "5.0.2";</script>
+    <script id="vervar">const version = "5.1.0";</script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="theme-color" content="#101418">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzOCAzOCIgd2lkdGg9IjM4IiBoZWlnaHQ9IjM4Ij4KCiAgPGRlZnM+CiAgICA8Y2xpcFBhdGggaWQ9ImNsaXAiPgogICAgICA8cmVjdCB3aWR0aD0iMzgiIGhlaWdodD0iMzgiIHJ4PSIxMCI+PC9yZWN0PgogICAgPC9jbGlwUGF0aD4KICA8L2RlZnM+CgogIDxnIGNsaXAtcGF0aD0idXJsKCNjbGlwKSI+CiAgICA8cmVjdCB3aWR0aD0iMzgiIGhlaWdodD0iMzgiIGZpbGw9IiMxYTczZTgiPjwvcmVjdD4KCiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxOSAxOSkiPgogICAgICA8IS0tIDI0IHJhaW5ib3cgd2VkZ2VzIC0tPgogICAgICA8cGF0aCBkPSJNMCwwIEwwLC0zMCBBMzAsMzAgMCAwLDEgNy43NiwtMjguOTggWiIgZmlsbD0iIzFhNzNlOCI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEw3Ljc2LC0yOC45OCBBMzAsMzAgMCAwLDEgMTUsLTI1Ljk4IFoiIGZpbGw9IiMyMTgwZDgiPjwvcGF0aD4KICAgICAgPHBhdGggZD0iTTAsMCBMMTUsLTI1Ljk4IEEzMCwzMCAwIDAsMSAyMS4yMSwtMjEuMjEgWiIgZmlsbD0iIzJiOGRkMCI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwyMS4yMSwtMjEuMjEgQTMwLDMwIDAgMCwxIDI1Ljk4LC0xNSBaIiBmaWxsPSIjMzVhMjhhIj48L3BhdGg+CiAgICAgIDxwYXRoIGQ9Ik0wLDAgTDI1Ljk4LC0xNSBBMzAsMzAgMCAwLDEgMjguOTgsLTcuNzYgWiIgZmlsbD0iIzQwYjU2YSI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwyOC45OCwtNy43NiBBMzAsMzAgMCAwLDEgMzAsMCBaIiBmaWxsPSIjNjhiZjU1Ij48L3BhdGg+CgogICAgICA8cGF0aCBkPSJNMCwwIEwzMCwwIEEzMCwzMCAwIDAsMSAyOC45OCw3Ljc2IFoiIGZpbGw9IiM4ZmM4NDAiPjwvcGF0aD4KICAgICAgPHBhdGggZD0iTTAsMCBMMjguOTgsNy43NiBBMzAsMzAgMCAwLDEgMjUuOTgsMTUgWiIgZmlsbD0iI2I3ZDEyYSI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwyNS45OCwxNSBBMzAsMzAgMCAwLDEgMjEuMjEsMjEuMjEgWiIgZmlsbD0iI2RiYzcxNCI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwyMS4yMSwyMS4yMSBBMzAsMzAgMCAwLDEgMTUsMjUuOTggWiIgZmlsbD0iI2ZiYmMwNCI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwxNSwyNS45OCBBMzAsMzAgMCAwLDEgNy43NiwyOC45OCBaIiBmaWxsPSIjZjRhMjA0Ij48L3BhdGg+CiAgICAgIDxwYXRoIGQ9Ik0wLDAgTDcuNzYsMjguOTggQTMwLDMwIDAgMCwxIDAsMzAgWiIgZmlsbD0iI2VjODYwYiI+PC9wYXRoPgoKICAgICAgPHBhdGggZD0iTTAsMCBMMCwzMCBBMzAsMzAgMCAwLDEgLTcuNzYsMjguOTggWiIgZmlsbD0iI2U1NmExMyI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwtNy43NiwyOC45OCBBMzAsMzAgMCAwLDEgLTE1LDI1Ljk4IFoiIGZpbGw9IiNkZjUzMWEiPjwvcGF0aD4KICAgICAgPHBhdGggZD0iTTAsMCBMLTE1LDI1Ljk4IEEzMCwzMCAwIDAsMSAtMjEuMjEsMjEuMjEgWiIgZmlsbD0iI2Q5MzAyNSI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwtMjEuMjEsMjEuMjEgQTMwLDMwIDAgMCwxIC0yNS45OCwxNSBaIiBmaWxsPSIjY2YyZjRkIj48L3BhdGg+CiAgICAgIDxwYXRoIGQ9Ik0wLDAgTC0yNS45OCwxNSBBMzAsMzAgMCAwLDEgLTI4Ljk4LDcuNzYgWiIgZmlsbD0iI2M2MzA3NiI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwtMjguOTgsNy43NiBBMzAsMzAgMCAwLDEgLTMwLDAgWiIgZmlsbD0iI2I4MzQ5YyI+PC9wYXRoPgoKICAgICAgPHBhdGggZD0iTTAsMCBMLTMwLDAgQTMwLDMwIDAgMCwxIC0yOC45OCwtNy43NiBaIiBmaWxsPSIjYTUzY2JmIj48L3BhdGg+CiAgICAgIDxwYXRoIGQ9Ik0wLDAgTC0yOC45OCwtNy43NiBBMzAsMzAgMCAwLDEgLTI1Ljk4LC0xNSBaIiBmaWxsPSIjOGQ0OWQ0Ij48L3BhdGg+CiAgICAgIDxwYXRoIGQ9Ik0wLDAgTC0yNS45OCwtMTUgQTMwLDMwIDAgMCwxIC0yMS4yMSwtMjEuMjEgWiIgZmlsbD0iIzZmNWRlMyI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwtMjEuMjEsLTIxLjIxIEEzMCwzMCAwIDAsMSAtMTUsLTI1Ljk4IFoiIGZpbGw9IiM0ZjZkZWIiPjwvcGF0aD4KICAgICAgPHBhdGggZD0iTTAsMCBMLTE1LC0yNS45OCBBMzAsMzAgMCAwLDEgLTcuNzYsLTI4Ljk4IFoiIGZpbGw9IiMzMzdiZWUiPjwvcGF0aD4KICAgICAgPHBhdGggZD0iTTAsMCBMLTcuNzYsLTI4Ljk4IEEzMCwzMCAwIDAsMSAwLC0zMCBaIiBmaWxsPSIjMWE3M2U4Ij48L3BhdGg+CiAgICA8L2c+CiAgPC9nPgoKICA8IS0tIDPDlzMgZ3JpZCAtLT4KICA8ZyBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LC45MikiPgogICAgPHJlY3QgeD0iNyIgeT0iNyIgd2lkdGg9IjYiIGhlaWdodD0iNiIgcng9IjIiPjwvcmVjdD4KICAgIDxyZWN0IHg9IjE2IiB5PSI3IiB3aWR0aD0iNiIgaGVpZ2h0PSI2IiByeD0iMiI+PC9yZWN0PgogICAgPHJlY3QgeD0iMjUiIHk9IjciIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CgogICAgPHJlY3QgeD0iNyIgeT0iMTYiIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CiAgICA8cmVjdCB4PSIxNiIgeT0iMTYiIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CiAgICA8cmVjdCB4PSIyNSIgeT0iMTYiIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CgogICAgPHJlY3QgeD0iNyIgeT0iMjUiIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CiAgICA8cmVjdCB4PSIxNiIgeT0iMjUiIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CiAgICA8cmVjdCB4PSIyNSIgeT0iMjUiIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CiAgPC9nPgoKPC9zdmc+">
     <link rel="icon" type="image/png" sizes="128x128" href="/icons/128-nocut.png">
-    <link rel="icon" type="image/png" sizes="144x144" href="/icons/144-nocut.png">
+    <link rel="icon" type="image/png" sizes="144x144" href="/icons/144nocut.png">
 	<title>Ceedoku - Loading</title>
 <link id="Style" rel="stylesheet" href="style.css">
 <link id="touchStyles" rel="stylesheet" href="touch.css">
@@ -24,7 +24,7 @@
 
 </head>
 
-<body class="dark"><div id="loader" style="display: flex; flex-direction: column; place-content: center; position: fixed; place-items: center; visibility: visible;height: 100dvh;width: 100dvw;overflow: hidden;"><style id="loadingscreen">
+<body class="dark" style="scrollbar-color:transparent transparent;display: flex;align-items: center;justify-content:center"><div id="loader" style="display: flex; flex-direction: column; place-content: center; position: fixed; place-items: center; visibility: visible;height: 100dvh;width: 100dvw;overflow: hidden;"><style id="loadingscreen">
 
 .spinner {
     animation: rotator 1.4s linear infinite;
@@ -95,7 +95,7 @@
         }</style><div style="display:flex;justify-content:center;margin-bottom: 10px;"><img aria-label="Ceedoku Logo" alt="Ceedoku" style="width:90%" class="whatdoievencallthis" src="./title.png"></div><svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66">
     <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30">
     </circle>
-</svg></div><div id="aahtheentiregame" style="visibility:hidden">
+</svg></div><div id="aahtheentiregame" style="visibility:hidden;scrollbar-color:transparent transparent">
 <div class="null"><div class="game-shell" style="padding-top: 20px;">
         <main class="app" aria-label="Ceedoku game">
             <section class="main" style="width: 100%;">
@@ -110,7 +110,7 @@
                                 <span></span><span></span><span></span>
                             </div>
                         </div>
-                        <div>
+                        <div style="margin-bottom:5px">
                             <h1 id="title" style="color: var(--text4);">Ceedoku</h1>
                             <div class="difficulty-badge" id="difficultyBadge">Easy</div>
                         </div>
@@ -171,6 +171,7 @@
 						<button title="Create a new game with the master difficulty."  aria-label="Create a new game with the master difficulty"  class="menu-item" type="button" data-difficulty="master" role="option" aria-selected="false">Master <span>64 Holes</span></button>
                         <button title="Create a new game with the extreme difficulty."  aria-label="Create a new game with the extreme difficulty"  class="menu-item" type="button" data-difficulty="extreme" role="option" aria-selected="false">Extreme <span>70 Holes</span></button>
                         <button title="Create a new game with the impossible difficulty."  aria-label="Create a new game with the impossible difficulty" class="menu-item" type="button" data-difficulty="impossible" role="option" aria-selected="false">Impossible <span>76 Holes</span></button>
+						<button title="Create a new game with the god-like difficulty."  aria-label="Create a new game with the god-like difficulty." class="menu-item" type="button" data-difficulty="godlike" role="option" aria-selected="false">Godlike <span>No Tools</span></button>
                     </div>
                 </div>
 
@@ -245,7 +246,8 @@
 						<button title="Create a new game with the master difficulty."  aria-label="Create a new game with the master difficulty"  class="menu-item" type="button" data-difficulty="master" role="option" aria-selected="false">Master <span>64 Holes</span></button>
                         <button title="Create a new game with the extreme difficulty."  aria-label="Create a new game with the extreme difficulty"  class="menu-item" type="button" data-difficulty="extreme" role="option" aria-selected="false">Extreme <span>70 Holes</span></button>
                         <button title="Create a new game with the impossible difficulty."  aria-label="Create a new game with the impossible difficulty" class="menu-item" type="button" data-difficulty="impossible" role="option" aria-selected="false">Impossible <span>76 Holes</span></button>
-                    </div>
+                        <button title="Create a new game with the god-like difficulty."  aria-label="Create a new game with the god-like difficulty." class="menu-item" type="button" data-difficulty="godlike" role="option" aria-selected="false">Godlike <span>No Tools</span></button>
+					</div>
                 </div>
 				<button class="new-main2" onclick="showmainmenu()" style="width: 100%;border-top-right-radius: 999px;border-bottom-right-radius: 999px;">Main Menu</button>
             </div>
@@ -292,7 +294,8 @@
 						<button title="Create a new game with the master difficulty."  aria-label="Create a new game with the master difficulty"  class="menu-item" type="button" data-difficulty="master" role="option" aria-selected="false">Master <span>64 Holes</span></button>
                         <button title="Create a new game with the extreme difficulty."  aria-label="Create a new game with the extreme difficulty"  class="menu-item" type="button" data-difficulty="extreme" role="option" aria-selected="false">Extreme <span>70 Holes</span></button>
                         <button title="Create a new game with the impossible difficulty."  aria-label="Create a new game with the impossible difficulty" class="menu-item" type="button" data-difficulty="impossible" role="option" aria-selected="false">Impossible <span>76 Holes</span></button> 
-                    </div>
+                        <button title="Create a new game with the god-like difficulty."  aria-label="Create a new game with the god-like difficulty." class="menu-item" type="button" data-difficulty="godlike" role="option" aria-selected="false">Godlike <span>No Tools</span></button>
+					</div>
                     </div>
 								<button class="new-main2" onclick="showmainmenu()" style="width: 100%;border-top-right-radius: 999px;border-bottom-right-radius: 999px;">Main Menu</button>
                 </div>
@@ -325,7 +328,8 @@
                         <button aria-label="Select the master difficulty" class="menu-item menu-item2"  type="button" data-difficulty="master" role="option" aria-selected="false" title="Select the master difficulty.">Master <span>64 Holes</span></button>
                         <button aria-label="Select the extreme difficulty" class="menu-item menu-item2"  type="button" data-difficulty="extreme" role="option" aria-selected="false" title="Select the extreme difficulty.">Extreme <span>70 Holes</span></button>
 	                    <button aria-label="Select the impossible difficulty" class="menu-item menu-item2"  type="button" data-difficulty="impossible" role="option" aria-selected="false" title="Select the impossible difficulty.">Impossible <span>76 Holes</span></button>
-					</div></div>
+					    <button title="Create a new game with the god-like difficulty." aria-label="Create a new game with the god-like difficulty." class="menu-item menu-item2" type="button" data-difficulty="godlike" role="option" aria-selected="false">Godlike <span>76 Holes - No Tools</span></button>
+				</div></div>
 		<button class="new-main2" onclick="continuenewGame()" style="width: 100%;border-top-right-radius: 999px;border-bottom-right-radius: 999px;margin-bottom: 5px;" title="Create a new game with the selected difficulty">New Game</button><button style="width: 100%; border-top-right-radius: 999px; border-bottom-right-radius: 999px; margin-bottom: 5px;font-size: 1.02rem;min-height: 58px;" class="cancel-button number-button" title="Cancel creating a new game." onclick="hidenewgame()">Cancel</button>
                 
 
@@ -398,7 +402,7 @@
             <div class="win-card" aria-label="Settings Menu" style="width: 92dvw;padding-top: 10px !important;padding: 15px;border: 1px solid var(--outline);">
 
                 
-                <div style="display: flex;padding-left: 10px;"><h1 class="win-title" style="color: var(--text2);">Ceedoku Settings</h1><button id="WHATTHEFUCKDOICALLTHIS?" onclick="closesettingsmenu()" style="background-color: transparent;margin-left:auto;margin-right: 5px;color: var(--text2)" aria-label="Close" title="Close the settings menu"><h1 class="win-title" style="font-size: 45px;height: 35px;padding-bottom: 8px;text-align: center;align-content: center;justify-content: center;display: flex;flex-direction: column;">×</h1></button></div><div style="height: 550px;background-color: var(--surface-2);margin-top: 15px;border-radius: 10px;padding: 10px;padding-top: 15px;padding-bottom: 10px;"><div style="height: 100%;overflow: scroll;scrollbar-color: var(--text2) transparent;scrollbar-width: thick;"><h1 class="settindescriber" style="font-size: 50px;text-align: center;">Animations</h1><div class="setting-row" style="padding-bottom: 5px;" title="Whether or not animations should be enabled.">
+                <div style="display: flex;padding-left: 10px;"><h1 class="win-title" style="color: var(--text2);">Ceedoku Settings</h1><button id="WHATTHEFUCKDOICALLTHIS?" onclick="closesettingsmenu()" style="background-color: transparent;margin-left:auto;margin-right: 5px;color: var(--text2)" aria-label="Close" title="Close the settings menu"><h1 class="win-title" style="font-size: 45px;height: 35px;padding-bottom: 8px;text-align: center;align-content: center;justify-content: center;display: flex;flex-direction: column;">×</h1></button></div><div style="height: 550px;background-color: var(--surface-2);margin-top: 15px;border-radius: 10px;padding: 10px;padding-top: 15px;padding-bottom: 10px;"><div style="height: 100%;overflow: scroll;scrollbar-color: var(--scrollbar) transparent;scrollbar-width: thick;"><h1 class="settindescriber" style="font-size: 50px;text-align: center;">Animations</h1><div class="setting-row" style="padding-bottom: 5px;" title="Whether or not animations should be enabled.">
     <span class="setting-name" style="text-align: left;"><strong>Enable animations</strong></span>
 
     <label class="toggle">
