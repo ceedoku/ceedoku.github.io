@@ -1,22 +1,14 @@
-* ### Version 5.1.0
-
+- ### Version 5.1.0
   > #### Changes:
-  >
-  > > ##### Fixed:
-  > >
-  > > > * The game UI not being vertically centered on mobile.
-  > > > * Confetti not showing at all.
-  > > > * Scrollbars appearing where they shouldn't.
-  > >
-  > > ##### Added:
-  > >
-  > > > * A Godlike difficulty. It is the same as Impossible difficulty, but hints, undo, redo, pencil mode, and erase mode cannot be used, and autocorrection is disabled.
-  > >
-  > > ##### Improved:
-  > >
-  > > > * The styling of the history buttons when tapped on a mobile device.
-  > > > * Animations so that everything should now smoothly fade when changing themes.
-
+  >> ##### Fixed:
+  >>> - The game UI not being vertically centered on mobile.
+  >>> - Confetti not showing at all.
+  >>> - Scrollbars appearing where they shouldn't.
+  >> ##### Added:
+  >>> - A Godlike difficulty. It is the same as Impossible difficulty, but hints, undo, redo, pencil mode, and erase mode cannot be used, and auto-correction is disabled.
+  >> ##### Improved:
+  >>> - The styling of the history buttons when tapped on a mobile device.
+  >>> - Animations so that everything should now smoothly fade when changing themes.
 - ### Version 5.0.2
   > #### Changes:
   >> ##### Fixed:
