@@ -1,3 +1,7 @@
+- ### Version 5.2.0
+  > #### Changes:
+  >> ##### Added:
+  >>> - A feedback button (or is it a link to u guys) - IDK what to call it... whatever, it exists
 - ### Version 5.1.1
   > #### Changes:
   >> ##### Fixed:
