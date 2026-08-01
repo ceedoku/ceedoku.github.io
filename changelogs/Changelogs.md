@@ -1,3 +1,7 @@
+- ### Version 5.1.1
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - A bug where setting starting hints to 0 would prevent the hint cooldown from starting.
 - ### Version 5.1.0
   > #### Changes:
   >> ##### Fixed:
