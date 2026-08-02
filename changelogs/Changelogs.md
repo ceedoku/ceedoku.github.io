@@ -1,3 +1,8 @@
+- ### Version 6.0.0
+  > #### Changes:
+  >> ##### Added:
+  >>> - Best time system (that's basically done).
+  >>> - More bugs for me to be fixing later.
 - ### Version 5.2.1
   > #### Changes:
   >> ##### Fixed:
