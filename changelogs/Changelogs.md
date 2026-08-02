@@ -1,7 +1,14 @@
+- ### Version 5.2.1
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - Animations not working for some things.
+  >>> - Styling of the feedback thingy.
+  >>> - Pause button not visible on some mobile devices.
+  >>> - Version number and feedback thingy getting cutoff on mobile because most phones have rounded corners on their screen.
 - ### Version 5.2.0
   > #### Changes:
   >> ##### Added:
-  >>> - A feedback button (or is it a link to u guys) - IDK what to call it... whatever, it exists
+  >>> - A feedback button (or is it a link to u guys) - IDK what to call it... whatever, it exists.
 - ### Version 5.1.1
   > #### Changes:
   >> ##### Fixed:
