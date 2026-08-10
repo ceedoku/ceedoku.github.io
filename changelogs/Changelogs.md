@@ -1,3 +1,15 @@
+- ### 6.0.2
+  > #### Changes:
+  >> ##### Improved:
+  >>> - Selected cell outline, it is now slightly out of the cell and just generally looks better.
+  >> ##### Fixed:
+  >>> - The contents of selected cells being shifted by a bit.
+- ### 6.0.1
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - A bug where you could pause/unpause the game after win when in portrait.
+  >>> - Feedback link leading to the old form.
+  >>> - Some difficulties not being visible in menus in mobile.
 - ### Version 6.0.0
   > #### Changes:
   >> ##### Added:
