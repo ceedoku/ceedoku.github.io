@@ -240,7 +240,7 @@
 - ### Version 2.0.4
   > #### Changes:
   >> ##### Added:
-  >>> - Version: before the version number.
+  >>> - 'Version:' before the version number.
 - ### Version 2.0.3
   > #### Changes:
   >> ##### Fixed:
