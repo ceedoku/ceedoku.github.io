@@ -9,7 +9,7 @@
   >> ##### Improved:
   >>> - Selected cell outline, now removes outlines that shouldnt be visible.
   >> ##### Fixed:
-  >>> - Cells that have numbera in them not getting the correction background color for selections.
+  >>> - Cells that have numbers in them not getting the correction background color for selections.
 - ### 6.0.2
   > #### Changes:
   >> ##### Improved:
