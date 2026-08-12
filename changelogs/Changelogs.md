@@ -2,6 +2,8 @@
   > #### Changes:
   >> ##### Fixed:
   >>> - Pencil mode and erase mode staying enabled on creation of a new game with the difficulty set to Godlike.
+  >>> - Icons being low quality on launch.
+  >>> - Icons not existing for pwas at all resulting in using the wrong files.
 - ### 6.0.3
   > #### Changes:
   >> ##### Improved:
