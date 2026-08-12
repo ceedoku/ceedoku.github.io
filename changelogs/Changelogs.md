@@ -1,3 +1,7 @@
+- ### 6.0.4
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - Pencil mode and erase mode staying enabled on creation of a new game with the difficulty set to Godlike.
 - ### 6.0.3
   > #### Changes:
   >> ##### Improved:
