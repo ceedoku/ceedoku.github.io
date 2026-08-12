@@ -1500,6 +1500,10 @@ function enablehistorybuttons() {
 function disableotherbuttons() {
 	eraseButton.disabled = true;
 	pencilButton.disabled = true;
+ pencilMode = false;
+ eraseMode = false;
+ pencilButton.setAttribute("aria-pressed", "false");
+ eraseButton.setAttribute("aria-pressed", "false");
 }
 function enableotherbuttons() {
 	eraseButton.disabled = false;
@@ -2106,6 +2110,8 @@ function newGame(nextDifficulty = difficulty) {
 	
 	if (difficulty === "godlike") {
 		canusehelp = false
+		pencilMode = false
+		eraseMode = false
 	} else {
 		canusehelp = true
 	}
