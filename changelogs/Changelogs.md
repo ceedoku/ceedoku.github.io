@@ -1,3 +1,8 @@
+- ### 6.1.0
+  > #### Changes:
+  >> ##### Added:
+  >>> - Best time display for the currently selected difficulty.
+  >>> - More comments for fun.
 - ### 6.0.6
   > #### Changes:
   >> ##### Fixed:
