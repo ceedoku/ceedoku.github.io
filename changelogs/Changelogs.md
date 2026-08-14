@@ -1,3 +1,9 @@
+- ### 6.0.6
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - Cell selection borders having inconsistent thickness between edges on desktop devices.
+  >> ##### Improved:
+  >>> - Codebase readability.
 - ### 6.0.5
   > #### Changes:
   >> ##### Fixed:
