@@ -1,3 +1,7 @@
+- ### 6.0.5
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - New best time text not being centered on mobile.
 - ### 6.0.4
   > #### Changes:
   >> ##### Fixed:
