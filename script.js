@@ -162,10 +162,6 @@ let settings = {
             cooldowntype: "time",
             cooldowntime: 30,
             hintsaftercooldown: 1,
-        },
-        hintlimit: {
-            enabled: false,
-            amount: 10,
         }
     },
 
@@ -446,9 +442,6 @@ const hintCooldownMethod = document.getElementById("hintcooldownmethod");
 const hintCooldownAmount = document.getElementById("hintcooldownamount");
 const hintsaftercooldown = document.getElementById("hintsaftercooldown");
 
-const hintlimit = document.getElementById("hintlimit");
-const hintlimitinput = document.getElementById("hintlimitinput");
-
 function updatePauseBtn2() {
     pauseBtn2.style.display =
         window.matchMedia("(orientation: portrait)").matches ?
@@ -485,11 +478,6 @@ function updateSettingsMenu() {
     hintCooldownAmount.value = settings.hints.cooldown.cooldowntime;
     hintsaftercooldown.value = settings.hints.cooldown.hintsaftercooldown;
 
-    hintlimit.checked = settings.hints.hintlimit.enabled
-    hintlimitinput.value = settings.hints.hintlimit.limit
-    
-    hintlimit.disabled = !settings.hints.enabled
-    hintlimitinput.disabled = !settings.hints.hintlimit.enabled
     cellHapticsToggle.disabled = !settings.haptics.enabled;
     winHapticsToggle.disabled = !settings.haptics.enabled;
     hintCooldownToggle.disabled = !settings.hints.enabled;
@@ -605,18 +593,6 @@ hintsaftercooldown.addEventListener("change", () => {
     saveSettings();
     updateSettingsMenu()
 });
-hintlimit.addEventListener("change", () => {
-    settings.hints.hintlimit.enabled = hintlimit.checked
-    saveSettings();
-    updateSettingsMenu()
-});
-hintlimitinput.addEventListener("change", () => {
-    settings.hints.hintlimit.limit = Number(hintlimitinput.value) || 1;
-    saveSettings();
-    updateSettingsMenu()
-});
-let hintlimitreached = false
-let hintcounter = 0
 function updateHintCooldownDisplay() {
     if (canusehelp) {
         if (!settings.hints.cooldown.enabled) {
@@ -764,11 +740,6 @@ function loadgame() {
         nosave = true;
         updateGiveUpButton();
         return;
-    }
-    if (game.hintcounter) {
-        hintcounter = game.hintcounter
-    } else {
-        hintcounter = 0
     }
     puzzle = game.puzzle;
     values = game.values;
@@ -972,9 +943,7 @@ function startTimer() {
 
         timerEl.textContent =
             `Time: ${formatTime(Math.floor(elapsedMs / 1000))}`;
-        if (hintcounter == settings.hints.hintlimit.limit && !hintlimitreached) {
-            hintlimitreached = true
-        }
+
         hintCooldownCounter++;
 
         if (hintCooldownCounter >= 10) {
@@ -987,10 +956,8 @@ function startTimer() {
             ) {
                 cooldowntime--;
 
-                if (cooldowntime === 0 && !hintlimitreached) {
+                if (cooldowntime === 0) {
                     hintcount = settings.hints.cooldown.hintsaftercooldown;
-                } else {
-                    hintcount = 0
                 }
 
                 updateHintCooldownDisplay();
@@ -1235,7 +1202,6 @@ function saveGame() {
             finished,
             pageMode,
             hintcount,
-            hintcounter,
             cooldownmoves,
             cooldowntime,
             cooldowntypetouse,
@@ -1437,7 +1403,7 @@ function placeNumber(value, options = {}) {
     paintBoard();
     animateNewCompletions(previousCompleted, selected);
     checkWin();
-    if (!options.fromHistory && cooldownmoves > 0 && !hintlimitreached) {
+    if (!options.fromHistory && cooldownmoves > 0) {
         cooldownmoves--;
         updateHintCooldownDisplay();
         if (cooldownmoves === 0) {
@@ -1725,15 +1691,8 @@ function hint() {
 
     // No logical move found
     if (!move) return;
-    if (settings.hints.cooldown.enabled && !hintlimitreached) {
+    if (settings.hints.cooldown.enabled) {
         hintcount--;
-        if (settings.hints.hintlimit.enabled) {
-            hintcounter++
-            if (hintcounter == settings.hints.hintlimit.limit) {
-                hintlimitreached = true
-                return
-            }
-        }
         if (hintcount <= 0) {
             canusecurrenthintsystem = true;
             cooldowntypetouse = settings.hints.cooldown.cooldowntype
@@ -1804,10 +1763,6 @@ function starthintcooldown() {
 }
 
 function getHintCooldownText() {
-    if (hintlimitreached && settings.hints.hintlimit.enabled) {
-        disableHintButton();
-        return `Limit Hit`
-    }
     if (hintcount > 0) {
         if (settings.hints.enabled) {
             enableHintButton()
@@ -2265,7 +2220,6 @@ function continueGame() {
     hideBestTime();
     updatePauseBtn2();
     usingsavegame = true;
-    
     if (savehintcount > 0) {
         hintcount = savehintcount
         cooldowntime = 0
@@ -2308,8 +2262,6 @@ function newGame(nextDifficulty = difficulty) {
     usingsavegame = false;
     cooldownmoves = 0;
     cooldowntime = 0;
-    hintcounter = 0;
-    hintlimitreached = false
     hintcount = settings.hints.cooldown.startinghints;
     canusecurrenthintsystem = true
 
