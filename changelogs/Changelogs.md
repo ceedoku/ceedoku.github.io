@@ -1,3 +1,9 @@
+- ### 6.2.0
+  > #### Changes:
+  >> ##### Added:
+  >>> - The ability to customize the amount of hints regained after the hint cooldown.
+  >> ##### Fixed:
+  >>> - Fade animations not working correctly
 - ### 6.1.0
   > #### Changes:
   >> ##### Added:
