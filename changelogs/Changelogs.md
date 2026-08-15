@@ -1,3 +1,12 @@
+- ### 7.0.0
+  > #### Changes:
+  >> ##### Added:
+  >>> - Hint limit settings (you can now set a hint limit and won't be able to use more than that many hints in a game).
+  >>> - Support for printing Sudoku games (when printing the website, it will use a custom style designed specifically for printouts).
+  >> ##### Fixed:
+  >>> - Selected cells being wrong.
+  >>> - Disabled color of some boxes being wrong.
+  >>> - Selected cells not having a noticeable color difference compared to the other cells when in light mode.
 - ### 6.2.0
   > #### Changes:
   >> ##### Added:
