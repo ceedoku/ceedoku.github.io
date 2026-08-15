@@ -14,6 +14,11 @@
     but it ain't no lie,
     bugs go bye bye bye. (Bye Bugs!)
 --------------------------- */
+@media (orientation: portrait) {
+	#print {
+		display: none
+	}
+}
 * {
     transition:
         background-color 0.2s ease,
@@ -120,12 +125,17 @@ select:disabled {
 	background-color: var(--disabledbox) !important
 }
 #hintcooldownamount:disabled,
-#startinghints:disabled {
+#startinghints:disabled,
+#hintsaftercooldown:disabled,
+#hintlimitinput:disabled {
 	color: var(--muted) !important;
 	cursor: not-allowed !important;
 	background-color: var(--disabledbox) !important
 }
-#hintcooldownamount,#startinghints {
+#hintcooldownamount,
+#startinghints,
+#hintsaftercooldown,
+#hintlimitinput {
 	color: var(--text2)
 }
 #WHATTHEFUCKDOICALLTHIS\?:hover {
@@ -308,6 +318,7 @@ select:disabled {
           --lime-text: #195700;
           --lime-glow: rgba(156, 255, 53, .56);
           --danger: #d93025;
+		  --selectedcell: color-mix(in srgb, var(--blue) 40%, var(--surface));
           --danger-soft: #ffe7e5;
           --shell: rgba(255, 255, 255, .48);
           --shadow: 0 0px 46px rgba(28, 48, 74, .12);
@@ -543,6 +554,7 @@ font-size: clamp(1.20rem, 5vw, 2.5rem)
           --lime-soft: #263d1d;
 	  --text2: #dce3e9;
 	  --text3: #bec9da;
+			--selectedcell: var(--blue-soft);
 	  --text4: #bbc6d4;
           --lime-text: #bcff76;
           --lime-glow: rgba(167, 255, 72, .46);
@@ -821,7 +833,7 @@ position: relative;
           transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
           user-select: none;
           overflow: hidden;
-          isolation: isolate;
+          /* isolation: isolate; */
         }
     
         .cell:nth-child(3n) {
@@ -832,11 +844,6 @@ position: relative;
         .cell:nth-child(9n) {
           border-right: 0;
         }
-	.cell.selected.related {
-		/* border-width: 0px !important */
-		background: var(--blue-soft) !important;
-		background-color: var(--blue-soft) !important
-	}
     
         .cell:nth-child(n + 19):nth-child(-n + 27),
         .cell:nth-child(n + 46):nth-child(-n + 54) {
@@ -859,18 +866,15 @@ position: relative;
           color: var(--lime-text);
         }
 
-    
-				.cell.selected {
-		  background: var(--blue-soft);
-  		  box-shadow: 0 0 0 3.5px var(--blue);
-		  border-radius: 5.5px;
-		  z-index: 1;
-		  border-left-color: transparent;
-		  border-bottom-color: transparent !important;
-		  border-top-color: transparent;
-		  border-right-color: transparent;
-		  border-color: transparent	!important
-				} 
+.cell.selected {
+	border-radius: 5.5px;
+	z-index: 1;
+	border-color: transparent !important;
+	outline: 5px solid var(--blue);
+	outline-offset: -1.5px;
+	background-color: var(--selectedcell) !important;
+	background: var(--selectedcell) !important;
+} 
     
         .cell.error {
           color: var(--danger);
@@ -1075,6 +1079,7 @@ position: relative;
             opacity: 1;
         }
     }
+
     @keyframes boxGrow2 {
         0% {
             transform: scale(.15) rotate(0deg);
@@ -1663,9 +1668,8 @@ body.light .menu-item:hover {
             grid-template-columns: repeat(9, minmax(30px, 1fr));
           }
         }
-
 	
-    
+   
         @media (orientation: portrait) {
 	.settindescriber {
         font-size: 20px !important;
@@ -1827,11 +1831,112 @@ body.light .menu-item:hover {
 	#pause-btn {
 		display: unset
 	}
-@media (orientation: landscape {
-	.cell.selected {
-		box-shadow: 0 0 0 8px var(--blue) !important
+@media print {
+    .foo,
+    aside,
+    #sitecontrols,
+    .status-line,
+    .sidebar,
+    .mark,
+    .theme-toggle,
+	.win-overlay,
+	.win-overlay2 {
+        display: none !important;
+    }
+
+    body,
+    body.dark,
+    body.light {
+        background: white !important;
+        color: black !important;
+        overflow: visible !important;
+    }
+
+    .game-shell {
+        width: 100% !important;
+        border: none !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+    }
+
+    .app {
+        display: block !important;
+        width: 100% !important;
+    }
+    .cell.selected {
+	border-radius: 2px !important;
+    }
+
+    main {
+        display: flex !important;
+        justify-content: center !important;
+    }
+
+    .main {
+        width: min(var(--board-size), 100%) !important;
+    }
+
+    .topbar {
+        width: min(var(--board-size), 100%) !important;
+        justify-content: center !important;
+    }
+
+    .cell {
+        background: white !important;
+        color: black !important;
+    }
+
+    .cell.selected {
+        background: white !important;
+        outline: none !important;
+        box-shadow: none !important;
+        border-color: var(--line) !important;
+    }
+
+    .cell.error,
+    .cell.correct {
+        color: black !important;
+        background: white !important;
+    }
+
+    * {
+        transition: none !important;
+        animation: none !important;
+    }
+
+    @page {
+        margin: 10mm;
+    }
+
+    body {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+	.game-shell {
+		height: 100vh !important;
+		width: 100vw !important;
+		align-content:center
 	}
+	.app {
+		display: flex !important
+	}
+#difficultyBadge {
+color: #2e3843;
+  font-weight: 1000;
+  font-size: 25px;
+  margin-top: 0px;
+  text-align: center;
 }
+#title {
+color: #1a212c !important
+}
+}
+#print {
+	padding: unset !important
+}
+
 @media (orientation: portrait) {
 	#pause-btn {
 		display: none
@@ -1846,6 +1951,7 @@ body.light .menu-item:hover {
 		overflow: scroll;
 		scrollbar-color: transparent transparent;
 	}
+
 	.sidebar {
 		max-height: unset
 	}

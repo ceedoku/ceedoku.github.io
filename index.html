@@ -19,7 +19,7 @@ if (releaseReady) {
 	<meta content="Ceedoku is a free Sudoku game with multiple difficulty levels, dark mode, hints, saving, and more." name=description>
 	<meta content=TIoixSj4h36QZAk_mHgQDXcUvwi8SHvCRLlZoKBVsbE name=google-site-verification>
 	<script id=vervar>
-		const version = "6.2.0"
+		const version = "6.3.0"
 	</script>
 	<meta charset=utf-8>
 	<meta content="width=device-width,initial-scale=1,viewport-fit=cover" name=viewport>
@@ -223,7 +223,7 @@ if (releaseReady) {
 				<div style=margin-top:5px><button title="Create a new game." title="Create a new game." class=new-main2 type=button id=mainDifficultyToggle aria-expanded=false onclick=openmainDifficultyMenu() style=width:100%;border-top-right-radius:999px;border-bottom-right-radius:999px>New Game</button><button title="Change the settings." class=new-main2 type=button id=settingsbutton aria-expanded=false onclick=opensettingsmenu() style=width:100%;border-top-right-radius:999px;border-bottom-right-radius:999px;margin-top:10px>Settings</button></div>
 			</div>
 		</div>
-		<div style="z-index:10000;width:fit-content;position:absolute;top:0;right:0;background-color:var(--surface);padding:5px 5px 10px 10px;display:flex;gap:5px;border-bottom-left-radius:32px;border:1px solid var(--outline);border-top:0;border-right:0" id=sitecontrols aria-label="site controls"><button title="Pause the game." class="hint-button bar" aria-label="Pause the game" id=pause-btn2 onclick=pauseTimer() style=justify-self:left;width:50px;height:50px;right:20px;top:20px>▶</button><button title="Switch between light and dark mode." class="hint-button bar" aria-label="switch between light and dark mode" id=mode onclick=changemode() style=font-size:22px;width:50px;height:50px!important><b>☾</b></button> <button title="Toggle fullscreen mode." class="hint-button bar" aria-label="toggle fullscreen mode." id=fullscreen onclick=fullscreen() style=font-size:18px;width:50px;height:50px;padding:0>❮ ❯</button><button title="Go to the main menu." class="hint-button bar" aria-label="go to the main menu" id=mainmenubutton onclick=showmainmenu() style=font-size:18px;width:50px;height:50px;padding:0><svg viewBox="0 0 24 24" height=24 width=24 fill=currentColor xmlns=http://w3.org>
+		<div style="z-index:10000;width:fit-content;position:absolute;top:0;right:0;background-color:var(--surface);padding:5px 5px 10px 10px;display:flex;gap:5px;border-bottom-left-radius:32px;border:1px solid var(--outline);border-top:0;border-right:0" id=sitecontrols aria-label="site controls"><button title="Pause the game." class="hint-button bar" aria-label="Pause the game" id=pause-btn2 onclick=pauseTimer() style=justify-self:left;width:50px;height:50px;right:20px;top:20px>▶</button><button title="Print the currently active sudoku game." class="hint-button bar" aria-label="Print the currently active sudoku game" id="print" onclick="window.print()" style="font-size:22px;width:50px;height:50px!important">🖶</button><button title="Switch between light and dark mode." class="hint-button bar" aria-label="switch between light and dark mode" id=mode onclick=changemode() style=font-size:22px;width:50px;height:50px!important><b>☾</b></button> <button title="Toggle fullscreen mode." class="hint-button bar" aria-label="toggle fullscreen mode." id=fullscreen onclick=fullscreen() style=font-size:18px;width:50px;height:50px;padding:0>❮ ❯</button><button title="Go to the main menu." class="hint-button bar" aria-label="go to the main menu" id=mainmenubutton onclick=showmainmenu() style=font-size:18px;width:50px;height:50px;padding:0><svg viewBox="0 0 24 24" height=24 width=24 fill=currentColor xmlns=http://w3.org>
 					<path d="M3 19h18v-2H3v2zm0-6h18v-2H3v2zm0-8v2h18V5H3z"></path>
 				</svg></button></div>
 	</div>
@@ -299,12 +299,16 @@ if (releaseReady) {
 					<hr style=height:1px;border:none;background-color:var(--muted);margin:auto;margin-bottom:10px;margin-top:5px;width:98%>
 					<div class=setting-row style=padding-bottom:5px;padding-top:0 title="The number of hints the game gives you after the hint cooldown ends."><span class=setting-name style=text-align:left><strong>Hints after cooldown</strong></span> <input id=hintsaftercooldown type=number placeholder=1 style=height:40px;border-radius:10px;background-color:var(--surface-3);border:none;text-align:center;background-color:var(--surface-3);appearance:textfield></div>
 					<hr style=height:1px;border:none;background-color:var(--muted);margin:auto;margin-bottom:10px;margin-top:5px;width:98%>
-					<div class=setting-row style=padding-bottom:5px;padding-top:0 title="The type of hint cooldownt that should be used"><span class=setting-name style=text-align:left><strong>Hint cooldown type</strong> </span><select class=settings-select id=hintcooldownmethod>
+					<div class=setting-row style=padding-bottom:5px;padding-top:0 title="The type of hint cooldown that should be used"><span class=setting-name style=text-align:left><strong>Hint cooldown type</strong> </span><select class=settings-select id=hintcooldownmethod>
 							<option value=time>Time-based
 							<option value=move>Move-based
 						</select></div>
 					<hr style=height:1px;border:none;background-color:var(--muted);margin:auto;margin-bottom:10px;margin-top:5px;width:98%>
 					<div class=setting-row style=padding-bottom:5px;padding-top:0 title="The number of moves/seconds until the hint cooldown ends."><span class=setting-name style=text-align:left><strong>Hint cooldown amount</strong></span> <input id=hintcooldownamount type=number placeholder=30 style=height:40px;border-radius:10px;background-color:var(--surface-3);border:none;text-align:center;background-color:var(--surface-3);appearance:textfield></div>
+					<hr style=height:1px;border:none;background-color:var(--muted);margin:auto;margin-bottom:10px;margin-top:5px;width:98%>
+					<div class=setting-row style=padding-bottom:5px;padding-top: 0px title="Whether or not hints should be limited."><span class=setting-name style=text-align:left><strong>Enable Limited Hints</strong></span> <label class=toggle><input id=hintlimit type=checkbox> <span class=toggle-track></span></label></div>
+					<hr style=height:1px;border:none;background-color:var(--muted);margin:auto;margin-bottom:10px;margin-top:5px;width:98%>
+					<div class=setting-row style=padding-bottom:5px;padding-top:0 title="The maximum amount of hints that you can use in a single game."><span class=setting-name style=text-align:left><strong>Hints Limit</strong></span> <input id=hintlimitinput type=number placeholder=1 style=height:40px;border-radius:10px;background-color:var(--surface-3);border:none;text-align:center;background-color:var(--surface-3);appearance:textfield></div>
 				</div>
 			</div>
 		</div>
