@@ -1,3 +1,10 @@
+- ### 7.1.0
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - An issue where higher difficulty levels could fail to generate puzzles reliably (Rebalanced the hole counts).
+  >>> - Game lag on creation of a new game.
+  >> ##### Added:
+  >>> - A spinner that shows on creation of a new game.
 - ### 7.0.0
   > #### Changes:
   >> ##### Added:
