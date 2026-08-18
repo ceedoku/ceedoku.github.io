@@ -1,3 +1,7 @@
+- ### 7.1.1
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - Backwards compatibility for browsers without Web Worker support (A Web Worker runs JavaScript in a separate thread).
 - ### 7.1.0
   > #### Changes:
   >> ##### Fixed:
