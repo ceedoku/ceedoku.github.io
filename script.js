@@ -13,7 +13,7 @@
  * Let's keep it that way.
  * If it ain't broke, don't fix it. It WILL break.
  *****************************************************************************/
-const puzzleWorker = new Worker("puzzle-worker.js");
+
 class CeedokuSpinner extends HTMLElement {
 	connectedCallback() {
 		this.innerHTML = `
@@ -32,8 +32,6 @@ class CeedokuSpinner extends HTMLElement {
 }
 
 customElements.define("ceedoku-spinner", CeedokuSpinner);
-const printBtn = document.getElementById("print")
-printBtn.style.display = "none";
 window.addEventListener("load", () => {
     const game = document.getElementById("aahtheentiregame");
     const loader = document.getElementById("loader");
@@ -50,6 +48,12 @@ window.addEventListener("load", () => {
 
     document.title = "Ceedoku"
 });
+let puzzleWorker = null;
+if (typeof Worker !== "undefined") {
+    puzzleWorker = new Worker("puzzle-worker.js");
+}
+const printBtn = document.getElementById("print")
+printBtn.style.display = "none";
 function checkTime() {
     let besttimes = JSON.parse(localStorage.getItem("besttimes"));
 
@@ -949,16 +953,55 @@ function countSolutions(grid, limit = 2) {
 }
 
 function makePuzzle(holes) {
-	return new Promise((resolve) => {
-		otherspinnythingo.classList.add("visible");
+    if (typeof Worker !== "undefined") {
+        return new Promise((resolve, reject) => {
+            const worker = new Worker("puzzle-worker.js");
 
-		puzzleWorker.onmessage = (event) => {
-			otherspinnythingo.classList.remove("visible");
-			resolve(event.data);
-		};
+            worker.onmessage = (event) => {
+                worker.terminate();
+                resolve(event.data);
+            };
 
-		puzzleWorker.postMessage({ holes });
-	});
+            worker.onerror = (error) => {
+                worker.terminate();
+                reject(error);
+            };
+
+            worker.postMessage({ holes });
+        });
+    }
+
+    return new Promise((resolve) => {
+        const full = Array(81).fill(0);
+        fillGrid(full);
+
+        const draft = [...full];
+        const order = shuffle(Array.from({
+            length: 81
+        }, (_, i) => i));
+
+        let removed = 0;
+
+        for (const index of order) {
+            if (removed >= holes) break;
+
+            const keep = draft[index];
+            draft[index] = 0;
+
+            const probe = [...draft];
+
+            if (countSolutions(probe, 2) === 1) {
+                removed += 1;
+            } else {
+                draft[index] = keep;
+            }
+        }
+
+        resolve({
+            full,
+            draft
+        });
+    });
 }
 
 function formatTime(seconds) {
