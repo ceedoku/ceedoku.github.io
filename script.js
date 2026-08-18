@@ -13,6 +13,25 @@
  * Let's keep it that way.
  * If it ain't broke, don't fix it. It WILL break.
  *****************************************************************************/
+const puzzleWorker = new Worker("puzzle-worker.js");
+class CeedokuSpinner extends HTMLElement {
+	connectedCallback() {
+		this.innerHTML = `
+		<svg viewBox="0 0 66 66" height="65px" width="65px" class="spinner">
+			<circle
+				class="path"
+				cx="33"
+				cy="33"
+				fill="none"
+				r="30"
+				stroke-linecap="round"
+				stroke-width="6"
+			></circle>
+		</svg>`;
+	}
+}
+
+customElements.define("ceedoku-spinner", CeedokuSpinner);
 const printBtn = document.getElementById("print")
 printBtn.style.display = "none";
 window.addEventListener("load", () => {
@@ -361,25 +380,25 @@ const DIFFICULTIES = {
         holes: 36
     },
     medium: {
-        holes: 44
+        holes: 39
     },
     hard: {
-        holes: 51
+        holes: 42
     },
     expert: {
-        holes: 58
+        holes: 45
     },
     master: {
-        holes: 64
+        holes: 48
     },
     extreme: {
-        holes: 70
+        holes: 51
     },
     impossible: {
-        holes: 76
+        holes: 54
     },
     godlike: {
-        holes: 76
+        holes: 54
     }
 };
 const hintcooldowndisplay = document.getElementById("hintCooldownDisplay")
@@ -930,30 +949,16 @@ function countSolutions(grid, limit = 2) {
 }
 
 function makePuzzle(holes) {
-    const full = Array(81).fill(0);
-    fillGrid(full);
-    const draft = [...full];
-    const order = shuffle(Array.from({
-        length: 81
-    }, (_, i) => i));
-    let removed = 0;
+	return new Promise((resolve) => {
+		otherspinnythingo.classList.add("visible");
 
-    for (const index of order) {
-        if (removed >= holes) break;
-        const keep = draft[index];
-        draft[index] = 0;
-        const probe = [...draft];
-        if (countSolutions(probe, 2) === 1) {
-            removed += 1;
-        } else {
-            draft[index] = keep;
-        }
-    }
+		puzzleWorker.onmessage = (event) => {
+			otherspinnythingo.classList.remove("visible");
+			resolve(event.data);
+		};
 
-    return {
-        full,
-        draft
-    };
+		puzzleWorker.postMessage({ holes });
+	});
 }
 
 function formatTime(seconds) {
@@ -2342,7 +2347,7 @@ function continueGame() {
 
 setInterval(saveGame, 1000);
 
-function newGame(nextDifficulty = difficulty) {
+async function newGame(nextDifficulty = difficulty) {
     printBtn.style.display = "";
     hideBestTime();
     updatePauseBtn2();
@@ -2380,7 +2385,7 @@ function newGame(nextDifficulty = difficulty) {
         document.querySelectorAll(".win-stat").forEach(el => el.style.scale = scaleValue);
     }
 
-    const built = makePuzzle(DIFFICULTIES[difficulty].holes);
+    const built = await makePuzzle(DIFFICULTIES[difficulty].holes);
 
     document.title = `Ceedoku - ${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}`;
     difficultyBadge.textContent = difficulty.charAt(0).toUpperCase() + difficulty.slice(1)
