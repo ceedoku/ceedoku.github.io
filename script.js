@@ -48,6 +48,65 @@ window.addEventListener("load", () => {
 
     document.title = "Ceedoku"
 });
+const importSaveInput = document.createElement("input");
+
+importSaveInput.type = "file";
+importSaveInput.accept = ".csf";
+importSaveInput.style.display = "none";
+
+document.body.appendChild(importSaveInput);
+
+importSaveInput.onchange = async () => {
+
+    const file = importSaveInput.files[0];
+
+    if (!file) return;
+
+    const title =
+        importexportOverlay.querySelector("h1");
+
+    if (!file.name.toLowerCase().endsWith(".csf")) {
+
+        title.textContent = "Not A .CSF File";
+        title.style.color = "#f04c42";
+
+        return;
+    }
+
+    let tmp;
+
+    try {
+
+        tmp = await JSF(file);
+
+    } catch (error) {
+
+        title.textContent = error.message;
+        title.style.color = "#f04c42";
+        return;
+    }
+
+    timerEl.textContent = "Time: 00:00";
+    winTime.textContent = "00:00";
+    pauseTime.textContent = "00:00";
+    continueTime.textContent = "00:00"
+    localStorage.setItem("save", tmp);
+    title.style.color = "var(--text2)";
+    title.textContent = "Imported Save File";
+
+    loadgame();
+	
+    setTimeout(() => {
+
+        title.textContent = "Import/Export Saves";
+        title.style.color = "var(--text2)";
+
+        hideimportexportgame();
+
+    }, 2500);
+};
+
+
 let puzzleWorker = null;
 if (typeof Worker !== "undefined") {
     puzzleWorker = new Worker("puzzle-worker.js");
@@ -461,10 +520,9 @@ const title = document.getElementById("title");
 const numberGrid = document.getElementById("numberGrid");
 
 const deleteOverlay = document.getElementById("deleteOverlay")
-
 const newoverlay = document.getElementById("newOverlay")
-
 const settingsOverlay = document.getElementById("settingsOverlay")
+const importexportOverlay = document.getElementById("importexportOverlay")
 
 const animationToggle = document.getElementById("animationtoggle");
 const completionAnimationToggle = document.getElementById("completionanimationtoggle");
@@ -812,7 +870,6 @@ function loadgame() {
     } else {
         hintcounter = 0
     }
-    puzzle = game.puzzle;
     values = game.values;
     givens = game.givens;
     if (game.canusehelp !== undefined) {
@@ -855,6 +912,8 @@ function loadgame() {
     timerPaused = game.timerPaused || false;
 
     clearInterval(timerId);
+	nosave = false;
+	updateGiveUpButton();
 }
 
 function changemode(forceMode) {
@@ -1190,7 +1249,21 @@ function renderNotes(noteSet) {
     }
     return grid;
 }
-
+function exportsave() {
+	if (nosave) return;
+	FSJ(localStorage.getItem("save"));
+	importexportOverlay.querySelector("h1").textContent = "Save Exported";
+	importexportOverlay.querySelector("h1").style.color = "var(--text2)";
+	
+	setTimeout(() => {
+    	importexportOverlay.querySelector("h1").textContent = "Import/Export Saves";
+		hideimportexportgame()
+	}, 5000);
+}
+function importsave() {
+    importSaveInput.value = "";
+    importSaveInput.click();
+}
 function getCompletedCellSet(units = getCompletedUnits()) {
     const completed = new Set();
     units.rows.forEach((done, index) => {
@@ -1288,7 +1361,6 @@ function saveGame() {
         if (solution.length !== 81) return;
         localStorage.setItem("save", JSON.stringify({
             solution,
-            puzzle,
             values,
             givens,
             notes: notes.map(set => [...set]),
@@ -1424,11 +1496,21 @@ function hidecontinuegame() {
 
 
 }
-
+function hideimportexportgame() {
+	// reset the title of the import/export game menu back to default on close of the menu.
+	importexportOverlay.querySelector("h1").textContent = "Import/Export Saves";
+	importexportOverlay.querySelector("h1").style.color = "var(--text2)";
+	importexportOverlay.hidden = true;
+	importexportOverlay.classList.remove("show");
+}
+function showimportexportmenu() {
+	importexportOverlay.hidden = false;
+	requestAnimationFrame(() => {
+        importexportOverlay.classList.add("show");
+    });
+}
 function hidedeleteGame() {
     deleteOverlay.classList.remove("show");
-
-
 }
 
 function hidemainmenu() {
@@ -1440,8 +1522,6 @@ function hidemainmenu() {
 
 function hidepausescreen() {
     pauseOverlay.classList.remove("show");
-
-
 }
 
 function scrubNotes(indexes, beforeStates) {
@@ -1450,7 +1530,6 @@ function scrubNotes(indexes, beforeStates) {
         notes[index].clear();
     });
 }
-
 
 function togglePencilMode(force) {
     pencilMode = typeof force === "boolean" ? force : !pencilMode;
@@ -2342,10 +2421,22 @@ function loadtheme() {
 }
 
 function updateGiveUpButton() {
-    document.getElementById("igiveup").classList.toggle("disabled", nosave);
+	const igiveup = document.getElementById("igiveup")
+	const exportbutton = document.getElementById("exportbutton")
+	
+    igiveup.classList.toggle("disabled", nosave);
+	exportbutton.classList.toggle("disabled", nosave);
+	exportbutton.disabled = nosave
+	igiveup.disabled = nosave
+	
     if (nosave) {
-        document.getElementById("igiveup").title = "No save found"
+        igiveup.title = "No save found!"
+		exportbutton.title = "No save found!"
     };
+	if (!nosave) {
+		igiveup.title = "Continue your current save game."
+		exportbutton.title = "Export your current save game."
+	}
 }
 loadgame();
 loadtheme();
@@ -2365,19 +2456,21 @@ function continueGame() {
         hintcount = 0;
         starthintcooldown()
     }
+	// update soo many ui elements and stuff on continuing a game
     updateHintCooldownDisplay();
     runninggame = true;
     hidemainmenu();
     pauseBtn.textContent = "❚❚";
     pauseBtn2.textContent = "❚❚";
-    // ---------------- TIMER UI ----------------
+	document.title = `Ceedoku - ${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}`;
+    difficultyBadge.textContent = difficulty.charAt(0).toUpperCase() + difficulty.slice(1)
     winTime.textContent = formatTime(Math.floor(elapsedMs / 1000));
     timerEl.textContent =
         `Time: ${formatTime(Math.floor(elapsedMs / 1000))}`;
     continueTime.textContent = formatTime(Math.floor(elapsedMs / 1000));
     pauseTime.textContent = formatTime(Math.floor(elapsedMs / 1000));
-    pauseMistakes.textContent = formatTime(Math.floor(elapsedMs / 1000));
-    continueMistakes.textContent = formatTime(Math.floor(elapsedMs / 1000));
+    pauseMistakes.textContent = mistakes
+    continueMistakes.textContent = mistakes
     timerPaused = false;
     hidewinscreen();
     hidepausescreen();
