@@ -73,6 +73,18 @@
         button:active::before {
             transform: scaleX(1.2) scaleY(1.03);
         }
+
+        button.spring::before {
+            animation: buttonSpring 0.5s ease-out;
+        }
+
+        @keyframes buttonSpring {
+            0%   { transform: scaleX(1.2) scaleY(1.03); }
+            30%  { transform: scaleX(0.92) scaleY(0.98); }
+            55%  { transform: scaleX(1.12) scaleY(1.01); }
+            78%  { transform: scaleX(0.97) scaleY(0.99); }
+            100% { transform: scaleX(1) scaleY(1); }
+        }
     </style>
 </head>
 
@@ -85,9 +97,24 @@
             Click 'Okay' to proceed.
         </p>
 
-        <button onclick="window.location.href = 'https://ceedoku.github.io/CSF%20Specification%20v1.0.pdf'">
+        <button id="okayButton">
             Okay
         </button>
     </div>
+    <script>
+        const button = document.getElementById("okayButton");
+
+        button.addEventListener("pointerdown", () => {
+            button.classList.remove("spring");
+        });
+
+        button.addEventListener("pointerup", () => {
+            button.classList.add("spring");
+
+            setTimeout(() => {
+                window.location.href = "https://ceedoku.github.io/CSF%20Specification%20v1.0.pdf";
+            }, 500);
+        });
+    </script>
 </body>
 </html>
