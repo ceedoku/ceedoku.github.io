@@ -1,3 +1,10 @@
+- ### 8.0.0
+  > #### Changes:
+  >> ##### Added:
+  >>> - Importing and Exporting.
+  >> ##### Fixed:
+  >>> - Difficulty badge not updating on continuation of a game.
+  >>> - Title not updating on continuation of a game.
 - ### 7.1.1
   > #### Changes:
   >> ##### Fixed:
