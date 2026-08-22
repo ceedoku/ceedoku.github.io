@@ -1,0 +1,2483 @@
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Ceedoku - Select an installer</title>
+<link href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzOCAzOCIgd2lkdGg9IjM4IiBoZWlnaHQ9IjM4Ij4KCiAgPGRlZnM+CiAgICA8Y2xpcFBhdGggaWQ9ImNsaXAiPgogICAgICA8cmVjdCB3aWR0aD0iMzgiIGhlaWdodD0iMzgiIHJ4PSIxMCI+PC9yZWN0PgogICAgPC9jbGlwUGF0aD4KICA8L2RlZnM+CgogIDxnIGNsaXAtcGF0aD0idXJsKCNjbGlwKSI+CiAgICA8cmVjdCB3aWR0aD0iMzgiIGhlaWdodD0iMzgiIGZpbGw9IiMxYTczZTgiPjwvcmVjdD4KCiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxOSAxOSkiPgogICAgICA8IS0tIDI0IHJhaW5ib3cgd2VkZ2VzIC0tPgogICAgICA8cGF0aCBkPSJNMCwwIEwwLC0zMCBBMzAsMzAgMCAwLDEgNy43NiwtMjguOTggWiIgZmlsbD0iIzFhNzNlOCI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEw3Ljc2LC0yOC45OCBBMzAsMzAgMCAwLDEgMTUsLTI1Ljk4IFoiIGZpbGw9IiMyMTgwZDgiPjwvcGF0aD4KICAgICAgPHBhdGggZD0iTTAsMCBMMTUsLTI1Ljk4IEEzMCwzMCAwIDAsMSAyMS4yMSwtMjEuMjEgWiIgZmlsbD0iIzJiOGRkMCI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwyMS4yMSwtMjEuMjEgQTMwLDMwIDAgMCwxIDI1Ljk4LC0xNSBaIiBmaWxsPSIjMzVhMjhhIj48L3BhdGg+CiAgICAgIDxwYXRoIGQ9Ik0wLDAgTDI1Ljk4LC0xNSBBMzAsMzAgMCAwLDEgMjguOTgsLTcuNzYgWiIgZmlsbD0iIzQwYjU2YSI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwyOC45OCwtNy43NiBBMzAsMzAgMCAwLDEgMzAsMCBaIiBmaWxsPSIjNjhiZjU1Ij48L3BhdGg+CgogICAgICA8cGF0aCBkPSJNMCwwIEwzMCwwIEEzMCwzMCAwIDAsMSAyOC45OCw3Ljc2IFoiIGZpbGw9IiM4ZmM4NDAiPjwvcGF0aD4KICAgICAgPHBhdGggZD0iTTAsMCBMMjguOTgsNy43NiBBMzAsMzAgMCAwLDEgMjUuOTgsMTUgWiIgZmlsbD0iI2I3ZDEyYSI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwyNS45OCwxNSBBMzAsMzAgMCAwLDEgMjEuMjEsMjEuMjEgWiIgZmlsbD0iI2RiYzcxNCI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwyMS4yMSwyMS4yMSBBMzAsMzAgMCAwLDEgMTUsMjUuOTggWiIgZmlsbD0iI2ZiYmMwNCI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwxNSwyNS45OCBBMzAsMzAgMCAwLDEgNy43NiwyOC45OCBaIiBmaWxsPSIjZjRhMjA0Ij48L3BhdGg+CiAgICAgIDxwYXRoIGQ9Ik0wLDAgTDcuNzYsMjguOTggQTMwLDMwIDAgMCwxIDAsMzAgWiIgZmlsbD0iI2VjODYwYiI+PC9wYXRoPgoKICAgICAgPHBhdGggZD0iTTAsMCBMMCwzMCBBMzAsMzAgMCAwLDEgLTcuNzYsMjguOTggWiIgZmlsbD0iI2U1NmExMyI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwtNy43NiwyOC45OCBBMzAsMzAgMCAwLDEgLTE1LDI1Ljk4IFoiIGZpbGw9IiNkZjUzMWEiPjwvcGF0aD4KICAgICAgPHBhdGggZD0iTTAsMCBMLTE1LDI1Ljk4IEEzMCwzMCAwIDAsMSAtMjEuMjEsMjEuMjEgWiIgZmlsbD0iI2Q5MzAyNSI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwtMjEuMjEsMjEuMjEgQTMwLDMwIDAgMCwxIC0yNS45OCwxNSBaIiBmaWxsPSIjY2YyZjRkIj48L3BhdGg+CiAgICAgIDxwYXRoIGQ9Ik0wLDAgTC0yNS45OCwxNSBBMzAsMzAgMCAwLDEgLTI4Ljk4LDcuNzYgWiIgZmlsbD0iI2M2MzA3NiI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwtMjguOTgsNy43NiBBMzAsMzAgMCAwLDEgLTMwLDAgWiIgZmlsbD0iI2I4MzQ5YyI+PC9wYXRoPgoKICAgICAgPHBhdGggZD0iTTAsMCBMLTMwLDAgQTMwLDMwIDAgMCwxIC0yOC45OCwtNy43NiBaIiBmaWxsPSIjYTUzY2JmIj48L3BhdGg+CiAgICAgIDxwYXRoIGQ9Ik0wLDAgTC0yOC45OCwtNy43NiBBMzAsMzAgMCAwLDEgLTI1Ljk4LC0xNSBaIiBmaWxsPSIjOGQ0OWQ0Ij48L3BhdGg+CiAgICAgIDxwYXRoIGQ9Ik0wLDAgTC0yNS45OCwtMTUgQTMwLDMwIDAgMCwxIC0yMS4yMSwtMjEuMjEgWiIgZmlsbD0iIzZmNWRlMyI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwtMjEuMjEsLTIxLjIxIEEzMCwzMCAwIDAsMSAtMTUsLTI1Ljk4IFoiIGZpbGw9IiM0ZjZkZWIiPjwvcGF0aD4KICAgICAgPHBhdGggZD0iTTAsMCBMLTE1LC0yNS45OCBBMzAsMzAgMCAwLDEgLTcuNzYsLTI4Ljk4IFoiIGZpbGw9IiMzMzdiZWUiPjwvcGF0aD4KICAgICAgPHBhdGggZD0iTTAsMCBMLTcuNzYsLTI4Ljk4IEEzMCwzMCAwIDAsMSAwLC0zMCBaIiBmaWxsPSIjMWE3M2U4Ij48L3BhdGg+CiAgICA8L2c+CiAgPC9nPgoKICA8IS0tIDPDlzMgZ3JpZCAtLT4KICA8ZyBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LC45MikiPgogICAgPHJlY3QgeD0iNyIgeT0iNyIgd2lkdGg9IjYiIGhlaWdodD0iNiIgcng9IjIiPjwvcmVjdD4KICAgIDxyZWN0IHg9IjE2IiB5PSI3IiB3aWR0aD0iNiIgaGVpZ2h0PSI2IiByeD0iMiI+PC9yZWN0PgogICAgPHJlY3QgeD0iMjUiIHk9IjciIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CgogICAgPHJlY3QgeD0iNyIgeT0iMTYiIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CiAgICA8cmVjdCB4PSIxNiIgeT0iMTYiIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CiAgICA8cmVjdCB4PSIyNSIgeT0iMTYiIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CgogICAgPHJlY3QgeD0iNyIgeT0iMjUiIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CiAgICA8cmVjdCB4PSIxNiIgeT0iMjUiIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CiAgICA8cmVjdCB4PSIyNSIgeT0iMjUiIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CiAgPC9nPgoKPC9zdmc+" rel="icon" type="image/svg+xml">
+<style>
+:root {
+    color-scheme: dark;
+
+    --bg: #0b0d11;
+    --surface: #13161c;
+    --surface-2: #191d25;
+    --surface-3: #222733;
+
+    --text: #f5f7fb;
+    --text-2: #c4c9d3;
+    --muted: #818895;
+
+    --blue: #4d8dff;
+
+    --windows: #4d8dff;
+    --macos: #c7d0ff;
+    --linux: #f2a33b;
+
+    --border: rgba(255, 255, 255, 0.075);
+
+    --page-radius: 24px;
+    --item-radius: 18px;
+    --icon-radius: 14px;
+    --button-radius: 12px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    color: var(--text);
+
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    background:
+        radial-gradient(
+            circle at 15% 15%,
+            color-mix(
+                in srgb,
+                var(--blue) 10%,
+                transparent
+            ),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            var(--bg),
+            color-mix(
+                in srgb,
+                var(--surface-2) 40%,
+                var(--bg)
+            )
+        );
+
+    background-attachment: fixed;
+
+    overflow-x: hidden;
+}
+
+body::before,
+body::after {
+    content: "";
+
+    position: fixed;
+
+    width: 600px;
+    height: 600px;
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+    filter: blur(140px);
+
+    opacity: .4;
+
+    z-index: -1;
+
+    animation:
+        ambient-drift
+        16s
+        ease-in-out
+        infinite
+        alternate;
+}
+
+body::before {
+    left: -390px;
+    top: 10%;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--blue) 13%,
+            transparent
+        );
+}
+
+body::after {
+    right: -420px;
+    bottom: -300px;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--blue) 9%,
+            transparent
+        );
+
+    animation-delay: -8s;
+}
+
+@keyframes ambient-drift {
+    from {
+        transform:
+            translate3d(-20px, -15px, 0)
+            scale(1);
+    }
+
+    to {
+        transform:
+            translate3d(25px, 20px, 0)
+            scale(1.08);
+    }
+}
+
+button,
+a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button {
+    font: inherit;
+}
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.page {
+    width: min(1180px, 100%);
+    min-height: 100vh;
+
+    margin: 0 auto;
+
+    padding:
+        26px
+        32px
+        32px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.topbar {
+    min-height: 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 50px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    color: var(--text);
+
+    text-decoration: none;
+
+    font-size: 17px;
+    font-weight: 750;
+
+    letter-spacing: -.02em;
+}
+
+.brand-logo {
+    display: block;
+
+    width: auto;
+    height: 38px;
+
+    max-width: 180px;
+
+    object-fit: contain;
+
+    transform: translateZ(0);
+    backface-visibility: hidden;
+
+    filter:
+        drop-shadow(
+            0 0 14px
+            color-mix(
+                in srgb,
+                var(--blue) 30%,
+                transparent
+            )
+        );
+
+    transition:
+        transform .25s ease,
+        filter .25s ease;
+}
+
+.brand:hover .brand-logo {
+    transform:
+        translateZ(0)
+        scale(1.035);
+
+    filter:
+        drop-shadow(
+            0 0 22px
+            color-mix(
+                in srgb,
+                var(--blue) 45%,
+                transparent
+            )
+        );
+}
+
+.version {
+    padding: 7px 11px;
+
+    border-radius: 999px;
+
+    color: var(--muted);
+
+    background:
+        rgba(255, 255, 255, .025);
+
+    border:
+        1px solid var(--border);
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.content {
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.download-page {
+    width: 100%;
+    max-width: 950px;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+    margin-bottom: 40px;
+}
+
+.hero-logo-wrapper {
+    width: fit-content;
+    max-width: min(420px, 80vw);
+
+    margin:
+        0
+        auto
+        25px;
+
+    will-change: transform;
+
+    animation:
+        hero-float
+        5s
+        ease-in-out
+        infinite;
+}
+
+.hero-logo {
+    display: block;
+
+    width: auto;
+    height: 92px;
+
+    max-width: min(420px, 80vw);
+
+    object-fit: contain;
+
+    transform: translateZ(0);
+    backface-visibility: hidden;
+
+    filter:
+        drop-shadow(
+            0 0 27px
+            color-mix(
+                in srgb,
+                var(--blue) 28%,
+                transparent
+            )
+        )
+        drop-shadow(
+            0 20px 45px
+            rgba(0, 0, 0, .35)
+        );
+}
+
+@keyframes hero-float {
+    0%,
+    100% {
+        transform:
+            translate3d(0, 0, 0);
+    }
+
+    50% {
+        transform:
+            translate3d(0, -4px, 0);
+    }
+}
+
+.hero h1 {
+    margin: 0;
+
+    font-size:
+        clamp(38px, 7vw, 66px);
+
+    line-height: .95;
+
+    letter-spacing: -.055em;
+}
+
+.hero p {
+    max-width: 650px;
+
+    margin:
+        19px
+        auto
+        0;
+
+    color: var(--text-2);
+
+    font-size: 15px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   MAIN CARD
+========================================================= */
+
+.card {
+    --current-glow: var(--blue);
+
+    position: relative;
+
+    --radius: var(--page-radius);
+
+    padding: 36px;
+
+    border-radius: var(--radius);
+
+    box-shadow:
+        inset 0 0 0 1px
+        color-mix(
+            in srgb,
+            var(--current-glow) 15%,
+            var(--border)
+        ),
+
+        0 0 55px
+        color-mix(
+            in srgb,
+            var(--current-glow) 8%,
+            transparent
+        ),
+
+        0 30px 100px
+        rgba(0, 0, 0, .34),
+
+        inset 0 1px
+        rgba(255, 255, 255, .045);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, .035),
+            rgba(255, 255, 255, .012)
+        ),
+        color-mix(
+            in srgb,
+            var(--surface) 94%,
+            transparent
+        );
+
+    backdrop-filter: blur(24px);
+
+    overflow: hidden;
+
+    isolation: isolate;
+
+    transition:
+        box-shadow .35s ease;
+}
+
+.card[data-os="windows"] {
+    --current-glow: var(--windows);
+}
+
+.card[data-os="macos"] {
+    --current-glow: var(--macos);
+}
+
+.card[data-os="linux"] {
+    --current-glow: var(--linux);
+}
+
+.card::before {
+    content: "";
+
+    position: absolute;
+
+    width: 460px;
+    height: 460px;
+
+    top: -330px;
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    border-radius: 50%;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--current-glow) 9%,
+            transparent
+        );
+
+    filter: blur(70px);
+
+    pointer-events: none;
+}
+
+.card::after {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 12%;
+
+    width: 76%;
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+
+            color-mix(
+                in srgb,
+                var(--current-glow) 50%,
+                white 5%
+            ),
+
+            transparent
+        );
+
+    opacity: .65;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   STEPS
+========================================================= */
+
+.step {
+    display: none;
+
+    position: relative;
+
+    z-index: 2;
+
+    animation:
+        step-enter
+        .3s
+        cubic-bezier(
+            .2,
+            .8,
+            .2,
+            1
+        );
+}
+
+.step.active {
+    display: block;
+}
+
+@keyframes step-enter {
+    from {
+        opacity: 0;
+
+        transform:
+            translate3d(0, 12px, 0)
+            scale(.985);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translate3d(0, 0, 0)
+            scale(1);
+    }
+}
+
+.question {
+    margin: 0;
+
+    font-size:
+        clamp(22px, 3vw, 30px);
+
+    letter-spacing: -.035em;
+}
+
+.description {
+    max-width: 650px;
+
+    margin:
+        11px
+        auto
+        30px;
+
+    color: var(--muted);
+
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   OS GRID
+========================================================= */
+
+.os-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 15px;
+}
+
+.os-card {
+    --os-glow: var(--blue);
+
+    position: relative;
+
+    min-height: 205px;
+
+    padding: 25px;
+
+    border: 0;
+
+    border-radius: var(--item-radius);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, .025),
+            rgba(255, 255, 255, .01)
+        ),
+        var(--surface-2);
+
+    color: var(--text);
+
+    cursor: pointer;
+
+    text-align: left;
+
+    overflow: hidden;
+
+    isolation: isolate;
+
+    box-shadow:
+        inset 0 0 0 1px
+        rgba(255, 255, 255, .075),
+
+        0 7px 25px
+        rgba(0, 0, 0, .14);
+
+    transition:
+        transform .22s
+        cubic-bezier(
+            .2,
+            .8,
+            .2,
+            1
+        ),
+
+        box-shadow .22s ease,
+
+        background .22s ease;
+}
+
+.os-card[data-os="windows"] {
+    --os-glow: var(--windows);
+}
+
+.os-card[data-os="macos"] {
+    --os-glow: var(--macos);
+}
+
+.os-card[data-os="linux"] {
+    --os-glow: var(--linux);
+}
+
+.os-card::before {
+    content: "";
+
+    position: absolute;
+
+    width: 270px;
+    height: 270px;
+
+    right: -175px;
+    bottom: -175px;
+
+    border-radius: 50%;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--os-glow) 19%,
+            transparent
+        );
+
+    filter: blur(36px);
+
+    opacity: .45;
+
+    pointer-events: none;
+
+    transition:
+        transform .35s ease,
+        opacity .35s ease;
+}
+
+.os-card:hover {
+    transform:
+        translate3d(0, -7px, 0);
+
+    box-shadow:
+        inset 0 0 0 1px
+        color-mix(
+            in srgb,
+            var(--os-glow) 40%,
+            transparent
+        ),
+
+        0 0 35px
+        color-mix(
+            in srgb,
+            var(--os-glow) 22%,
+            transparent
+        ),
+
+        0 22px 45px
+        rgba(0, 0, 0, .28);
+}
+
+.os-card:hover::before {
+    transform: scale(1.4);
+
+    opacity: .85;
+}
+
+.os-icon {
+    position: relative;
+
+    width: 52px;
+    height: 52px;
+
+    margin-bottom: 28px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: var(--icon-radius);
+
+    color: var(--os-glow);
+
+    background:
+        radial-gradient(
+            circle at 50% 45%,
+            color-mix(
+                in srgb,
+                var(--os-glow) 25%,
+                transparent
+            ),
+            transparent 72%
+        ),
+        rgba(255, 255, 255, .04);
+
+    box-shadow:
+        inset 0 0 0 1px
+        color-mix(
+            in srgb,
+            var(--os-glow) 25%,
+            transparent
+        ),
+
+        0 0 24px
+        color-mix(
+            in srgb,
+            var(--os-glow) 18%,
+            transparent
+        );
+
+    font-size: 22px;
+
+    overflow: hidden;
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease;
+}
+
+.os-card:hover .os-icon {
+    transform:
+        scale(1.08)
+        translate3d(0, -1px, 0);
+
+    box-shadow:
+        inset 0 0 0 1px
+        color-mix(
+            in srgb,
+            var(--os-glow) 40%,
+            transparent
+        ),
+
+        0 0 35px
+        color-mix(
+            in srgb,
+            var(--os-glow) 35%,
+            transparent
+        );
+}
+
+
+/* =========================================================
+   PLATFORM ICONS
+========================================================= */
+
+.os-icon svg,
+.download-icon svg {
+    display: block;
+
+    width: 65%;
+    height: 65%;
+
+    overflow: visible;
+
+    fill: currentColor;
+
+    color: currentColor;
+
+    filter:
+        drop-shadow(
+            0 0 7px
+            color-mix(
+                in srgb,
+                currentColor 35%,
+                transparent
+            )
+        );
+}
+
+
+/* Windows 11-inspired icon */
+.windows-icon {
+    width: 29px !important;
+    height: 29px !important;
+}
+
+.windows-icon rect {
+    fill: currentColor;
+}
+
+
+/* Single-colour bitten Apple */
+.apple-icon {
+    width: 31px !important;
+    height: 31px !important;
+}
+
+.apple-icon path {
+    fill: currentColor;
+}
+
+
+/* Tux */
+.linux-icon {
+    width: 34px !important;
+    height: 34px !important;
+}
+
+.linux-icon path,
+.linux-icon ellipse,
+.linux-icon circle {
+    fill: currentColor;
+}
+
+.os-name {
+    display: block;
+
+    font-size: 20px;
+    font-weight: 750;
+
+    letter-spacing: -.02em;
+}
+
+.os-detail {
+    display: block;
+
+    margin-top: 7px;
+
+    color: var(--muted);
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   ARCHITECTURE
+========================================================= */
+
+.arch-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 15px;
+}
+
+.arch-card {
+    --os-glow: var(--blue);
+
+    position: relative;
+
+    min-height: 145px;
+
+    padding: 24px;
+
+    border: 0;
+
+    border-radius: var(--item-radius);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, .025),
+            rgba(255, 255, 255, .01)
+        ),
+        var(--surface-2);
+
+    color: var(--text);
+
+    cursor: pointer;
+
+    text-align: left;
+
+    overflow: hidden;
+
+    isolation: isolate;
+
+    box-shadow:
+        inset 0 0 0 1px
+        rgba(255, 255, 255, .075),
+
+        0 7px 23px
+        rgba(0, 0, 0, .13);
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+.arch-card::before {
+    content: "";
+
+    position: absolute;
+
+    width: 190px;
+    height: 190px;
+
+    right: -120px;
+    bottom: -120px;
+
+    border-radius: 50%;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--os-glow) 15%,
+            transparent
+        );
+
+    filter: blur(30px);
+
+    opacity: .4;
+
+    pointer-events: none;
+
+    transition:
+        transform .3s ease,
+        opacity .3s ease;
+}
+
+.arch-card:hover {
+    transform:
+        translate3d(0, -5px, 0);
+
+    box-shadow:
+        inset 0 0 0 1px
+        color-mix(
+            in srgb,
+            var(--os-glow) 40%,
+            transparent
+        ),
+
+        0 0 28px
+        color-mix(
+            in srgb,
+            var(--os-glow) 17%,
+            transparent
+        ),
+
+        0 18px 35px
+        rgba(0, 0, 0, .25);
+}
+
+.arch-card:hover::before {
+    transform: scale(1.45);
+
+    opacity: .75;
+}
+
+.arch-name {
+    display: block;
+
+    font-size: 22px;
+    font-weight: 750;
+
+    letter-spacing: -.025em;
+}
+
+.arch-description {
+    display: block;
+
+    max-width: 190px;
+
+    margin-top: 8px;
+
+    color: var(--muted);
+
+    font-size: 13px;
+
+    line-height: 1.45;
+}
+
+.recommended {
+    position: absolute;
+
+    top: 15px;
+    right: 15px;
+
+    padding:
+        5px
+        9px;
+
+    border-radius: 999px;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--os-glow) 14%,
+            transparent
+        );
+
+    box-shadow:
+        inset 0 0 0 1px
+        color-mix(
+            in srgb,
+            var(--os-glow) 25%,
+            transparent
+        );
+
+    color:
+        color-mix(
+            in srgb,
+            var(--os-glow) 70%,
+            white
+        );
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: .06em;
+
+    text-transform: uppercase;
+}
+
+
+/* =========================================================
+   DOWNLOAD SCREEN
+========================================================= */
+
+.download-screen {
+    --os-glow: var(--blue);
+
+    padding:
+        20px
+        10px
+        5px;
+}
+
+.download-screen.windows {
+    --os-glow: var(--windows);
+}
+
+.download-screen.macos {
+    --os-glow: var(--macos);
+}
+
+.download-screen.linux {
+    --os-glow: var(--linux);
+}
+
+.download-icon {
+    width: 90px;
+    height: 90px;
+
+    margin:
+        0
+        auto
+        25px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: var(--icon-radius);
+
+    color: var(--os-glow);
+
+    background:
+        radial-gradient(
+            circle at 50% 45%,
+            color-mix(
+                in srgb,
+                var(--os-glow) 28%,
+                transparent
+            ),
+            transparent 72%
+        ),
+        var(--surface-3);
+
+    box-shadow:
+        inset 0 0 0 1px
+        color-mix(
+            in srgb,
+            var(--os-glow) 28%,
+            transparent
+        ),
+
+        0 0 45px
+        color-mix(
+            in srgb,
+            var(--os-glow) 30%,
+            transparent
+        ),
+
+        0 18px 40px
+        rgba(0, 0, 0, .25);
+
+    font-size: 34px;
+
+    animation:
+        download-pulse
+        2.8s
+        ease-in-out
+        infinite;
+}
+
+@keyframes download-pulse {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.025);
+    }
+}
+
+.download-screen h2 {
+    margin: 0;
+
+    font-size: 31px;
+
+    letter-spacing: -.035em;
+}
+
+.download-screen p {
+    max-width: 520px;
+
+    margin:
+        10px
+        auto
+        28px;
+
+    color: var(--muted);
+
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   DOWNLOAD BUTTON
+========================================================= */
+
+.download-button {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 9px;
+
+    width: min(420px, 100%);
+
+    padding:
+        16px
+        27px;
+
+    border: 0;
+
+    border-radius: var(--button-radius);
+
+    background:
+        linear-gradient(
+            135deg,
+            color-mix(
+                in srgb,
+                var(--os-glow) 92%,
+                white
+            ),
+            var(--os-glow)
+        );
+
+    color: white;
+
+    cursor: pointer;
+
+    font-size: 15px;
+    font-weight: 800;
+
+    box-shadow:
+        0 0 25px
+        color-mix(
+            in srgb,
+            var(--os-glow) 28%,
+            transparent
+        ),
+
+        0 0 55px
+        color-mix(
+            in srgb,
+            var(--os-glow) 15%,
+            transparent
+        ),
+
+        0 12px 30px
+        rgba(0, 0, 0, .3);
+
+    transition:
+        transform .2s ease,
+        filter .2s ease,
+        box-shadow .2s ease;
+}
+
+.download-button:hover {
+    transform:
+        translate3d(0, -4px, 0);
+
+    filter:
+        brightness(1.08)
+        saturate(1.08);
+
+    box-shadow:
+        0 0 35px
+        color-mix(
+            in srgb,
+            var(--os-glow) 45%,
+            transparent
+        ),
+
+        0 0 80px
+        color-mix(
+            in srgb,
+            var(--os-glow) 20%,
+            transparent
+        ),
+
+        0 16px 38px
+        rgba(0, 0, 0, .35);
+}
+
+.download-button:active {
+    transform:
+        translate3d(0, -1px, 0);
+}
+
+.download-screen.macos .download-button {
+    background:
+        linear-gradient(
+            135deg,
+            #e8ecff,
+            #b9c7ff
+        );
+
+    color: #101217;
+
+    box-shadow:
+        0 0 28px
+        rgba(189, 201, 255, .42),
+
+        0 0 65px
+        rgba(189, 201, 255, .18),
+
+        0 12px 30px
+        rgba(0, 0, 0, .3);
+}
+
+.download-screen.macos .download-button:hover {
+    background:
+        linear-gradient(
+            135deg,
+            #f1f3ff,
+            #c7d2ff
+        );
+
+    color: #080a0e;
+}
+
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+.download-progress {
+    width: min(420px, 100%);
+
+    height: 7px;
+
+    margin:
+        25px
+        auto
+        0;
+
+    overflow: hidden;
+
+    border-radius: 999px;
+
+    background:
+        rgba(255, 255, 255, .07);
+
+    box-shadow:
+        inset 0 1px 3px
+        rgba(0, 0, 0, .35);
+}
+
+.download-progress-bar {
+    width: 0%;
+    height: 100%;
+
+    border-radius: inherit;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--os-glow),
+            color-mix(
+                in srgb,
+                var(--os-glow) 65%,
+                white
+            )
+        );
+
+    box-shadow:
+        0 0 18px
+        color-mix(
+            in srgb,
+            var(--os-glow) 65%,
+            transparent
+        );
+
+    transition:
+        width .15s ease;
+}
+
+.download-meta {
+    margin-top: 15px;
+
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+.download-fallback {
+    display: inline-block;
+
+    margin-top: 18px;
+
+    color: var(--text-2);
+
+    font-size: 13px;
+
+    text-decoration: none;
+}
+
+.download-fallback:hover {
+    color: var(--text);
+
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   BACK
+========================================================= */
+
+.back {
+    display: block;
+
+    margin:
+        28px
+        auto
+        0;
+
+    padding:
+        8px
+        12px;
+
+    border: 0;
+
+    background: transparent;
+
+    color: var(--muted);
+
+    cursor: pointer;
+
+    font-size: 13px;
+
+    transition:
+        color .15s ease,
+        transform .15s ease;
+}
+
+.back:hover {
+    color: var(--text);
+
+    transform:
+        translate3d(-3px, 0, 0);
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer {
+    margin-top: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 12px;
+
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+.footer a {
+    color: var(--text-2);
+
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 760px) {
+
+    :root {
+        --page-radius: 20px;
+        --item-radius: 15px;
+        --icon-radius: 12px;
+        --button-radius: 11px;
+    }
+
+    body::before,
+    body::after {
+        width: 350px;
+        height: 350px;
+
+        filter: blur(90px);
+    }
+
+    .page {
+        padding:
+            18px
+            14px
+            28px;
+    }
+
+    .topbar {
+        margin-bottom: 36px;
+    }
+
+    .brand-logo {
+        height: 34px;
+        max-width: 150px;
+    }
+
+    .hero {
+        margin-bottom: 28px;
+    }
+
+    .hero-logo-wrapper {
+        margin-bottom: 21px;
+    }
+
+    .hero-logo {
+        height: 70px;
+        max-width: 75vw;
+    }
+
+    .hero p {
+        font-size: 14px;
+    }
+
+    .card {
+        padding:
+            22px
+            15px;
+    }
+
+    .os-grid,
+    .arch-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .os-card {
+        min-height: 135px;
+
+        padding: 21px;
+    }
+
+    .os-icon {
+        width: 45px;
+        height: 45px;
+
+        margin-bottom: 17px;
+    }
+
+    .arch-card {
+        min-height: 120px;
+
+        padding: 21px;
+    }
+
+    .download-button {
+        width: 100%;
+    }
+
+    .download-screen h2 {
+        font-size: 26px;
+    }
+
+    .footer {
+        flex-direction: column;
+
+        gap: 5px;
+    }
+}
+
+@media (max-width: 430px) {
+
+    .version {
+        display: none;
+    }
+
+    .topbar {
+        justify-content: center;
+    }
+
+    .brand-logo {
+        max-width: 140px;
+    }
+
+    .hero h1 {
+        font-size: 37px;
+    }
+
+    .hero p {
+        font-size: 13px;
+    }
+
+    .question {
+        font-size: 21px;
+    }
+
+    .card {
+        padding:
+            19px
+            12px;
+    }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+    }
+}
+</style>
+</head>
+
+
+<body>
+
+<div class="page">
+
+<header class="topbar">
+
+    <a class="brand" href="https://ceedoku.github.io/">
+
+        <img class="brand-logo" src="https://ceedoku.github.io/title.png" alt="Ceedoku">
+
+        <span>
+            Download
+        </span>
+
+    </a>
+
+    <span class="version">
+        Client 1.0.0
+    </span>
+
+</header>
+
+
+<main class="content">
+
+<div class="download-page">
+
+
+<section class="hero">
+
+    <div class="hero-logo-wrapper">
+
+        <img class="hero-logo" src="https://ceedoku.github.io/title.png" alt="Ceedoku">
+
+    </div>
+
+    <h1>
+        Download Ceedoku
+    </h1>
+
+    <p>
+        Get the full Ceedoku experience on your desktop.
+        Choose your operating system and download the
+        version made for your device.
+    </p>
+
+</section>
+
+
+<div class="card" id="main-card">
+
+
+<!-- =====================================================
+     OS SELECTION
+====================================================== -->
+
+<section class="step active" id="step-os">
+
+    <h2 class="question">
+        What do you want to download Ceedoku for?
+    </h2>
+
+    <p class="description">
+        Choose your operating system to continue.
+    </p>
+
+    <div class="os-grid">
+
+
+        <!-- WINDOWS -->
+
+        <button class="os-card" data-os="windows" onclick="chooseOS('windows')">
+
+            <span class="os-icon">
+
+                <!-- Windows icon -->
+                <svg class="windows-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+
+                    <rect x="7" y="7" width="41" height="41" rx="4"></rect>
+
+                    <rect x="52" y="7" width="41" height="41" rx="4"></rect>
+
+                    <rect x="7" y="52" width="41" height="41" rx="4"></rect>
+
+                    <rect x="52" y="52" width="41" height="41" rx="4"></rect>
+
+                </svg>
+
+            </span>
+
+            <span class="os-name">
+                Windows
+            </span>
+
+            <span class="os-detail">
+                Windows 10 and newer
+            </span>
+
+        </button>
+
+
+        <!-- MACOS -->
+
+        <button class="os-card" data-os="macos" onclick="chooseOS('macos')">
+
+            <span class="os-icon">
+
+                <!-- Single-colour bitten Apple -->
+                <svg class="apple-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+
+                    <path d="
+                            M67.8 24.7
+                            C64.1 29.2 58.3 32 52.2 31.5
+                            C51.4 25.6 53.5 19.5 57.9 15.3
+                            C62.2 10.8 68.5 8.2 74.6 8
+                            C75.1 14.1 73.1 20.2 67.8 24.7
+                            Z
+
+                            M78.7 50.7
+                            C78.8 43.1 82.6 36.1 88.7 31.9
+                            C84.8 26.3 78.4 22.9 71.5 22.6
+                            C64.2 21.8 57.2 26.9 53.5 26.9
+                            C49.7 26.9 43.9 22.7 37.8 22.8
+                            C29.8 23.1 22.5 27.4 18.4 34.3
+                            C9.9 49.1 16.2 70.8 24.4 82.6
+                            C28.5 88.4 33.2 94.9 39.3 94.7
+                            C45.1 94.5 47.3 90.8 54.3 90.8
+                            C61.4 90.8 63.4 94.7 69.5 94.5
+                            C75.9 94.4 80 88.7 83.8 82.8
+                            C88.2 76.1 90 69.5 90.1 69.2
+                            C82.8 66.1 78.8 58.7 78.7 50.7
+                            Z
+                        "></path>
+
+                    <!-- Bite -->
+                    <circle cx="89" cy="35" r="8" fill="var(--surface-2)"></circle>
+
+                </svg>
+
+            </span>
+
+            <span class="os-name">
+                macOS
+            </span>
+
+            <span class="os-detail">
+                Intel &amp; Apple Silicon
+            </span>
+
+        </button>
+
+
+        <!-- LINUX -->
+
+        <button class="os-card" data-os="linux" onclick="chooseOS('linux')">
+
+            <span class="os-icon">
+
+                <!-- Tux-inspired Linux icon -->
+                <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" style=""><path fill="currentColor" d="M12.642 8.084c-.364.189-.79.42-1.242.42s-.81-.209-1.066-.413c-.13-.101-.234-.202-.313-.276-.137-.108-.12-.259-.064-.254.094.012.108.136.168.191.08.075.18.172.302.269.243.192.567.38.973.38s.878-.238 1.167-.4c.163-.092.371-.256.541-.381.13-.095.125-.21.232-.198.107.013.028.127-.122.258a3.404 3.404 0 0 1-.576.404z" style=""></path><path fill="currentColor" d="M19.649 17.77c-.142-.16-.209-.456-.281-.771s-.153-.654-.411-.874l-.002-.001a1.054 1.054 0 0 0-.317-.192c.359-1.065.219-2.126-.145-3.084-.444-1.177-1.222-2.202-1.815-2.903-.664-.838-1.313-1.633-1.301-2.808.021-1.793.197-5.118-2.958-5.122a4.66 4.66 0 0 0-.401.017c-3.526.283-2.59 4.008-2.643 5.255-.064.912-.249 1.631-.877 2.523-.736.876-1.774 2.295-2.266 3.771-.232.697-.342 1.407-.241 2.08a1.9 1.9 0 0 0-.091.089c-.216.231-.376.511-.555.699-.166.167-.403.229-.664.323s-.547.231-.721.565l-.001.002a1 1 0 0 0-.108.484c0 .154.023.311.046.461.048.313.097.609.032.81-.206.564-.232.954-.087 1.237.146.284.444.409.783.479.676.141 1.592.106 2.314.489l.062-.117-.061.118c.773.404 1.557.547 2.182.405.454-.104.821-.374 1.011-.789.489-.002 1.025-.209 1.885-.256.583-.047 1.312.207 2.149.16a1.119 1.119 0 0 0 .099.264c.324.649.928.946 1.571.896s1.329-.43 1.883-1.089l-.102-.085.102.084c.527-.64 1.403-.905 1.984-1.255.29-.175.525-.395.544-.713.018-.318-.169-.675-.599-1.152zm-7.79-11.708c-.003-.234.036-.435.126-.639s.201-.351.358-.47.312-.174.494-.176h.009c.179 0 .332.053.489.167.159.116.274.261.366.463a1.493 1.493 0 0 1 .141.636c.002.235-.038.435-.127.639a1.23 1.23 0 0 1-.18.299l-.074-.033c-.089-.038-.167-.069-.237-.096s-.124-.044-.181-.064c.041-.049.122-.108.151-.181a.943.943 0 0 0 .072-.347l.002-.016a.953.953 0 0 0-.05-.337c-.038-.113-.086-.195-.155-.263s-.139-.099-.223-.101h-.011a.324.324 0 0 0-.217.086.618.618 0 0 0-.174.25.944.944 0 0 0-.072.348l-.001.015a.992.992 0 0 0 .014.2 2.463 2.463 0 0 0-.507-.171 1.681 1.681 0 0 1-.014-.19v-.019zm-2.144.052c-.012-.202.009-.376.064-.556s.13-.311.238-.418a.516.516 0 0 1 .349-.168h.03c.118 0 .225.04.335.127a.968.968 0 0 1 .284.389c.076.171.116.343.127.545v.002a1.51 1.51 0 0 1-.002.243c-.023.006-.046.014-.068.021-.128.044-.23.093-.328.158a.845.845 0 0 0 .003-.214v-.012a.95.95 0 0 0-.068-.274.523.523 0 0 0-.138-.203c-.052-.044-.1-.065-.153-.064l-.017.001c-.061.005-.11.034-.157.092a.536.536 0 0 0-.101.223.912.912 0 0 0-.019.293l.001.012c.01.103.031.189.067.275a.528.528 0 0 0 .166.224c-.059.045-.098.078-.146.113l-.11.081a.995.995 0 0 1-.229-.342 1.528 1.528 0 0 1-.128-.546v-.002zm.155 1.228c.187-.14.315-.234.402-.298.086-.063.121-.086.148-.112h.001c.14-.132.362-.374.699-.49.115-.04.245-.065.39-.066.275-.001.608.089 1.01.348.247.16.439.174.882.363h.001c.213.087.338.202.399.321.061.12.063.25.012.387-.103.273-.429.562-.887.705h-.001c-.224.072-.418.233-.647.364a1.449 1.449 0 0 1-.842.217 1.105 1.105 0 0 1-.374-.083 1.202 1.202 0 0 1-.27-.167c-.161-.131-.303-.295-.51-.416h-.002c-.333-.19-.515-.408-.573-.598-.057-.189-.003-.351.162-.475zm.131 13.018v.001c-.047.623-.398.961-.938 1.085-.539.123-1.27 0-1.999-.381h-.001c-.808-.427-1.768-.385-2.384-.514-.308-.064-.509-.161-.602-.341-.092-.18-.094-.494.102-1.028l.001-.002.001-.002c.097-.299.025-.626-.021-.934-.047-.307-.07-.586.034-.781l.001-.002c.135-.259.332-.352.576-.439.245-.088.534-.157.764-.386l.001-.001.001-.001c.212-.223.371-.503.557-.702.157-.167.314-.279.551-.28h.009c.041 0 .085.003.132.011.314.047.588.268.853.625l.762 1.389h.001c.202.423.631.89.994 1.365.362.475.644.952.607 1.317l-.002.001zm-.063-1.01a6.721 6.721 0 0 0-.333-.469 13.467 13.467 0 0 0-.229-.293c.151 0 .28-.024.384-.072a.486.486 0 0 0 .266-.274c.09-.242 0-.583-.288-.973-.29-.39-.778-.83-1.494-1.269-.527-.328-.821-.729-.959-1.165s-.119-.907-.013-1.373c.204-.894.729-1.762 1.063-2.308.09-.066.032.123-.339.811-.332.629-.953 2.081-.103 3.214a6.722 6.722 0 0 1 .538-2.398c.472-1.067 1.456-2.919 1.534-4.395.041.029.18.123.241.158.182.106.316.262.492.403.177.142.396.264.729.283l.093.003c.343 0 .61-.112.833-.239.242-.138.436-.292.618-.351h.001c.387-.122.694-.335.869-.585.302 1.186 1.001 2.897 1.45 3.733.239.443.715 1.385.92 2.52.13-.004.273.015.427.054.537-1.393-.455-2.892-.909-3.31-.184-.178-.192-.258-.102-.254.492.436 1.139 1.311 1.374 2.3.107.451.13.925.016 1.393.056.023.113.048.171.076.862.42 1.181.785 1.027 1.283-.05-.002-.1-.001-.148 0h-.014c.125-.395-.151-.687-.889-1.02-.764-.336-1.373-.303-1.476.379a1.302 1.302 0 0 0-.017.109c-.057.02-.114.045-.172.076-.358.197-.555.553-.664.99-.108.437-.14.964-.17 1.558-.019.298-.141.702-.266 1.129-1.249.897-2.986 1.283-4.461.276zm9.628.057c-.524.317-1.456.593-2.05 1.313-.517.615-1.146.952-1.7.996-.555.044-1.033-.186-1.315-.752v-.001l-.001-.003c-.175-.333-.102-.858.045-1.412.147-.554.359-1.123.388-1.585v-.001c.03-.592.063-1.11.163-1.509.1-.399.256-.669.533-.821l.039-.02c.031.513.285 1.036.734 1.149.491.129 1.199-.292 1.498-.636.06-.002.118-.006.175-.007.262-.006.481.009.707.205v.001h.001c.173.146.255.423.326.733.071.31.128.647.342.888h.001c.41.456.542.764.531.96-.011.198-.153.344-.417.502z"></path><path fill="currentColor" d="M11.738 6.762c.015.048.093.04.138.063.04.02.071.065.116.066.042.001.107-.015.113-.057.008-.056-.073-.091-.126-.111-.067-.026-.153-.039-.216-.004-.014.008-.03.027-.025.043zm-.46 0c-.016.048-.094.04-.139.063-.039.02-.071.065-.115.066-.042.001-.108-.015-.114-.057-.007-.056.074-.091.126-.111.067-.026.153-.039.217-.004.015.008.03.027.025.043z"></path></svg>
+
+            </span>
+
+            <span class="os-name">
+                Linux
+            </span>
+
+            <span class="os-detail">
+                AppImage
+            </span>
+
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- WINDOWS -->
+
+<section class="step" id="step-windows">
+
+    <h2 class="question">
+        Which Windows version do you need?
+    </h2>
+
+    <p class="description">
+        Most modern Windows PCs use x64.
+    </p>
+
+    <div class="arch-grid">
+
+        <button class="arch-card" style="--os-glow: var(--windows)" onclick="download('windows-x64')">
+
+            <span class="recommended">
+                Recommended
+            </span>
+
+            <span class="arch-name">
+                x64
+            </span>
+
+            <span class="arch-description">
+                64-bit Intel or AMD
+            </span>
+
+        </button>
+
+        <button class="arch-card" style="--os-glow: var(--windows)" onclick="download('windows-x86')">
+
+            <span class="arch-name">
+                x86
+            </span>
+
+            <span class="arch-description">
+                32-bit Intel or AMD
+            </span>
+
+        </button>
+
+        <button class="arch-card" style="--os-glow: var(--windows)" onclick="download('windows-arm64')">
+
+            <span class="arch-name">
+                ARM64
+            </span>
+
+            <span class="arch-description">
+                64-bit ARM
+            </span>
+
+        </button>
+
+    </div>
+
+    <button class="back" onclick="show('step-os')">
+        ← Back
+    </button>
+
+</section>
+
+
+<!-- LINUX -->
+
+<section class="step" id="step-linux">
+
+    <h2 class="question">
+        Which Linux version do you need?
+    </h2>
+
+    <p class="description">
+        Choose the architecture used by your computer.
+    </p>
+
+    <div class="arch-grid">
+
+        <button class="arch-card" style="--os-glow: var(--linux)" onclick="download('linux-x64')">
+
+            <span class="recommended">
+                Recommended
+            </span>
+
+            <span class="arch-name">
+                x64
+            </span>
+
+            <span class="arch-description">
+                64-bit Intel or AMD
+            </span>
+
+        </button>
+
+        <button class="arch-card" style="--os-glow: var(--linux)" onclick="download('linux-arm64')">
+
+            <span class="arch-name">
+                ARM64
+            </span>
+
+            <span class="arch-description">
+                64-bit ARM
+            </span>
+
+        </button>
+
+        <button class="arch-card" style="--os-glow: var(--linux)" onclick="download('linux-arm32')">
+
+            <span class="arch-name">
+                ARM32
+            </span>
+
+            <span class="arch-description">
+                32-bit ARM
+            </span>
+
+        </button>
+
+    </div>
+
+    <button class="back" onclick="show('step-os')">
+        ← Back
+    </button>
+
+</section>
+
+
+<!-- MACOS -->
+
+<section class="step" id="step-macos">
+
+    <div class="download-screen macos">
+
+        <div class="download-icon">
+
+            <!-- Apple icon -->
+            <svg class="apple-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+
+                <path d="
+                        M67.8 24.7
+                        C64.1 29.2 58.3 32 52.2 31.5
+                        C51.4 25.6 53.5 19.5 57.9 15.3
+                        C62.2 10.8 68.5 8.2 74.6 8
+                        C75.1 14.1 73.1 20.2 67.8 24.7
+                        Z
+
+                        M78.7 50.7
+                        C78.8 43.1 82.6 36.1 88.7 31.9
+                        C84.8 26.3 78.4 22.9 71.5 22.6
+                        C64.2 21.8 57.2 26.9 53.5 26.9
+                        C49.7 26.9 43.9 22.7 37.8 22.8
+                        C29.8 23.1 22.5 27.4 18.4 34.3
+                        C9.9 49.1 16.2 70.8 24.4 82.6
+                        C28.5 88.4 33.2 94.9 39.3 94.7
+                        C45.1 94.5 47.3 90.8 54.3 90.8
+                        C61.4 90.8 63.4 94.7 69.5 94.5
+                        C75.9 94.4 80 88.7 83.8 82.8
+                        C88.2 76.1 90 69.5 90.1 69.2
+                        C82.8 66.1 78.8 58.7 78.7 50.7
+                        Z
+                    "></path>
+
+                <circle cx="89" cy="35" r="8" fill="var(--surface-3)"></circle>
+
+            </svg>
+
+        </div>
+
+        <h2>
+            Ceedoku for macOS
+        </h2>
+
+        <p>
+            One universal download for Intel Macs
+            and Apple Silicon Macs.
+        </p>
+
+        <button class="download-button" onclick="download('macos-universal')">
+            ↓&nbsp; Download for macOS
+        </button>
+
+        <div class="download-meta">
+            Universal · DMG
+        </div>
+
+    </div>
+
+    <button class="back" onclick="show('step-os')">
+        ← Back
+    </button>
+
+</section>
+
+
+<!-- DOWNLOAD -->
+
+<section class="step" id="step-download">
+
+    <div class="download-screen" id="final-download-screen">
+
+        <div class="download-icon" id="download-icon">
+            ↓
+        </div>
+
+        <h2 id="download-title">
+            Downloading Ceedoku...
+        </h2>
+
+        <p id="download-description">
+            Your download should begin shortly.
+        </p>
+
+        <div class="download-progress">
+
+            <div class="download-progress-bar" id="download-progress-bar"></div>
+
+        </div>
+
+        <div class="download-meta" id="download-meta"></div>
+
+        <a class="download-fallback" id="download-fallback" href="#" hidden="">
+            Download manually
+        </a>
+
+    </div>
+
+    <button class="back" onclick="show(previousStep)">
+        ← Back
+    </button>
+
+</section>
+
+
+</div>
+
+</div>
+
+</main>
+
+
+<footer class="footer">
+
+    <span>
+        Ceedoku Client 1.0.0
+    </span>
+
+    <span>·</span>
+
+    <a href="https://ceedoku.github.io/">
+        ceedoku.github.io
+    </a>
+
+</footer>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   DOWNLOADS
+========================================================= */
+
+const downloads = {
+
+    "windows-x64": {
+        url:
+            "Windows-x64.exe",
+
+        filename:
+            "Ceedoku Installer - Windows-x64.exe",
+
+        meta:
+            "Windows Installer · x64",
+
+        os:
+            "windows"
+    },
+
+    "windows-x86": {
+        url:
+            "Windows-x86.exe",
+
+        filename:
+            "Ceedoku Installer - Windows-x86.exe",
+
+        meta:
+            "Windows Installer · x86",
+
+        os:
+            "windows"
+    },
+
+    "windows-arm64": {
+        url:
+            "Windows-arm64.exe",
+
+        filename:
+            "Ceedoku Installer - Windows-arm64.exe",
+
+        meta:
+            "Windows Installer · ARM64",
+
+        os:
+            "windows"
+    },
+
+    "linux-x64": {
+        url:
+            "Linux-x64.AppImage",
+
+        filename:
+            "Ceedoku Installer - Linux-x64.AppImage",
+
+        meta:
+            "Linux AppImage · x64",
+
+        os:
+            "linux"
+    },
+
+    "linux-arm64": {
+        url:
+            "Linux-arm64.AppImage",
+
+        filename:
+            "Ceedoku Installer - Linux-arm64.AppImage",
+
+        meta:
+            "Linux AppImage · ARM64",
+
+        os:
+            "linux"
+    },
+
+    "linux-arm32": {
+        url:
+            "Linux-arm32.AppImage",
+
+        filename:
+            "Ceedoku Installer - Linux-arm32.AppImage",
+
+        meta:
+            "Linux AppImage · ARM32",
+
+        os:
+            "linux"
+    },
+
+    "macos-universal": {
+        url:
+            "MacOS-universal.dmg",
+
+        filename:
+            "Ceedoku Installer - MacOS-universal.dmg",
+
+        meta:
+            "macOS · Universal DMG",
+
+        os:
+            "macos"
+    }
+
+};
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+let previousStep = "step-os";
+
+
+function show(id) {
+
+    document
+        .querySelectorAll(".step")
+        .forEach(step => {
+
+            step.classList.remove(
+                "active"
+            );
+
+        });
+
+    const target =
+        document.getElementById(id);
+
+    if (!target) {
+        return;
+    }
+
+    target.classList.add(
+        "active"
+    );
+	    // Reset OS colour when returning to OS selection
+    if (id === "step-os") {
+        document
+            .getElementById("main-card")
+            .removeAttribute("data-os");
+    }
+}
+
+
+function chooseOS(os) {
+
+    previousStep =
+        "step-" + os;
+
+    document
+        .getElementById("main-card")
+        .dataset.os =
+        os;
+
+    show(
+        "step-" + os
+    );
+}
+
+
+/* =========================================================
+   DOWNLOAD
+========================================================= */
+
+async function download(id) {
+
+    const data =
+        downloads[id];
+
+    if (!data) {
+        return;
+    }
+
+    if (data.os === "windows") {
+
+        previousStep =
+            "step-windows";
+
+    } else if (data.os === "linux") {
+
+        previousStep =
+            "step-linux";
+
+    } else {
+
+        previousStep =
+            "step-macos";
+    }
+
+    const card =
+        document.getElementById(
+            "main-card"
+        );
+
+    card.dataset.os =
+        data.os;
+
+    const screen =
+        document.getElementById(
+            "final-download-screen"
+        );
+
+    screen.className =
+        "download-screen " +
+        data.os;
+
+    const title =
+        document.getElementById(
+            "download-title"
+        );
+
+    const description =
+        document.getElementById(
+            "download-description"
+        );
+
+    const meta =
+        document.getElementById(
+            "download-meta"
+        );
+
+    const icon =
+        document.getElementById(
+            "download-icon"
+        );
+
+    const progress =
+        document.getElementById(
+            "download-progress-bar"
+        );
+
+    const fallback =
+        document.getElementById(
+            "download-fallback"
+        );
+
+    title.textContent =
+        "Downloading Ceedoku...";
+
+    description.textContent =
+        "Your download should begin shortly.";
+
+    meta.textContent =
+        data.filename;
+
+    icon.textContent =
+        "↓";
+
+    progress.style.width =
+        "0%";
+
+    fallback.hidden =
+        true;
+
+    fallback.href =
+        data.url;
+
+    fallback.download =
+        data.filename;
+
+    show(
+        "step-download"
+    );
+
+    await new Promise(
+        resolve =>
+            requestAnimationFrame(
+                resolve
+            )
+    );
+
+    try {
+
+        const response =
+            await fetch(
+                data.url
+            );
+
+        if (!response.ok) {
+
+            throw new Error(
+                "HTTP " +
+                response.status
+            );
+
+        }
+
+        if (!response.body) {
+
+            throw new Error(
+                "ReadableStream unavailable"
+            );
+
+        }
+
+        const reader =
+            response.body.getReader();
+
+        const chunks = [];
+
+        let received = 0;
+
+        const contentLength =
+            response.headers.get(
+                "content-length"
+            );
+
+        while (true) {
+
+            const {
+                done,
+                value
+            } =
+                await reader.read();
+
+            if (done) {
+                break;
+            }
+
+            chunks.push(
+                value
+            );
+
+            received +=
+                value.length;
+
+            if (contentLength) {
+
+                const percent =
+                    (
+                        received /
+                        Number(
+                            contentLength
+                        )
+                    ) * 100;
+
+                progress.style.width =
+                    Math.min(
+                        percent,
+                        100
+                    ) + "%";
+
+            } else {
+
+                const current =
+                    parseFloat(
+                        progress.style.width
+                    ) || 0;
+
+                progress.style.width =
+                    Math.min(
+                        current + 2,
+                        90
+                    ) + "%";
+            }
+        }
+
+        const blob =
+            new Blob(
+                chunks
+            );
+
+        const blobURL =
+            URL.createObjectURL(
+                blob
+            );
+
+        const link =
+            document.createElement(
+                "a"
+            );
+
+        link.href =
+            blobURL;
+
+        link.download =
+            data.filename;
+
+        link.style.display =
+            "none";
+
+        document.body.appendChild(
+            link
+        );
+
+        link.click();
+
+        link.remove();
+
+        setTimeout(
+            () => {
+
+                URL.revokeObjectURL(
+                    blobURL
+                );
+
+            },
+            1500
+        );
+
+        progress.style.width =
+            "100%";
+
+        icon.textContent =
+            "✓";
+
+        title.textContent =
+            "Download started";
+
+        description.textContent =
+            "Ceedoku should be downloaded shortly.";
+
+        meta.textContent =
+            data.filename;
+
+    } catch (error) {
+
+        console.error(
+            "Ceedoku download failed:",
+            error
+        );
+
+        icon.textContent =
+            "↓";
+
+        title.textContent =
+            "Download ready";
+
+        description.textContent =
+            "The automatic download was blocked or could not be started. Use the button below to download it normally.";
+
+        meta.textContent =
+            data.filename;
+
+        progress.style.width =
+            "0%";
+
+        fallback.hidden =
+            false;
+    }
+
+}
+
+</script>
+
+
+</body></html>
