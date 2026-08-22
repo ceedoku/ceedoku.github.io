@@ -1,3 +1,9 @@
+- ### 8.1.0
+  > #### Changes:
+  >> ##### Added:
+  >>> - Notification thingy at the top.
+  >> ##### Fixed:
+  >>> - Being able to print with CTRL/CMD + P when a game is not running.
 - ### 8.0.0
   > #### Changes:
   >> ##### Added:
