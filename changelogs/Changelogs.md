@@ -1,3 +1,7 @@
+- ### 8.1.1
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - The game crashing whenever a notification was shown.
 - ### 8.1.0
   > #### Changes:
   >> ##### Added:
