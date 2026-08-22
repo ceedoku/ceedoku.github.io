@@ -3,7 +3,7 @@
   >> ##### Added:
   >>> - Notification thingy at the top.
   >> ##### Fixed:
-  >>> - Being able to print with CTRL/CMD + P when a game is not running.
+  >>> - Being able to print with <kbd>Ctrl</kbd> + <kbd>P</kbd> or <kbd>Cmd</kbd> + <kbd>P</kbd> when a game is not running.
 - ### 8.0.0
   > #### Changes:
   >> ##### Added:
