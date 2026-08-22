@@ -2037,11 +2037,19 @@ button {
    DOWNLOADS
 ========================================================= */
 
+const RELEASE_TAG = "installer-1.0.0";
+
+const RELEASE_BASE =
+    "https://github.com/Ceebug/ceedoku/releases/download/" +
+    RELEASE_TAG;
+
+
 const downloads = {
 
     "windows-x64": {
         url:
-            "Windows-x64.exe",
+            RELEASE_BASE +
+            "/Windows-x64.exe",
 
         filename:
             "Ceedoku Installer - Windows-x64.exe",
@@ -2055,7 +2063,8 @@ const downloads = {
 
     "windows-x86": {
         url:
-            "Windows-x86.exe",
+            RELEASE_BASE +
+            "/Windows-x86.exe",
 
         filename:
             "Ceedoku Installer - Windows-x86.exe",
@@ -2069,7 +2078,8 @@ const downloads = {
 
     "windows-arm64": {
         url:
-            "Windows-arm64.exe",
+            RELEASE_BASE +
+            "/Windows-arm64.exe",
 
         filename:
             "Ceedoku Installer - Windows-arm64.exe",
@@ -2083,7 +2093,8 @@ const downloads = {
 
     "linux-x64": {
         url:
-            "Linux-x64.AppImage",
+            RELEASE_BASE +
+            "/Linux-x64.AppImage",
 
         filename:
             "Ceedoku Installer - Linux-x64.AppImage",
@@ -2097,7 +2108,8 @@ const downloads = {
 
     "linux-arm64": {
         url:
-            "Linux-arm64.AppImage",
+            RELEASE_BASE +
+            "/Linux-arm64.AppImage",
 
         filename:
             "Ceedoku Installer - Linux-arm64.AppImage",
@@ -2111,7 +2123,8 @@ const downloads = {
 
     "linux-arm32": {
         url:
-            "Linux-arm32.AppImage",
+            RELEASE_BASE +
+            "/Linux-arm32.AppImage",
 
         filename:
             "Ceedoku Installer - Linux-arm32.AppImage",
@@ -2125,7 +2138,8 @@ const downloads = {
 
     "macos-universal": {
         url:
-            "MacOS-universal.dmg",
+            RELEASE_BASE +
+            "/MacOS-universal.dmg",
 
         filename:
             "Ceedoku Installer - MacOS-universal.dmg",
@@ -2159,38 +2173,59 @@ function show(id) {
 
         });
 
+
     const target =
         document.getElementById(id);
+
 
     if (!target) {
         return;
     }
 
+
     target.classList.add(
         "active"
     );
-	    // Reset OS colour when returning to OS selection
+
+
+    /*
+     * Reset the OS colour when returning
+     * to the operating-system picker.
+     */
+
     if (id === "step-os") {
+
         document
             .getElementById("main-card")
-            .removeAttribute("data-os");
+            .removeAttribute(
+                "data-os"
+            );
+
     }
+
 }
 
+
+/* =========================================================
+   CHOOSE OS
+========================================================= */
 
 function chooseOS(os) {
 
     previousStep =
         "step-" + os;
 
+
     document
         .getElementById("main-card")
         .dataset.os =
         os;
 
+
     show(
         "step-" + os
     );
+
 }
 
 
@@ -2198,14 +2233,20 @@ function chooseOS(os) {
    DOWNLOAD
 ========================================================= */
 
-async function download(id) {
+function download(id) {
 
     const data =
         downloads[id];
 
+
     if (!data) {
         return;
     }
+
+
+    /*
+     * Remember which screen we came from.
+     */
 
     if (data.os === "windows") {
 
@@ -2221,258 +2262,226 @@ async function download(id) {
 
         previousStep =
             "step-macos";
+
     }
+
+
+    /*
+     * Set the main card colour.
+     */
 
     const card =
         document.getElementById(
             "main-card"
         );
 
+
     card.dataset.os =
         data.os;
+
+
+    /*
+     * Configure the download screen.
+     */
 
     const screen =
         document.getElementById(
             "final-download-screen"
         );
 
+
     screen.className =
         "download-screen " +
         data.os;
+
 
     const title =
         document.getElementById(
             "download-title"
         );
 
+
     const description =
         document.getElementById(
             "download-description"
         );
+
 
     const meta =
         document.getElementById(
             "download-meta"
         );
 
+
     const icon =
         document.getElementById(
             "download-icon"
         );
+
 
     const progress =
         document.getElementById(
             "download-progress-bar"
         );
 
+
     const fallback =
         document.getElementById(
             "download-fallback"
         );
 
+
+    /*
+     * Reset the screen.
+     */
+
     title.textContent =
-        "Downloading Ceedoku...";
+        "Download Ceedoku";
+
 
     description.textContent =
         "Your download should begin shortly.";
 
+
     meta.textContent =
         data.filename;
+
 
     icon.textContent =
         "↓";
 
+
     progress.style.width =
         "0%";
+
 
     fallback.hidden =
         true;
 
+
     fallback.href =
         data.url;
 
+
     fallback.download =
         data.filename;
+
+
+    /*
+     * Show the download screen first.
+     */
 
     show(
         "step-download"
     );
 
-    await new Promise(
-        resolve =>
-            requestAnimationFrame(
-                resolve
-            )
-    );
 
-    try {
+    /*
+     * Start the download directly.
+     *
+     * We deliberately DON'T fetch the entire
+     * installer into a Blob.
+     *
+     * This is important for large files such
+     * as the ~220 MB macOS DMG.
+     */
 
-        const response =
-            await fetch(
-                data.url
-            );
+    setTimeout(
+        () => {
 
-        if (!response.ok) {
-
-            throw new Error(
-                "HTTP " +
-                response.status
-            );
-
-        }
-
-        if (!response.body) {
-
-            throw new Error(
-                "ReadableStream unavailable"
-            );
-
-        }
-
-        const reader =
-            response.body.getReader();
-
-        const chunks = [];
-
-        let received = 0;
-
-        const contentLength =
-            response.headers.get(
-                "content-length"
-            );
-
-        while (true) {
-
-            const {
-                done,
-                value
-            } =
-                await reader.read();
-
-            if (done) {
-                break;
-            }
-
-            chunks.push(
-                value
-            );
-
-            received +=
-                value.length;
-
-            if (contentLength) {
-
-                const percent =
-                    (
-                        received /
-                        Number(
-                            contentLength
-                        )
-                    ) * 100;
-
-                progress.style.width =
-                    Math.min(
-                        percent,
-                        100
-                    ) + "%";
-
-            } else {
-
-                const current =
-                    parseFloat(
-                        progress.style.width
-                    ) || 0;
-
-                progress.style.width =
-                    Math.min(
-                        current + 2,
-                        90
-                    ) + "%";
-            }
-        }
-
-        const blob =
-            new Blob(
-                chunks
-            );
-
-        const blobURL =
-            URL.createObjectURL(
-                blob
-            );
-
-        const link =
-            document.createElement(
-                "a"
-            );
-
-        link.href =
-            blobURL;
-
-        link.download =
-            data.filename;
-
-        link.style.display =
-            "none";
-
-        document.body.appendChild(
-            link
-        );
-
-        link.click();
-
-        link.remove();
-
-        setTimeout(
-            () => {
-
-                URL.revokeObjectURL(
-                    blobURL
+            const link =
+                document.createElement(
+                    "a"
                 );
 
-            },
-            1500
+
+            link.href =
+                data.url;
+
+
+            link.download =
+                data.filename;
+
+
+            link.style.display =
+                "none";
+
+
+            document.body.appendChild(
+                link
+            );
+
+
+            link.click();
+
+
+            link.remove();
+
+
+        },
+        150
+    );
+
+
+    /*
+     * Since the browser handles the actual
+     * file transfer, we cannot reliably track
+     * byte-by-byte progress from this page.
+     *
+     * Instead, show the download as started.
+     */
+
+    setTimeout(
+        () => {
+
+            progress.style.width =
+                "100%";
+
+
+            icon.textContent =
+                "✓";
+
+
+            title.textContent =
+                "Download started";
+
+
+            description.textContent =
+                "Your browser should begin downloading Ceedoku shortly.";
+
+
+            meta.textContent =
+                data.filename;
+
+        },
+        500
+    );
+
+}
+
+
+/* =========================================================
+   OPTIONAL: MANUAL DOWNLOAD
+========================================================= */
+
+function downloadManually() {
+
+    const fallback =
+        document.getElementById(
+            "download-fallback"
         );
 
-        progress.style.width =
-            "100%";
 
-        icon.textContent =
-            "✓";
+    if (
+        fallback &&
+        fallback.href &&
+        fallback.href !==
+            window.location.href
+    ) {
 
-        title.textContent =
-            "Download started";
+        window.location.href =
+            fallback.href;
 
-        description.textContent =
-            "Ceedoku should be downloaded shortly.";
-
-        meta.textContent =
-            data.filename;
-
-    } catch (error) {
-
-        console.error(
-            "Ceedoku download failed:",
-            error
-        );
-
-        icon.textContent =
-            "↓";
-
-        title.textContent =
-            "Download ready";
-
-        description.textContent =
-            "The automatic download was blocked or could not be started. Use the button below to download it normally.";
-
-        meta.textContent =
-            data.filename;
-
-        progress.style.width =
-            "0%";
-
-        fallback.hidden =
-            false;
     }
 
 }
