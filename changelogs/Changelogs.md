@@ -1,3 +1,7 @@
+- ### 8.1.2
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - The Continue Game menu mistakes and time values not updating after importing a save.
 - ### 8.1.1
   > #### Changes:
   >> ##### Fixed:
