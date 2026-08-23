@@ -104,12 +104,14 @@
     </div>
     <script>
         const button = document.getElementById("okayButton");
-
-        button.addEventListener("pointerdown", () => {
+        button.addEventListener("pointerdown", (event) => {
+            if (event.button !== 0) return;
             button.classList.remove("spring");
         });
 
-        button.addEventListener("pointerup", () => {
+        button.addEventListener("pointerup", (event) => {
+            if (event.button !== 0) return;
+
             button.classList.add("spring");
 
             setTimeout(() => {
