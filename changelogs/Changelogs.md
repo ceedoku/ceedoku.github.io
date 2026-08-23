@@ -1,3 +1,11 @@
+- ### 8.3.0
+  > #### Changes:
+  >> ##### Added:
+  >>> - The ability to click the version number to go the GitHub release for that version.
+- ### 8.2.0
+  > #### Changes:
+  >> ##### Added:
+  >>> - The ability to name a save file before exporting it.
 - ### 8.1.3
   > #### Changes:
   >> ##### Fixed:
