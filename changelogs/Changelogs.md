@@ -1,3 +1,7 @@
+- ### 8.4.0
+  > #### Changes:
+  >> ##### Added:
+  >>> - A cancel button inside the export save filename menu so you can cancel exporting your save game.
 - ### 8.3.1
   > #### Changes:
   >> ##### Changed:
