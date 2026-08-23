@@ -1,3 +1,7 @@
+- ### 8.4.1
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - 'Enable Limited Hints' setting having too high of a gap.
 - ### 8.4.0
   > #### Changes:
   >> ##### Added:
