@@ -1,3 +1,7 @@
+- ### 8.3.1
+  > #### Changes:
+  >> ##### Changed:
+  >>> - The hover tooltip text for the version number when the script is unable to reach GitHub.
 - ### 8.3.0
   > #### Changes:
   >> ##### Added:
