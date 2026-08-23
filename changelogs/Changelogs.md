@@ -1,3 +1,8 @@
+- ### 8.1.3
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - New game not working when the new game helper didn't initialize correctly.
+  >>> - Print icon not existing on most devices.
 - ### 8.1.2
   > #### Changes:
   >> ##### Fixed:
