@@ -19,7 +19,7 @@ if (releaseReady) {
 	<meta content="Ceedoku is a free Sudoku game with multiple difficulty levels, dark mode, hints, saving, and more." name=description>
 	<meta content=TIoixSj4h36QZAk_mHgQDXcUvwi8SHvCRLlZoKBVsbE name=google-site-verification>
 	<script id=vervar>
-		const version = "8.1.3"
+		const version = "8.3.0"
 	</script>
 	<script src="fsj.js"></script>
 	<script src="jsf.js"></script>
@@ -331,6 +331,19 @@ if (releaseReady) {
 			<button title="Cancel importing and/or exporting save games." class="number-button cancel-button" onclick="hideimportexportgame()" style="width:100%;border-top-right-radius:999px;border-bottom-right-radius:999px;margin-bottom:5px;font-size:1.02rem;min-height:58px">Cancel</button>
 		</div>
 	</div>
+	<div class="win-overlay" style="border-radius:66px;overflow:clip" id="namefileOverlay">
+		<div class="win-card">
+			<h1 style="color:var(--text2);margin-bottom: 0px;" class="win-title">Name your save game</h1>
+			<h3 style="margin-top: 10px;">Please type a name for your save game.</h3>
+			<div style="display: flex;">
+				<input id="savenameinput" placeholder="Enter filename here..." class="input" type="text" style="margin-bottom: 10px;min-height: 58px;background: var(--surface-2);border-radius: 20px;border: 3px solid var(--surface-3);padding-left: 10px;padding-right: 10px;color: var(--text2);width: 100%;border-top-right-radius: 0px;border-bottom-right-radius: 0px;border-right: 1px solid var(--surface-3);">
+				<div style="width: 20%;margin-bottom: 10px;background: var(--surface-2);border: 3px solid var(--surface-3);border-left: 1px solid var(--surface-3);border-radius: 20px;border-top-left-radius: 0px;border-bottom-left-radius: 0px;align-content: center;justify-content: center;">
+					<p style="color: var(--text2);font-size: 14px;">.csf</p>
+				</div>
+			</div>
+			<button id="savenamebutton" title="Export your current save game." class="new-main2" onclick="exportsavename()" style="width:100%;border-top-right-radius:999px;border-bottom-right-radius:999px;margin-bottom:5px">OK</button>
+		</div>
+	</div>
 	<div class=win-overlay style=border-radius:66px;overflow:clip id=newOverlay>
 		<div class=win-card aria-label="Difficulty selection screen">
 			<h1 style=color:var(--text2) class=win-title>Select a difficulty</h1>
@@ -463,8 +476,25 @@ if (releaseReady) {
 			"touch" === e.pointerType && (touchStyles.disabled = !1)
 		})
 	</script>
-	<script id=setver>
-		document.getElementById("version").innerHTML = `<strong>Version:</strong> ${version}`
+	<script id="setver">
+		const link = `https://github.com/ceebug/ceedoku/releases/tag/v${version}`;
+		const versionElement = document.getElementById("version");
+
+		fetch(`https://api.github.com/repos/ceebug/ceedoku/releases/tags/v${version}`)
+			.then(response => {
+				if (response.ok) {
+					versionElement.innerHTML =
+						`<strong>Version:</strong> <a class="feedbacklink" title="Go to the GitHub release for the current version." href="${link}">${version}</a>`;
+				} else {
+					versionElement.innerHTML =
+						`<strong>Version:</strong> <a class="feedbacklink" title="No GitHub release for this version of Ceedoku exists yet.">${version}</a>`;
+				}
+			})
+			.catch(() => {
+				// If GitHub can't be reached, don't make it a link.
+				versionElement.innerHTML =
+					`<strong>Version:</strong> <a class="feedbacklink" title="No GitHub release for this version of Ceedoku exists yet.">${version}</a>`;
+			});
 	</script>
 	<script id=crash-detector>
 		window.addEventListener("error", e => {
