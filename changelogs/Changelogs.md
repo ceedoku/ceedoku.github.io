@@ -1,3 +1,8 @@
+- ### 8.4.2
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - 'Hints Limit' setting name using incorrect wording - it is now 'Hint Limit'
+  >>> - 'Hints Limit' setting input box not having it's value set on page load
 - ### 8.4.1
   > #### Changes:
   >> ##### Fixed:
