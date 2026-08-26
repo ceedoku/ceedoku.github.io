@@ -1,3 +1,18 @@
+- ### 9.0.0
+  > #### Changes:
+  >> ##### Added:
+  >>> - **New settings:**
+  >>>> - Enable tools.
+  >>>> - Enable pencil mode.
+  >>>> - Enable erase mode.
+  >>>> - Enable undo and redo.
+  >>> - Wraparound for arrow keys on cells.
+  >> ##### Fixed:
+  >>> - An issue where completion animations would only show for the currently selected cell.
+  >> ##### Changed:
+  >>> - Moved the 'Hints after cooldown' setting below the 'Hint cooldown amount' setting to match the order of events.
+  >> ##### Improved:
+  >>> - The load times of images.
 - ### 8.4.2
   > #### Changes:
   >> ##### Fixed:
