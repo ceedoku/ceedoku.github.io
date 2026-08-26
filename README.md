@@ -1,2 +1,0 @@
-![CEEDOKU](./title.png)
-# Website
