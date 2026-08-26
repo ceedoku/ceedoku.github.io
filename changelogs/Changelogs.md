@@ -1,3 +1,7 @@
+- ### 9.0.1
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - 'Hint cooldown' setting not getting disabled correctly after turning off the setting 'Enable tools'.
 - ### 9.0.0
   > #### Changes:
   >> ##### Added:
