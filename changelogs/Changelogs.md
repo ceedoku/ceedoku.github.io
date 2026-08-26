@@ -330,6 +330,11 @@
   > #### Changes:
   >> ##### Added:
   >>> - A light/dark mode switcher to the main menu.
+  
+---
+> Anything below this point might not be accurate
+
+---
 - ### Version 2.0.8
   > #### Changes:
   >> ##### Fixed:
@@ -370,3 +375,6 @@
   > #### Changes:
   >> ##### Added:
   >>> - A main menu.
+  
+---
+> Changelogs don't go down further then this since I didn't start versioning yet.
