@@ -17,6 +17,7 @@
   >>> - Moved the 'Hints after cooldown' setting below the 'Hint cooldown amount' setting to match the order of events.
   >> ##### Improved:
   >>> - The load times of images.
+  >>> - The load time of the version number
 - ### 8.4.2
   > #### Changes:
   >> ##### Fixed:
