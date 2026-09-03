@@ -353,25 +353,25 @@
   >>> - A bug where the version text was not the correct element type.
   >>> - A bug where the version text wasn't being updated.
   >>> - A bug involving a script overwriting its own text content.
-- ###2.0.4
+- ### 2.0.4
   > #### Changes:
   >> ##### Added:
   >>> - 'Version:' before the version number.
-- ###2.0.3
+- ### 2.0.3
   > #### Changes:
   >> ##### Fixed:
   >>> - The content of the Main Menu not being vertically centered.
   >> ##### Added:
   >>> - Version text.
-- ###2.0.2
+- ### 2.0.2
   > #### Changes:
   >> ##### Tested:
   >>> - A fix for the Main Menu not being vertically centered.
-- ###2.0.1
+- ### 2.0.1
   > #### Changes:
   >> ##### Tested:
   >>> - A fix for the Main Menu not being vertically centered.
-- ###2.0.0
+- ### 2.0.0
   > #### Changes:
   >> ##### Added:
   >>> - A main menu.
