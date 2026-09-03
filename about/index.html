@@ -8,6 +8,11 @@
     --shadow: 0 5px 48px rgba(0,0,0,.32);
 }
 
+.titlebar {
+	position: sticky;
+	top: 0;
+}
+
 * {
     box-sizing: border-box;
 }
@@ -291,6 +296,53 @@ input[type="submit"] {
 		height: fit-content
 	}
 }
+.focus {
+    position: relative;
+    transform: translateY(-3px);
+    border: 1px solid rgba(115, 167, 255, 0.75) !important;
+    z-index: 1;
+
+    box-shadow:
+        /* tight inner glow */
+        inset 0 0 4px rgba(55, 115, 255, 0.9),
+        inset 0 0 9px rgba(55, 115, 255, 0.45),
+
+        /* tight outer glow */
+        0 0 4px rgba(115, 167, 255, 0.55),
+        0 0 11px rgba(70, 130, 255, 0.55),
+        0 0 24px rgba(55, 110, 255, 0.28),
+
+        /* card shadow */
+        0 12px 40px rgba(0, 0, 0, 0.28);
+
+    animation: ceedoku-focus-pulse 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes ceedoku-focus-pulse {
+    from {
+        box-shadow:
+            inset 0 0 3px rgba(55, 115, 255, 0.75),
+            inset 0 0 7px rgba(55, 115, 255, 0.35),
+
+            0 0 3px rgba(115, 167, 255, 0.45),
+            0 0 9px rgba(70, 130, 255, 0.42),
+            0 0 19px rgba(55, 110, 255, 0.20),
+
+            0 12px 40px rgba(0, 0, 0, 0.28);
+    }
+
+    to {
+        box-shadow:
+            inset 0 0 5px rgba(55, 115, 255, 0.95),
+            inset 0 0 10px rgba(55, 115, 255, 0.50),
+
+            0 0 5px rgba(115, 167, 255, 0.65),
+            0 0 12px rgba(70, 130, 255, 0.62),
+            0 0 27px rgba(55, 110, 255, 0.32),
+
+            0 12px 40px rgba(0, 0, 0, 0.28);
+    }
+}
     </style>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzOCAzOCIgd2lkdGg9IjM4IiBoZWlnaHQ9IjM4Ij4KCiAgPGRlZnM+CiAgICA8Y2xpcFBhdGggaWQ9ImNsaXAiPgogICAgICA8cmVjdCB3aWR0aD0iMzgiIGhlaWdodD0iMzgiIHJ4PSIxMCI+PC9yZWN0PgogICAgPC9jbGlwUGF0aD4KICA8L2RlZnM+CgogIDxnIGNsaXAtcGF0aD0idXJsKCNjbGlwKSI+CiAgICA8cmVjdCB3aWR0aD0iMzgiIGhlaWdodD0iMzgiIGZpbGw9IiMxYTczZTgiPjwvcmVjdD4KCiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxOSAxOSkiPgogICAgICA8IS0tIDI0IHJhaW5ib3cgd2VkZ2VzIC0tPgogICAgICA8cGF0aCBkPSJNMCwwIEwwLC0zMCBBMzAsMzAgMCAwLDEgNy43NiwtMjguOTggWiIgZmlsbD0iIzFhNzNlOCI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEw3Ljc2LC0yOC45OCBBMzAsMzAgMCAwLDEgMTUsLTI1Ljk4IFoiIGZpbGw9IiMyMTgwZDgiPjwvcGF0aD4KICAgICAgPHBhdGggZD0iTTAsMCBMMTUsLTI1Ljk4IEEzMCwzMCAwIDAsMSAyMS4yMSwtMjEuMjEgWiIgZmlsbD0iIzJiOGRkMCI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwyMS4yMSwtMjEuMjEgQTMwLDMwIDAgMCwxIDI1Ljk4LC0xNSBaIiBmaWxsPSIjMzVhMjhhIj48L3BhdGg+CiAgICAgIDxwYXRoIGQ9Ik0wLDAgTDI1Ljk4LC0xNSBBMzAsMzAgMCAwLDEgMjguOTgsLTcuNzYgWiIgZmlsbD0iIzQwYjU2YSI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwyOC45OCwtNy43NiBBMzAsMzAgMCAwLDEgMzAsMCBaIiBmaWxsPSIjNjhiZjU1Ij48L3BhdGg+CgogICAgICA8cGF0aCBkPSJNMCwwIEwzMCwwIEEzMCwzMCAwIDAsMSAyOC45OCw3Ljc2IFoiIGZpbGw9IiM4ZmM4NDAiPjwvcGF0aD4KICAgICAgPHBhdGggZD0iTTAsMCBMMjguOTgsNy43NiBBMzAsMzAgMCAwLDEgMjUuOTgsMTUgWiIgZmlsbD0iI2I3ZDEyYSI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwyNS45OCwxNSBBMzAsMzAgMCAwLDEgMjEuMjEsMjEuMjEgWiIgZmlsbD0iI2RiYzcxNCI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwyMS4yMSwyMS4yMSBBMzAsMzAgMCAwLDEgMTUsMjUuOTggWiIgZmlsbD0iI2ZiYmMwNCI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwxNSwyNS45OCBBMzAsMzAgMCAwLDEgNy43NiwyOC45OCBaIiBmaWxsPSIjZjRhMjA0Ij48L3BhdGg+CiAgICAgIDxwYXRoIGQ9Ik0wLDAgTDcuNzYsMjguOTggQTMwLDMwIDAgMCwxIDAsMzAgWiIgZmlsbD0iI2VjODYwYiI+PC9wYXRoPgoKICAgICAgPHBhdGggZD0iTTAsMCBMMCwzMCBBMzAsMzAgMCAwLDEgLTcuNzYsMjguOTggWiIgZmlsbD0iI2U1NmExMyI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwtNy43NiwyOC45OCBBMzAsMzAgMCAwLDEgLTE1LDI1Ljk4IFoiIGZpbGw9IiNkZjUzMWEiPjwvcGF0aD4KICAgICAgPHBhdGggZD0iTTAsMCBMLTE1LDI1Ljk4IEEzMCwzMCAwIDAsMSAtMjEuMjEsMjEuMjEgWiIgZmlsbD0iI2Q5MzAyNSI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwtMjEuMjEsMjEuMjEgQTMwLDMwIDAgMCwxIC0yNS45OCwxNSBaIiBmaWxsPSIjY2YyZjRkIj48L3BhdGg+CiAgICAgIDxwYXRoIGQ9Ik0wLDAgTC0yNS45OCwxNSBBMzAsMzAgMCAwLDEgLTI4Ljk4LDcuNzYgWiIgZmlsbD0iI2M2MzA3NiI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwtMjguOTgsNy43NiBBMzAsMzAgMCAwLDEgLTMwLDAgWiIgZmlsbD0iI2I4MzQ5YyI+PC9wYXRoPgoKICAgICAgPHBhdGggZD0iTTAsMCBMLTMwLDAgQTMwLDMwIDAgMCwxIC0yOC45OCwtNy43NiBaIiBmaWxsPSIjYTUzY2JmIj48L3BhdGg+CiAgICAgIDxwYXRoIGQ9Ik0wLDAgTC0yOC45OCwtNy43NiBBMzAsMzAgMCAwLDEgLTI1Ljk4LC0xNSBaIiBmaWxsPSIjOGQ0OWQ0Ij48L3BhdGg+CiAgICAgIDxwYXRoIGQ9Ik0wLDAgTC0yNS45OCwtMTUgQTMwLDMwIDAgMCwxIC0yMS4yMSwtMjEuMjEgWiIgZmlsbD0iIzZmNWRlMyI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwtMjEuMjEsLTIxLjIxIEEzMCwzMCAwIDAsMSAtMTUsLTI1Ljk4IFoiIGZpbGw9IiM0ZjZkZWIiPjwvcGF0aD4KICAgICAgPHBhdGggZD0iTTAsMCBMLTE1LC0yNS45OCBBMzAsMzAgMCAwLDEgLTcuNzYsLTI4Ljk4IFoiIGZpbGw9IiMzMzdiZWUiPjwvcGF0aD4KICAgICAgPHBhdGggZD0iTTAsMCBMLTcuNzYsLTI4Ljk4IEEzMCwzMCAwIDAsMSAwLC0zMCBaIiBmaWxsPSIjMWE3M2U4Ij48L3BhdGg+CiAgICA8L2c+CiAgPC9nPgoKICA8IS0tIDPDlzMgZ3JpZCAtLT4KICA8ZyBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LC45MikiPgogICAgPHJlY3QgeD0iNyIgeT0iNyIgd2lkdGg9IjYiIGhlaWdodD0iNiIgcng9IjIiPjwvcmVjdD4KICAgIDxyZWN0IHg9IjE2IiB5PSI3IiB3aWR0aD0iNiIgaGVpZ2h0PSI2IiByeD0iMiI+PC9yZWN0PgogICAgPHJlY3QgeD0iMjUiIHk9IjciIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CgogICAgPHJlY3QgeD0iNyIgeT0iMTYiIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CiAgICA8cmVjdCB4PSIxNiIgeT0iMTYiIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CiAgICA8cmVjdCB4PSIyNSIgeT0iMTYiIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CgogICAgPHJlY3QgeD0iNyIgeT0iMjUiIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CiAgICA8cmVjdCB4PSIxNiIgeT0iMjUiIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CiAgICA8cmVjdCB4PSIyNSIgeT0iMjUiIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CiAgPC9nPgoKPC9zdmc+">
   <title>Ceedoku - About the game</title></head><body class="dark activity-stream" style="height: fit-content;/*! padding: 10px; */"><header class="titlebar" style="">
@@ -332,7 +384,7 @@ input[type="submit"] {
         <img class="img" src=".\title.png" alt="CEEDOKU" style=""><h2 style="color: var(--text2); margin-bottom: 0px; margin-top: 0px; --darkreader-inline-color: var(--darkreader-text--text2, var(--darkreader-text-000000, #e8e6e3));" data-darkreader-inline-color="">What is Ceedoku?</h2><div class="card" style="padding: 8px 25px 25px; background-color: var(--surface); border-radius: 20px; border: 1px solid rgb(35, 43, 54); margin-top: 1dvh; --darkreader-inline-bgcolor: var(--darkreader-bg--surface, var(--darkreader-background-ffffff, #181a1b)); --darkreader-inline-border-top: var(--darkreader-border-232b36, #7d7467); --darkreader-inline-border-right: var(--darkreader-border-232b36, #7d7467); --darkreader-inline-border-bottom: var(--darkreader-border-232b36, #7d7467); --darkreader-inline-border-left: var(--darkreader-border-232b36, #7d7467);margin-bottom: 10px;padding-bottom: 8px;" data-darkreader-inline-bgcolor="" data-darkreader-inline-border-top="" data-darkreader-inline-border-right="" data-darkreader-inline-border-bottom="" data-darkreader-inline-border-left=""><p style="">Ceedoku is a free, lightweight, and open-source Sudoku game made by <a href="https://github.com/ceebug">Ceebug</a>. It is designed to fit your needs while using as few resources as possible, allowing Ceedoku to run on a wide range of devices. With plenty of features including multiple difficulty levels, dark mode, hints, saving, and more, Ceedoku gives you a simple yet powerful Sudoku experience.</p>
         </div>        <h2 id="features" class="why" style="color: var(--text2); margin-bottom: 0px; margin-top: 0px; --darkreader-inline-color: var(--darkreader-text--text2, var(--darkreader-text-000000, #e8e6e3));" data-darkreader-inline-color="">Features:</h2>
 
-        <div class="card" style="padding-top: 8px; padding-bottom: 8px; background-color: var(--surface); border-radius: 20px; border: 1px solid rgb(35, 43, 54); margin-top: 1dvh; --darkreader-inline-bgcolor: var(--darkreader-bg--surface, var(--darkreader-background-ffffff, #181a1b)); --darkreader-inline-border-top: var(--darkreader-border-232b36, #7d7467); --darkreader-inline-border-right: var(--darkreader-border-232b36, #7d7467); --darkreader-inline-border-bottom: var(--darkreader-border-232b36, #7d7467); --darkreader-inline-border-left: var(--darkreader-border-232b36, #7d7467);" data-darkreader-inline-bgcolor="" data-darkreader-inline-border-top="" data-darkreader-inline-border-right="" data-darkreader-inline-border-bottom="" data-darkreader-inline-border-left="">
+        <div id="featurescard" class="card" style="padding-top: 8px; padding-bottom: 8px; background-color: var(--surface); border-radius: 20px; border: 1px solid rgb(35, 43, 54); margin-top: 1dvh; --darkreader-inline-bgcolor: var(--darkreader-bg--surface, var(--darkreader-background-ffffff, #181a1b)); --darkreader-inline-border-top: var(--darkreader-border-232b36, #7d7467); --darkreader-inline-border-right: var(--darkreader-border-232b36, #7d7467); --darkreader-inline-border-bottom: var(--darkreader-border-232b36, #7d7467); --darkreader-inline-border-left: var(--darkreader-border-232b36, #7d7467);" data-darkreader-inline-bgcolor="" data-darkreader-inline-border-top="" data-darkreader-inline-border-right="" data-darkreader-inline-border-bottom="" data-darkreader-inline-border-left="">
             <ul>
                 <li><strong>Fully installable, right from your browser</strong></li>
                 <li><strong>Dark mode and light mode</strong> (Dark mode is default.)</li>
@@ -353,11 +405,11 @@ input[type="submit"] {
 				<li><strong>Sound effects</strong>
 				<li><strong>Animations</strong></li>
 				<li><strong>Settings menu</strong> (To control the features.)</li>
-				<li><strong>Importing and exporting save files</strong>(Using <a href="https://ceedoku.github.io/csfspec">.CSF (Ceedoku Save Format)</a> for the save files.)</li>
+				<li><strong>Importing and exporting save files</strong> (Using <a href="https://ceedoku.github.io/csfspec">.CSF (Ceedoku Save Format)</a> for the save files.)</li>
 				<li><strong>Clickable release version to direct to the changelogs</strong></li>
 			<ul>
         </div><h2 id="download"  style="color: var(--text2); margin-bottom: 0px; margin-top: 10px; --darkreader-inline-color: var(--darkreader-text--text2, var(--darkreader-text-000000, #e8e6e3));" data-darkreader-inline-color="">Download Ceedoku</h2>
-        <div class="card" style="padding: 8px 25px 25px; background-color: var(--surface); border-radius: 20px; border: 1px solid rgb(35, 43, 54); margin-top: 1dvh; --darkreader-inline-bgcolor: var(--darkreader-bg--surface, var(--darkreader-background-ffffff, #181a1b)); --darkreader-inline-border-top: var(--darkreader-border-232b36, #7d7467); --darkreader-inline-border-right: var(--darkreader-border-232b36, #7d7467); --darkreader-inline-border-bottom: var(--darkreader-border-232b36, #7d7467); --darkreader-inline-border-left: var(--darkreader-border-232b36, #7d7467);margin-bottom: 10px;" data-darkreader-inline-bgcolor="" data-darkreader-inline-border-top="" data-darkreader-inline-border-right="" data-darkreader-inline-border-bottom="" data-darkreader-inline-border-left=""><p style="">Ceedoku is a website, not an app. However, this does not mean you cannot install Ceedoku. Below are all the ways you can access Ceedoku. <br> Whether it be using the website, Installing from an executable, or something else; rest assured: Ceedoku can run on anything.</p><div class="whatamidoingwithmylife" style="width: 100%; height: 55px; background-color: var(--surface-2); border-radius: 8px; display: flex; padding: 4px; gap: 4px; --darkreader-inline-bgcolor: var(--darkreader-bg--surface-2, var(--darkreader-background-ffffff, #181a1b));" data-darkreader-inline-bgcolor=""><button onclick="location.href='https://ceedoku.github.io';" style="border-radius: 4px; width: 100%; border: 1px solid var(--muted); display: flex; justify-content: center; align-items: center; --darkreader-inline-border-short: 1px solid var(--darkreader-border--muted);" "="" data-darkreader-inline-border-short="">  <svg class="sphere-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="height: 65%; margin-right: 5px; stroke: rgb(72, 147, 255); --darkreader-inline-stroke: var(--darkreader-text-4893ff, #4ca9ff);" data-darkreader-inline-stroke="">
+        <div id="downloadcard" class="card" style="padding: 8px 25px 25px; background-color: var(--surface); border-radius: 20px; border: 1px solid rgb(35, 43, 54); margin-top: 1dvh; --darkreader-inline-bgcolor: var(--darkreader-bg--surface, var(--darkreader-background-ffffff, #181a1b)); --darkreader-inline-border-top: var(--darkreader-border-232b36, #7d7467); --darkreader-inline-border-right: var(--darkreader-border-232b36, #7d7467); --darkreader-inline-border-bottom: var(--darkreader-border-232b36, #7d7467); --darkreader-inline-border-left: var(--darkreader-border-232b36, #7d7467);margin-bottom: 10px;" data-darkreader-inline-bgcolor="" data-darkreader-inline-border-top="" data-darkreader-inline-border-right="" data-darkreader-inline-border-bottom="" data-darkreader-inline-border-left=""><p style="">Ceedoku is a website, not an app. However, this does not mean you cannot install Ceedoku. Below are all the ways you can access Ceedoku. <br> Whether it be using the website, Installing from an executable, or something else; rest assured: Ceedoku can run on anything.</p><div class="whatamidoingwithmylife" style="width: 100%; height: 55px; background-color: var(--surface-2); border-radius: 8px; display: flex; padding: 4px; gap: 4px; --darkreader-inline-bgcolor: var(--darkreader-bg--surface-2, var(--darkreader-background-ffffff, #181a1b));" data-darkreader-inline-bgcolor=""><button onclick="location.href='https://ceedoku.github.io';" style="border-radius: 4px; width: 100%; border: 1px solid var(--muted); display: flex; justify-content: center; align-items: center; --darkreader-inline-border-short: 1px solid var(--darkreader-border--muted);" "="" data-darkreader-inline-border-short="">  <svg class="sphere-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="height: 65%; margin-right: 5px; stroke: rgb(72, 147, 255); --darkreader-inline-stroke: var(--darkreader-text-4893ff, #4ca9ff);" data-darkreader-inline-stroke="">
     <circle cx="12" cy="12" r="10"></circle>
     <line x1="2" y1="12" x2="22" y2="12"></line>
     <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
@@ -382,15 +434,102 @@ input[type="submit"] {
 
         </div>
     
-
 <script>
+document.addEventListener("DOMContentLoaded", () => {
+    const downloadLinks = document.querySelectorAll(
+        'a[href="https://ceedoku.github.io/download"]'
+    );
+
+    const aboutLinks = document.querySelectorAll(
+        'a[href="https://ceedoku.github.io/about"]'
+    );
+
+    const downloadCard = document.getElementById("downloadcard");
+    const featuresCard = document.getElementById("featurescard");
+
+    // Keep the links bold without changing the actual link.
+    function setBold(link, bold) {
+        const strong = link.querySelector(":scope > strong");
+
+        if (bold && !strong) {
+            const wrapper = document.createElement("strong");
+
+            while (link.firstChild) {
+                wrapper.appendChild(link.firstChild);
+            }
+
+            link.appendChild(wrapper);
+        } else if (!bold && strong) {
+            while (strong.firstChild) {
+                link.insertBefore(strong.firstChild, strong);
+            }
+
+            strong.remove();
+        }
+    }
+
+    // Make Download bold at the bottom of the page,
+    // otherwise make About bold.
+    function updateLinks() {
+        const atBottom =
+            window.innerHeight + window.scrollY >=
+            document.documentElement.scrollHeight - 1;
+
+        downloadLinks.forEach(link => setBold(link, atBottom));
+        aboutLinks.forEach(link => setBold(link, !atBottom));
+    }
+
+    // Check the URL when the page loads.
+    const hash = window.location.hash.toLowerCase();
+
+    // If the URL has #download, highlight Download.
+    if (hash === "#download") {
+        downloadCard.classList.add("focus");
+    }
+
+    // If the URL has #features, highlight Features.
+    // Also make sure the browser is using the Features hash.
+    if (hash === "#features") {
+        featuresCard.classList.add("focus");
+
+        history.replaceState(null, "", "#features");
+		
+		window.scrollBy(0, -5);
+    }
+
+    // Once the user interacts with the page, remove every focus.
+    function removeFocus() {
+        downloadCard.classList.remove("focus");
+        featuresCard.classList.remove("focus");
+
+        window.removeEventListener("pointerdown", removeFocus);
+        window.removeEventListener("wheel", removeFocus);
+        window.removeEventListener("touchstart", removeFocus);
+        window.removeEventListener("keydown", removeFocus);
+        window.removeEventListener("contextmenu", removeFocus);
+        window.removeEventListener("selectstart", removeFocus);
+    }
+
+    // Don't use scroll here because the browser scrolls to the hash
+    // automatically when the page loads.
+    window.addEventListener("pointerdown", removeFocus);
+    window.addEventListener("wheel", removeFocus);
+    window.addEventListener("touchstart", removeFocus);
+    window.addEventListener("keydown", removeFocus);
+    window.addEventListener("contextmenu", removeFocus);
+    window.addEventListener("selectstart", removeFocus);
+
+    window.addEventListener("scroll", updateLinks);
+    window.addEventListener("resize", updateLinks);
+
+    updateLinks();
+});
+
 function toggleMenu() {
     document.getElementById("sidebar").classList.toggle("open");
 }
 
-
 document.addEventListener("click", function(event) {
-
     const sidebar = document.getElementById("sidebar");
     const button = document.querySelector(".menu-button");
 
@@ -401,7 +540,6 @@ document.addEventListener("click", function(event) {
     ) {
         sidebar.classList.remove("open");
     }
-
 });
 </script>
 
