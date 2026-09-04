@@ -1,4 +1,19 @@
-- ### 9.0.1
+- ### 9.1.1
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - Previous updates' UI elements staying highlighted after being clicked on mobile.
+- ### 9.1.0
+  > #### Changes:
+  >> ##### Added:
+  >>> - A custom select box in the settings menu instead of the default browser one, which could not be styled.
+  >> ##### Changed:
+  >>> - Print icon to be better looking.
+  >>> - Pause icon to be better looking.
+  >>> - Play icon to be better looking.
+  >>> - Erase icon to be more clear that it is an eraser (and better looking).
+  >>> - Light and Dark mode icons to be better looking.
+  >>> - Menu icon to be better looking.
+  >>> - Enter and exit fullscreen icons to be better looking.- ### 9.0.1
   > #### Changes:
   >> ##### Fixed:
   >>> - 'Hint cooldown' setting not getting disabled correctly after turning off the setting 'Enable tools'.
