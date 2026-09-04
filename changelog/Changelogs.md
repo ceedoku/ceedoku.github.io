@@ -1,3 +1,8 @@
+- ### 9.1.2
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - The shadow color of the dropdown.
+  >>> - The animations of the dropdown.
 - ### 9.1.1
   > #### Changes:
   >> ##### Fixed:
