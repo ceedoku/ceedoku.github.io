@@ -3,4 +3,4 @@ Allow: /
 Disallow: /icons/
 Disallow: /sounds/
 
-Sitemap: https://ceedoku.github.io/sitemap.xml
+Sitemap: https://ceedoku.github.io/site.xml
