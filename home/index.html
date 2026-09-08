@@ -1272,10 +1272,33 @@ function formatReleaseText(text) {
 
     return escapeHTML(text)
 
+        /*
+         * Bold
+         *
+         * **text**
+         */
+
         .replace(
             /\*\*(.*?)\*\*/g,
             "<strong>$1</strong>"
         )
+
+        /*
+         * Italic
+         *
+         * *text*
+         */
+
+        .replace(
+            /(?<!\*)\*(?!\*)(.*?)(?<!\*)\*(?!\*)/g,
+            "<em>$1</em>"
+        )
+
+        /*
+         * Inline code
+         *
+         * `text`
+         */
 
         .replace(
             /`(.*?)`/g,
