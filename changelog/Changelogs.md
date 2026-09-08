@@ -1,4 +1,4 @@
-- ### Ceedoku 9.1.3
+- ### 9.1.3
   > #### Changes:
   >> ##### Fixed:
   >>> - Android users having the page not act correctly when the keyboard shows.
