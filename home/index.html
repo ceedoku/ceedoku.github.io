@@ -1012,6 +1012,8 @@ async function loadLatestRelease() {
  *
  * > - Enable tools.
  * > - Enable pencil mode.
+ *
+ * Everything under "Developer Changes" is ignored.
  */
 
 function parseReleaseNotes(markdown) {
@@ -1070,6 +1072,23 @@ function parseReleaseNotes(markdown) {
             inChanges = true;
 
             continue;
+        }
+
+
+        /*
+         * Developer Changes heading.
+         *
+         * Everything after this is ignored.
+         *
+         * > #### Developer Changes:
+         */
+
+        if (
+            content.startsWith("#### Developer Changes:")
+        ) {
+
+            break;
+
         }
 
 
