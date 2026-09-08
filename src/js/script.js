@@ -1,0 +1,3183 @@
+/*****************************************************************************
+ * THE SCRIPT - IT FINALLY FUCKING WORKS!
+ *
+ * DO NOT:
+ *  - Change anything in this script.
+ *  - Refactor this script.
+ *  - "Clean up" this script.
+ *  - Touch this script.
+ *
+ * Reason:
+ * It finally works.
+ * Nobody knows why.
+ * Let's keep it that way.
+ * If it ain't broke, don't fix it. It WILL break.
+ *****************************************************************************/
+document.title = "Ceedoku - Loading"
+class CeedokuSpinner extends HTMLElement {
+	connectedCallback() {
+		this.innerHTML = `
+		<svg viewBox="0 0 66 66" height="65px" width="65px" class="spinner">
+			<circle
+				class="path"
+				cx="33"
+				cy="33"
+				fill="none"
+				r="30"
+				stroke-linecap="round"
+				stroke-width="6"
+			></circle>
+		</svg>`;
+	}
+}
+
+customElements.define("ceedoku-spinner", CeedokuSpinner);
+window.addEventListener("load", () => {
+    const game = document.getElementById("aahtheentiregame");
+    const loader = document.getElementById("loader");
+
+    loader.classList.add("fade-out");
+    setTimeout(() => {
+        loader.style.visibility = "hidden";
+    }, 500);
+
+    game.style.visibility = "visible";
+    requestAnimationFrame(() => {
+        game.classList.add("loaded");
+    });
+
+    document.title = "Ceedoku"
+});
+
+const hintselectvaluetext = document.getElementById("hintselectvaluetext");
+const hintselectvalue = document.getElementById("hintselectvalue");
+const hintselectbox = document.getElementById("hintselectbox");
+
+hintselectvalue.addEventListener("click", () => {
+    if (hintselectbox.classList.contains("open")) {
+        hintselectbox.classList.remove("open");
+
+        setTimeout(() => {
+            hintselectvalue.classList.remove("opening");
+        }, 500);
+    } else {
+        hintselectvalue.classList.add("opening");
+
+        setTimeout(() => {
+            hintselectbox.classList.add("open");
+        }, 250);
+    }
+});
+function showNotification(text, duration = 5000) {
+
+    document.getElementById("notification-content").textContent = text;
+
+    document.getElementById("notification").classList.add("show");
+
+    setTimeout(() => {
+        document.getElementById("notification").classList.remove("show");
+		document.getElementById("notification-content").style.color = "var(--text2)";
+    }, duration);
+}
+if (window.electronAPI) {
+
+    window.electronAPI.onCSFOpen(async (filePath) => {
+
+        try {
+
+            const response = await fetch(
+                `file://${filePath.replace(/\\/g, "/")}`
+            );
+
+            const blob = await response.blob();
+
+            const file = new File(
+                [blob],
+                filePath.split("\\").pop(),
+                { type: "application/octet-stream" }
+            );
+
+            let tmp;
+
+            try {
+
+                tmp = await JSF(file);
+
+            } catch (error) {
+
+                showNotification(error.message);
+
+                const notificationContent =
+                    document.getElementById("notification-content");
+
+                notificationContent.style.color = "#f04c42";
+
+
+                return;
+            }
+
+            localStorage.setItem("save", tmp);
+
+            loadgame();
+
+            showNotification("Imported Save File");
+
+        } catch (error) {
+
+            console.error("Failed to open CSF:", error);
+
+            const notificationContent =
+                document.getElementById("notification-content");
+
+            notificationContent.style.color = "#f04c42";
+
+            showNotification(error.message);
+
+        }
+
+    });
+
+}
+const importSaveInput = document.createElement("input");
+
+importSaveInput.type = "file";
+importSaveInput.accept = ".csf";
+importSaveInput.style.display = "none";
+
+document.body.appendChild(importSaveInput);
+
+importSaveInput.onchange = async () => {
+
+    const file = importSaveInput.files[0];
+
+    if (!file) return;
+
+    const title =
+        importexportOverlay.querySelector("h1");
+
+    if (!file.name.toLowerCase().endsWith(".csf")) {
+
+        title.textContent = "Not A .CSF File";
+        title.style.color = "#f04c42";
+
+        return;
+    }
+
+    let tmp;
+
+    try {
+
+        tmp = await JSF(file);
+
+    } catch (error) {
+
+        title.textContent = error.message;
+        title.style.color = "#f04c42";
+        return;
+    }
+
+    localStorage.setItem("save", tmp);
+    title.style.color = "var(--text2)";
+    title.textContent = "Imported Save File";
+
+    loadgame();
+	
+    setTimeout(() => {
+
+        title.textContent = "Import/Export Saves";
+        title.style.color = "var(--text2)";
+
+        hideimportexportgame();
+
+    }, 2500);
+};
+
+
+let puzzleWorker = null;
+
+if (typeof Worker !== "undefined") {
+    try {
+        const worker = new Worker("src/js/puzzleGen.js");
+
+        const handleReady = (event) => {
+            if (event.data?.type !== "ready") return;
+
+            puzzleWorker = worker;
+            worker.removeEventListener("message", handleReady);
+
+            console.log("Puzzle worker loaded successfully.");
+        };
+
+        worker.addEventListener("message", handleReady);
+
+        worker.onerror = () => {
+            worker.terminate();
+            puzzleWorker = null;
+
+            console.warn("Puzzle worker failed to load.");
+        };
+    } catch {
+        puzzleWorker = null;
+    }
+}
+const printBtn = document.getElementById("print")
+printBtn.style.display = "none";
+function checkTime() {
+    let besttimes = JSON.parse(localStorage.getItem("besttimes"));
+
+    // Create besttimes if it doesn't exist
+    if (!besttimes) {
+        besttimes = {
+            easy: null,
+            medium: null,
+            hard: null,
+            expert: null,
+            master: null,
+            extreme: null,
+            impossible: null,
+            godlike: null
+        };
+
+        localStorage.setItem("besttimes", JSON.stringify(besttimes));
+    }
+
+    const oldTime = besttimes[difficulty];
+
+    // No previous best time
+    if (oldTime === null || oldTime === undefined) {
+        document.getElementById("oldwintime").textContent = "00:00";
+        updateBestTime(besttimes);
+        return;
+    }
+
+    // Not a new best
+    if (oldTime <= elapsedMs) {
+        return;
+    }
+
+    // New best time
+    document.getElementById("oldwintime").textContent = formatTime(Math.floor(oldTime / 1000));
+
+    updateBestTime(besttimes);
+}
+
+function updateBestTime(besttimes) {
+    document.getElementById("newwintime").textContent =
+        formatTime(Math.floor(elapsedMs / 1000));
+
+    besttimes[difficulty] = elapsedMs;
+
+    localStorage.setItem("besttimes", JSON.stringify(besttimes));
+
+    showBestTime();
+}
+
+function showBestTime() {
+    document.querySelector(".besttime").style.display = "flex";
+}
+
+function hideBestTime() {
+    document.querySelector(".besttime").style.display = "none";
+}
+
+
+let canusecurrenthintsystem = false
+let usingsavegame = false
+let cooldownmoves = 0
+let cooldowntime = 0
+const count = 150,
+    defaults = {
+        origin: {
+            y: .7
+        }
+    };
+
+function fire(particleRatio, opts) {
+    confetti(Object.assign({}, defaults, opts, {
+        particleCount: Math.floor(count * particleRatio)
+    }));
+}
+
+function fireconfetti() {
+    fire(.25, {
+        spread: 26,
+        startVelocity: 55
+    });
+    fire(.2, {
+        spread: 60
+    });
+    fire(.35, {
+        spread: 100,
+        decay: .91,
+        scalar: .8
+    });
+    fire(.1, {
+        spread: 120,
+        startVelocity: 25,
+        decay: .92,
+        scalar: 1.2
+    });
+    fire(.1, {
+        spread: 120,
+        startVelocity: 45
+    });
+}
+let settings = {
+    SFX: {
+        enabled: true,
+        completion: true,
+        win: true
+    },
+
+    VFX: {
+        enabled: true,
+        completion: true,
+        confetti: true,
+    },
+
+    hints: {
+        enabled: true,
+        cooldown: {
+            enabled: false,
+            startinghints: 3,
+            cooldowntype: "time",
+            cooldowntime: 30,
+            hintsaftercooldown: 1,
+        },
+        hintlimit: {
+            enabled: false,
+            amount: 10,
+        }
+    },
+	
+	tools: {
+		enabled: true,
+		pencil: {
+			enabled: true
+		},
+		erase: {
+			enabled: true
+		},
+		history: {
+			enabled: true
+		}
+	},
+    haptics: {
+        enabled: true,
+        buttons: true,
+        cells: true,
+        puzzlecomplete: true
+    }
+};
+function mergeSettings(target, source) {
+    for (const key in source) {
+        if (
+            source[key] !== null &&
+            typeof source[key] === "object" &&
+            !Array.isArray(source[key])
+        ) {
+            if (
+                target[key] === null ||
+                typeof target[key] !== "object" ||
+                Array.isArray(target[key])
+            ) {
+                target[key] = {};
+            }
+
+            mergeSettings(target[key], source[key]);
+        } else {
+            target[key] = source[key];
+        }
+    }
+}
+function loadSettings() {
+    const saved = localStorage.getItem("settings");
+    
+    if (saved) {
+        mergeSettings(settings, JSON.parse(saved));
+    }
+	if (settings.hints.cooldown.cooldowntype === "moves") {
+		hintselectvaluetext.textContent = "Move-Based"
+	} else {
+		hintselectvaluetext.textContent = "Time-Based"
+	}
+}
+
+function saveSettings() {
+    localStorage.setItem("settings", JSON.stringify(settings));
+}
+let disableprint = true
+loadSettings();
+let hintcount = settings.hints.cooldown.startinghints
+const winSound = new Audio("./src/sounds/win.ogg");
+const popSound = new Audio("./src/sounds/pop.ogg");
+popSound.preload = "auto";
+popSound.load();
+winSound.preload = "auto";
+winSound.load();
+const audioContext = new AudioContext();
+const popSource = audioContext.createMediaElementSource(popSound);
+const popGain = audioContext.createGain();
+
+popSource.connect(popGain);
+popGain.connect(audioContext.destination);
+let audioUnlocked = false;
+
+function unlockAudio() {
+    if (audioUnlocked) return;
+
+    popSound.muted = true;
+
+    popSound.play()
+        .then(() => {
+            popSound.pause();
+            popSound.currentTime = 0;
+            popSound.muted = false;
+            audioUnlocked = true;
+        })
+        .catch(() => {
+            popSound.muted = false;
+        });
+}
+
+function isTouchDevice() {
+    return window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+}
+document.addEventListener("pointerdown", unlockAudio, {
+    once: true
+});
+let vibrate;
+if ("vibrate" in navigator) {
+    vibrate = function(duration = 10) {
+        if (typeof isTouchDevice !== "function" || !isTouchDevice()) return;
+        if (!settings.haptics.enabled) return;
+
+        navigator.vibrate(duration);
+    };
+} else {
+    vibrate = function() {};
+}
+
+let popQueue = Promise.resolve();
+let pitchInterval = null;
+
+function playPop(speed = 1) {
+    if (!settings.SFX) return;
+
+    if (pitchInterval) {
+        clearInterval(pitchInterval);
+        pitchInterval = null;
+    }
+
+    popSound.pause();
+    popSound.currentTime = 0;
+
+    popSound.preservesPitch = false;
+    popSound.mozPreservesPitch = false;
+    popSound.webkitPreservesPitch = false;
+
+    let currentSpeed = speed;
+
+    if (currentSpeed > 7) {
+        currentSpeed = 7;
+    }
+
+    popSound.playbackRate = currentSpeed;
+
+    popSound.play().catch(err => {
+        console.log("pop failed -", err);
+    });
+
+    pitchInterval = setInterval(() => {
+        currentSpeed += 0.1;
+
+        if (currentSpeed > 7) {
+            currentSpeed = 7;
+        }
+
+        popSound.playbackRate = currentSpeed;
+    }, 50);
+
+    popSound.onended = () => {
+        clearInterval(pitchInterval);
+        pitchInterval = null;
+        popSound.playbackRate = 1;
+    };
+}
+document.addEventListener("pointerdown", (event) => {
+    const button = event.target.closest("button");
+
+    if (!button) return;
+
+    const isCell = button.classList.contains("cell");
+
+    if (isCell ? settings.haptics.cells : settings.haptics.buttons) {
+        vibrate(isCell ? 5 : 10);
+    }
+});
+let selectedDifficulty = localStorage.getItem("difficulty") || "easy";
+document.getElementById("mainmenubutton").style.display = "none"
+const mainmenu = document.getElementById("mainmenu");
+let runninggame = false
+let menuOpen = false;
+let cooldowntypetouse = "just declaring var"
+
+function showmainmenu() {
+    printBtn.style.display = "none";
+	disableprint = true
+    hideBestTime();
+    pauseBtn2.style.display = "none"
+    if (!timerPaused) {
+        timerPaused = true;
+
+        clearInterval(timerId);
+
+        elapsedMs = Date.now() - startTime;
+
+        if (runninggame) {
+            if (cooldowntypetouse !== settings.hints.cooldown.cooldowntype) {
+                canusecurrenthintsystem = false
+            }
+            saveGame();
+        };
+    }
+    mainmenu.inert = false
+    document.getElementById("mainmenubutton").style.display = "none"
+    mainmenu.hidden = false;
+    requestAnimationFrame(() => {
+        mainmenu.classList.add("show");
+    });
+}
+window.addEventListener('keydown', function(event) {
+    if (event.key === 'Tab') {
+        event.preventDefault();
+    }
+});
+
+const DIFFICULTIES = {
+    easy: {
+        holes: 36
+    },
+    medium: {
+        holes: 39
+    },
+    hard: {
+        holes: 42
+    },
+    expert: {
+        holes: 45
+    },
+    master: {
+        holes: 48
+    },
+    extreme: {
+        holes: 51
+    },
+    impossible: {
+        holes: 54
+    },
+    godlike: {
+        holes: 54
+    }
+};
+const hintcooldowndisplay = document.getElementById("hintCooldownDisplay")
+
+const boardEl = document.getElementById("board");
+
+const winOverlay = document.getElementById("winOverlay");
+const winDifficulty = document.getElementById("winDifficulty");
+const winTime = document.getElementById("winTime");
+const winMistakes = document.getElementById("winMistakes");
+const winNewGameButton = document.getElementById("winNewGameButton");
+const winDifficultyToggle = document.getElementById("winDifficultyToggle");
+const winDifficultyMenu = document.getElementById("windifficultyMenu");
+const winnewGameBand = document.getElementById("winnewgameband");
+const winToast = document.getElementById("winToast");
+
+const pauseOverlay = document.getElementById("pauseOverlay");
+const pauseDifficulty = document.getElementById("pauseDifficulty");
+const pauseTime = document.getElementById("pauseTime");
+const pauseMistakes = document.getElementById("pauseMistakes");
+const paueNewGameButton = document.getElementById("pauseNewGameButton")
+const pauseDifficultyToggle = document.getElementById("pauseDifficultyToggle");
+const pauseDifficultyMenu = document.getElementById("pausedifficultyMenu");
+const pausenewGameBand = document.getElementById("pausenewgameband");
+
+const mainDifficultyMenu = document.getElementById("maindifficultyMenu");
+const mainDifficultyToggle = document.getElementById("mainDifficultyToggle");
+
+
+const continueDifficulty = document.getElementById("continueDifficulty");
+const continueTime = document.getElementById("continueTime");
+const continueMistakes = document.getElementById("continueMistakes");
+const continueOverlay = document.getElementById("continueOverlay");
+
+const difficultyBadge = document.getElementById("difficultyBadge");
+const difficultyMenu = document.getElementById("difficultyMenu");
+const difficultyToggle = document.getElementById("difficultyToggle");
+const newGameButton = document.getElementById("newGameButton");
+const newGameBand = document.getElementById("newGameBand");
+
+const undoButton = document.getElementById("undoButton");
+const redoButton = document.getElementById("redoButton");
+const hintButton = document.getElementById("hintButton");
+const eraseButton = document.getElementById("eraseButton");
+const pencilButton = document.getElementById("pencilButton");
+const pauseBtn = document.getElementById("pause-btn");
+
+const pauseBtn2 = document.getElementById("pause-btn2");
+const modeButton = document.getElementById("mode");
+const fullscreenButton = document.getElementById("fullscreen")
+
+const mistakeStatus = document.getElementById("mistakeStatus");
+const emptyStatus = document.getElementById("emptyStatus");
+const timerEl = document.getElementById("timer");
+const title = document.getElementById("title");
+const numberGrid = document.getElementById("numberGrid");
+
+const deleteOverlay = document.getElementById("deleteOverlay")
+const newoverlay = document.getElementById("newOverlay")
+const settingsOverlay = document.getElementById("settingsOverlay")
+const importexportOverlay = document.getElementById("importexportOverlay")
+
+const animationToggle = document.getElementById("animationtoggle");
+const completionAnimationToggle = document.getElementById("completionanimationtoggle");
+const confettiAnimationToggle = document.getElementById("confettianimationtoggle");
+
+const sfxToggle = document.getElementById("sfxtoggle");
+const winSoundToggle = document.getElementById("winsoundtoggle");
+const completionSoundToggle = document.getElementById("completionsoundtoggle");
+
+const hapticsToggle = document.getElementById("hapticstoggle");
+const buttonHapticsToggle = document.getElementById("buttonhapticstoggle");
+const cellHapticsToggle = document.getElementById("cellhapticstoggle");
+const winHapticsToggle = document.getElementById("winhapticstoggle");
+
+const hintsToggle = document.getElementById("hintstoggle");
+const hintCooldownToggle = document.getElementById("hintcooldowntoggle");
+const startingHintsInput = document.getElementById("startinghints");
+const hintCooldownMethod = document.getElementById("hintcooldownmethod");
+const hintCooldownAmount = document.getElementById("hintcooldownamount");
+const hintsaftercooldown = document.getElementById("hintsaftercooldown");
+
+const hintlimit = document.getElementById("hintlimit");
+const hintlimitinput = document.getElementById("hintlimitinput");
+
+const pencilToggle = document.getElementById("penciltoggle");
+const eraseToggle = document.getElementById("erasetoggle");
+const toolsToggle = document.getElementById("toolstoggle");
+const historyToggle = document.getElementById("historytoggle");
+
+function updatePauseBtn2() {
+    pauseBtn2.style.display =
+        window.matchMedia("(orientation: portrait)").matches ?
+        "unset" :
+        "none";
+}
+
+function updateSettingsMenu() {
+    animationToggle.checked = settings.VFX.enabled;
+    completionAnimationToggle.checked = settings.VFX.completion;
+    confettiAnimationToggle.checked = settings.VFX.confetti;
+
+    completionAnimationToggle.disabled = !settings.VFX.enabled;
+    confettiAnimationToggle.disabled = !settings.VFX.enabled;
+
+    sfxToggle.checked = settings.SFX.enabled;
+    winSoundToggle.checked = settings.SFX.win;
+    completionSoundToggle.checked = settings.SFX.completion;
+
+    winSoundToggle.disabled = !settings.SFX.enabled;
+    completionSoundToggle.disabled = !settings.SFX.enabled;
+
+
+    hapticsToggle.checked = settings.haptics.enabled;
+    buttonHapticsToggle.checked = settings.haptics.buttons;
+    cellHapticsToggle.checked = settings.haptics.cells;
+    winHapticsToggle.checked = settings.haptics.puzzlecomplete;
+    buttonHapticsToggle.disabled = !settings.haptics.enabled;
+    hintsToggle.checked = settings.hints.enabled;
+	hintsToggle.disabled = !settings.tools.enabled
+	
+	toolsToggle.checked = settings.tools.enabled;
+
+	pencilToggle.checked = settings.tools.pencil.enabled;
+	eraseToggle.checked = settings.tools.erase.enabled;
+	historyToggle.checked = settings.tools.history.enabled;
+
+	pencilToggle.disabled = !settings.tools.enabled;
+	eraseToggle.disabled = !settings.tools.enabled;
+	historyToggle.disabled = !settings.tools.enabled;
+
+    hintCooldownToggle.checked = settings.hints.cooldown.enabled;
+    startingHintsInput.value = settings.hints.cooldown.startinghints;
+    hintCooldownMethod.value = settings.hints.cooldown.cooldowntype;
+    hintCooldownAmount.value = settings.hints.cooldown.cooldowntime;
+    hintsaftercooldown.value = settings.hints.cooldown.hintsaftercooldown;
+	if (settings.hints.cooldown.cooldowntype === "moves") {
+		hintselectvaluetext.textContent = "Move-Based"
+	} else {
+		hintselectvaluetext.textContent = "Time-Based"
+	}
+	
+    hintlimit.checked = settings.hints.hintlimit.enabled
+    hintlimitinput.value = settings.hints.hintlimit.amount
+
+    
+    hintlimit.disabled = !settings.hints.enabled
+    hintlimitinput.disabled = !settings.hints.hintlimit.enabled
+    cellHapticsToggle.disabled = !settings.haptics.enabled;
+    winHapticsToggle.disabled = !settings.haptics.enabled;
+    hintCooldownToggle.disabled = !settings.hints.enabled;
+    startingHintsInput.disabled = !settings.hints.cooldown.enabled;
+    hintCooldownMethod.disabled = !settings.hints.enabled || !settings.hints.cooldown.enabled;
+	hintselectvalue.disabled = !settings.hints.enabled || !settings.hints.cooldown.enabled;
+    hintCooldownAmount.disabled = !settings.hints.enabled || !settings.hints.cooldown.enabled;
+    hintsaftercooldown.disabled = !settings.hints.enabled || !settings.hints.cooldown.enabled;
+}
+
+const hintselectObserver = new MutationObserver(() => {
+    if (hintselectvalue.disabled === true) {
+        hintselectbox.classList.remove("open");
+
+        setTimeout(() => {
+            hintselectvalue.classList.remove("opening");
+			hintselectvalue.classList.add("disabled");
+        }, 500);
+    } else if (hintselectvalue.disabled === false) {
+		hintselectvalue.classList.remove("disabled");
+    }
+});
+
+hintselectObserver.observe(hintselectvalue, {
+    attributes: true,
+    attributeFilter: ["disabled"]
+});
+updateSettingsMenu();
+
+animationToggle.addEventListener("change", () => {
+    settings.VFX.enabled = animationToggle.checked;
+
+    if (!settings.VFX.enabled) {
+        settings.VFX.completion = false;
+        settings.VFX.confetti = false;
+    }
+
+    saveSettings();
+    updateSettingsMenu();
+});
+completionAnimationToggle.addEventListener("change", () => {
+    settings.VFX.completion = completionAnimationToggle.checked;
+    saveSettings();
+    updateSettingsMenu();
+});
+confettiAnimationToggle.addEventListener("change", () => {
+    settings.VFX.confetti = confettiAnimationToggle.checked;
+    saveSettings();
+    updateSettingsMenu();
+});
+sfxToggle.addEventListener("change", () => {
+    settings.SFX.enabled = sfxToggle.checked;
+
+    if (!settings.SFX.enabled) {
+        settings.SFX.completion = false;
+        settings.SFX.win = false;
+    }
+
+    saveSettings();
+    updateSettingsMenu();
+});
+winSoundToggle.addEventListener("change", () => {
+    settings.SFX.win = winSoundToggle.checked;
+    saveSettings();
+    updateSettingsMenu();
+});
+completionSoundToggle.addEventListener("change", () => {
+    settings.SFX.completion = completionSoundToggle.checked;
+    saveSettings();
+    updateSettingsMenu();
+});
+hapticsToggle.addEventListener("change", () => {
+    settings.haptics.enabled = hapticsToggle.checked;
+
+    if (!settings.haptics.enabled) {
+        settings.haptics.cells = false;
+        settings.haptics.buttons = false;
+        settings.haptics.puzzlecomplete = false;
+    }
+
+    saveSettings();
+    updateSettingsMenu();
+});
+buttonHapticsToggle.addEventListener("change", () => {
+    settings.haptics.buttons = buttonHapticsToggle.checked;
+    saveSettings();
+    updateSettingsMenu();
+});
+cellHapticsToggle.addEventListener("change", () => {
+    settings.haptics.cells = cellHapticsToggle.checked;
+    saveSettings();
+    updateSettingsMenu();
+});
+winHapticsToggle.addEventListener("change", () => {
+    settings.haptics.puzzlecomplete = winHapticsToggle.checked;
+    saveSettings();
+    updateSettingsMenu();
+});
+hintsToggle.addEventListener("change", () => {
+    settings.hints.enabled = hintsToggle.checked;
+    testHintButton();
+
+    if (!settings.hints.enabled) {
+        settings.hints.cooldown.enabled = false;
+        settings.hints.hintlimit.enabled = false;
+    }
+
+    saveSettings();
+    updateSettingsMenu();
+});
+toolsToggle.addEventListener("change", () => {
+    settings.tools.enabled = toolsToggle.checked;
+    testHintButton();
+	
+    if (!settings.tools.enabled) {
+		settings.hints.hintlimit.enabled = false;
+		settings.hints.cooldown.enabled = false
+        settings.hints.enabled = false;
+        settings.tools.pencil.enabled = false;
+        settings.tools.erase.enabled = false;
+		settings.tools.history.enabled = false;
+    }
+
+    saveSettings();
+    updateSettingsMenu();
+});
+hintCooldownToggle.addEventListener("change", () => {
+    settings.hints.cooldown.enabled = hintCooldownToggle.checked;
+    saveSettings();
+    updateSettingsMenu();
+});
+startingHintsInput.addEventListener("change", () => {
+    settings.hints.cooldown.startinghints =
+        startingHintsInput.value === "" ? 3 : Number(startingHintsInput.value);
+    saveSettings();
+    updateSettingsMenu()
+});
+hintCooldownMethod.addEventListener("change", () => {
+    settings.hints.cooldown.cooldowntype = hintCooldownMethod.value
+    saveSettings();
+    updateSettingsMenu()
+});
+hintCooldownAmount.addEventListener("change", () => {
+    settings.hints.cooldown.cooldowntime = Number(hintCooldownAmount.value) || 30;
+    saveSettings();
+    updateSettingsMenu()
+});
+hintsaftercooldown.addEventListener("change", () => {
+    settings.hints.cooldown.hintsaftercooldown = Number(hintsaftercooldown.value) || 1;
+    saveSettings();
+    updateSettingsMenu()
+});
+hintlimit.addEventListener("change", () => {
+    settings.hints.hintlimit.enabled = hintlimit.checked
+    saveSettings();
+    updateSettingsMenu()
+});
+hintlimitinput.addEventListener("change", () => {
+    settings.hints.hintlimit.limit = Number(hintlimitinput.value) || 1;
+    saveSettings();
+    updateSettingsMenu()
+});
+pencilToggle.addEventListener("change", () => {
+    settings.tools.pencil.enabled = pencilToggle.checked;
+    saveSettings();
+    updateSettingsMenu();
+});
+
+eraseToggle.addEventListener("change", () => {
+    settings.tools.erase.enabled = eraseToggle.checked;
+    saveSettings();
+    updateSettingsMenu();
+});
+
+historyToggle.addEventListener("change", () => {
+    settings.tools.history.enabled = historyToggle.checked;
+    saveSettings();
+    updateSettingsMenu();
+});
+settings.hints.hintlimit.limit = Number(hintlimitinput.value) || 1;
+let hintlimitreached = false
+let hintcounter = 0
+function updateHintCooldownDisplay() {
+    if (canusehelp) {
+        if (!settings.hints.cooldown.enabled) {
+            hintCooldownDisplay.textContent = "∞";
+            hintCooldownDisplay.style.fontWeight = "800";
+        } else {
+            hintCooldownDisplay.style.fontWeight = "unset";
+            hintCooldownDisplay.textContent = getHintCooldownText();
+        }
+    }
+}
+let solution = [];
+let puzzle = [];
+let values = [];
+let givens = [];
+let notes = [];
+let selected = 40;
+let difficulty = "easy";
+let pencilMode = false;
+let eraseMode = false;
+let mistakes = 0;
+let elapsed = 0;
+let undoStack = [];
+let redoStack = [];
+let finished = false;
+
+
+let winmenuOpen = false;
+let pausemenuOpen = false;
+let pageMode = localStorage.getItem("theme") || "dark";
+
+function showWinScreen() {
+    winpauseTimer();
+    if (settings.haptics.puzzlecomplete) {
+        vibrate([20, 50, 40]);
+    }
+    if (settings.SFX.enabled && settings.SFX.win) {
+        winSound.currentTime = 0;
+        winSound.play().catch(() => {});
+    }
+    winDifficulty.textContent =
+        difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+
+
+    winMistakes.textContent = mistakes;
+    winOverlay.hidden = false;
+
+    requestAnimationFrame(() => {
+        winOverlay.classList.add("show");
+    });
+    setTimeout(() => {
+        if (settings.VFX.enabled && settings.VFX.confetti) {
+            fireconfetti();
+        }
+    }, 200);
+
+}
+
+function opensettingsmenu() {
+    document.getElementById("settingsOverlay").classList.add("show");
+}
+
+function closesettingsmenu() {
+    document.getElementById("settingsOverlay").classList.remove("show");
+}
+
+function showPauseScreen() {
+    pauseDifficulty.textContent =
+        difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+
+
+    pauseMistakes.textContent = mistakes;
+    pauseOverlay.hidden = false;
+
+    requestAnimationFrame(() => {
+        pauseOverlay.classList.add("show");
+    });
+}
+const isAndroidPWA =
+    /Android/i.test(navigator.userAgent) &&
+    (
+        window.matchMedia("(display-mode: standalone)").matches ||
+        window.matchMedia("(display-mode: fullscreen)").matches ||
+        window.matchMedia("(display-mode: minimal-ui)").matches
+    );
+
+if (isAndroidPWA && fullscreenButton) {
+    fullscreenButton.style.display = "none";
+}
+
+function fullscreen() {
+    if (!fullscreenButton) return;
+
+    if (document.fullscreenElement) {
+        document.exitFullscreen();
+    } else {
+        document.documentElement.requestFullscreen();
+    }
+}
+
+document.addEventListener("fullscreenchange", () => {
+    if (!fullscreenButton) return;
+
+    fullscreenButton.innerHTML = document.fullscreenElement
+        ? '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7L9 12L4 17"/><path d="M20 7L15 12L20 17"/></svg>'
+        : '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5L2 12L8 19"></path><path d="M16 5L22 12L16 19"></path></svg>';
+});
+
+function showcontinueGame() {
+    if (nosave) return
+    continueDifficulty.textContent =
+        difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+
+
+    continueMistakes.textContent = mistakes;
+    continueOverlay.hidden = false;
+
+    requestAnimationFrame(() => {
+        continueOverlay.classList.add("show");
+    });
+}
+
+function showdeleteGame() {
+    deleteOverlay.hidden = false;
+
+    requestAnimationFrame(() => {
+        deleteOverlay.classList.add("show");
+    });
+}
+let canusehelp = true
+
+function loadgame() {
+    const save = localStorage.getItem("save");
+    if (save === null) {
+        nosave = true;
+        updateGiveUpButton();
+        return;
+    }
+    const game = JSON.parse(save);
+    // ---------------- BOARD ----------------
+    solution = game.solution;
+    if (solution.length !== 81) {
+        localStorage.removeItem("save");
+        nosave = true;
+        updateGiveUpButton();
+        return;
+    }
+    if (game.hintcounter) {
+        hintcounter = game.hintcounter
+    } else {
+        hintcounter = 0
+    }
+    values = game.values;
+    givens = game.givens;
+    if (game.canusehelp !== undefined) {
+        canusehelp = game.canusehelp;
+    } else {
+        canusehelp = true
+    }
+    notes = game.notes.map(arr => new Set(arr));
+
+    selected = game.selected;
+    difficulty = game.difficulty;
+    pencilMode = game.pencilMode;
+    eraseMode = game.eraseMode;
+    mistakes = game.mistakes;
+	continueMistakes.textContent = mistakes;
+
+    undoStack = game.undoStack;
+    redoStack = game.redoStack;
+
+    if (game.cooldowntypetouse === undefined) {
+        hintcount = settings.hints.cooldown.startinghints;
+        savehintcount = settings.hints.cooldown.startinghints;
+        canusecurrenthintsystem = true
+    } else if (game.cooldowntypetouse !== settings.hints.cooldown.cooldowntype) {
+        canusecurrenthintsystem = false;
+        savehintcount = game.hintcount;
+        cooldowntypetouse = game.cooldowntypetouse;
+        savecooldownmoves = game.cooldownmoves;
+        savecooldowntime = game.cooldowntime
+    } else if (game.cooldowntypetouse == settings.hints.cooldown.cooldowntype) {
+        savehintcount = game.hintcount;
+        canusecurrenthintsystem = true;
+        cooldowntypetouse = game.cooldowntypetouse;
+        savecooldownmoves = game.cooldownmoves
+        savecooldowntime = game.cooldowntime
+    }
+    testhistorybuttons();
+
+    // ---------------- TIMER ----------------
+    elapsedMs = game.elapsedMs || 0;
+    timerPaused = game.timerPaused || false;
+	continueTime.textContent = formatTime(Math.floor(elapsedMs / 1000));
+
+    clearInterval(timerId);
+	nosave = false;
+	updateGiveUpButton();
+}
+
+function changemode(forceMode) {
+    
+    if (forceMode) {
+        pageMode = forceMode;
+    } else {
+        // otherwise toggle
+        pageMode = (pageMode === "light") ? "dark" : "light";
+    }
+
+
+    document.body.classList.remove("light", "dark");
+    document.body.classList.add(pageMode);
+
+    localStorage.setItem("theme", pageMode);
+
+	if (modeButton) {
+		modeButton.innerHTML = pageMode === "dark"
+			? '<svg style="transform:translatey(1px)" viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4" style="fill: currentColor;"></circle><path d="M12 2V4"></path><path d="M12 20V22"></path><path d="M4.93 4.93L6.34 6.34"></path><path d="M17.66 17.66L19.07 19.07"></path><path d="M2 12H4"></path><path d="M20 12H22"></path><path d="M4.93 19.07L6.34 17.66"></path><path d="M17.66 6.34L19.07 4.93"></path></svg>'
+			: '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.5C19.4 15.05 18.16 15.35 16.85 15.35C12.33 15.35 8.65 11.67 8.65 7.15C8.65 5.84 8.95 4.6 9.5 3.5C5.6 4.45 2.7 7.97 2.7 12.15C2.7 17.06 6.68 21.05 11.6 21.05C15.78 21.05 19.55 18.4 20.5 14.5Z"></path></svg>';
+	}
+}
+
+const rows = Array.from({
+    length: 9
+}, (_, r) => Array.from({
+    length: 9
+}, (_, c) => r * 9 + c));
+const cols = Array.from({
+    length: 9
+}, (_, c) => Array.from({
+    length: 9
+}, (_, r) => r * 9 + c));
+const boxes = Array.from({
+    length: 9
+}, (_, b) => {
+    const startRow = Math.floor(b / 3) * 3;
+    const startCol = (b % 3) * 3;
+    return Array.from({
+        length: 9
+    }, (_, i) => (startRow + Math.floor(i / 3)) * 9 + startCol + (i % 3));
+});
+
+function shuffle(items) {
+    const copy = [...items];
+    for (let i = copy.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+}
+
+function boxIndex(row, col) {
+    return Math.floor(row / 3) * 3 + Math.floor(col / 3);
+}
+
+function canPlace(grid, index, value) {
+    const row = Math.floor(index / 9);
+    const col = index % 9;
+    for (let i = 0; i < 9; i += 1) {
+        if (grid[row * 9 + i] === value || grid[i * 9 + col] === value) return false;
+    }
+    return boxes[boxIndex(row, col)].every((cellIndex) => grid[cellIndex] !== value);
+}
+
+
+
+
+function fillGrid(grid, index = 0) {
+    if (index === 81) return true;
+    if (grid[index] !== 0) return fillGrid(grid, index + 1);
+    for (const value of shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9])) {
+        if (canPlace(grid, index, value)) {
+            grid[index] = value;
+            if (fillGrid(grid, index + 1)) return true;
+            grid[index] = 0;
+        }
+    }
+    return false;
+}
+
+function countSolutions(grid, limit = 2) {
+    const emptyIndex = grid.findIndex((value) => value === 0);
+    if (emptyIndex === -1) return 1;
+    let count = 0;
+    for (let value = 1; value <= 9; value += 1) {
+        if (canPlace(grid, emptyIndex, value)) {
+            grid[emptyIndex] = value;
+            count += countSolutions(grid, limit);
+            grid[emptyIndex] = 0;
+            if (count >= limit) return count;
+        }
+    }
+    return count;
+}
+
+function makePuzzle(holes) {
+    if (puzzleWorker) {
+        return new Promise((resolve, reject) => {
+            const worker = puzzleWorker;
+
+            const handleMessage = (event) => {
+                worker.removeEventListener("message", handleMessage);
+                worker.removeEventListener("error", handleError);
+
+                resolve(event.data);
+            };
+
+            const handleError = (error) => {
+                worker.removeEventListener("message", handleMessage);
+                worker.removeEventListener("error", handleError);
+
+                puzzleWorker = null;
+                reject(error);
+            };
+
+            worker.addEventListener("message", handleMessage);
+            worker.addEventListener("error", handleError);
+
+            worker.postMessage({ holes });
+        });
+    }
+
+    return new Promise((resolve) => {
+        const full = Array(81).fill(0);
+        fillGrid(full);
+
+        const draft = [...full];
+
+        const order = shuffle(
+            Array.from(
+                { length: 81 },
+                (_, i) => i
+            )
+        );
+
+        let removed = 0;
+
+        for (const index of order) {
+            if (removed >= holes) break;
+
+            const keep = draft[index];
+
+            draft[index] = 0;
+
+            const probe = [...draft];
+
+            if (countSolutions(probe, 2) === 1) {
+                removed += 1;
+            } else {
+                draft[index] = keep;
+            }
+        }
+
+        resolve({
+            full,
+            draft
+        });
+    });
+}
+
+function formatTime(seconds) {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor(seconds / 60) % 60;
+    const secs = seconds % 60;
+
+    if (hours > 0) {
+        return `${hours}:${String(minutes).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+    }
+
+    return `${String(minutes).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+}
+
+
+document.addEventListener("keydown", (event) => {
+
+    const printShortcut =
+        (event.ctrlKey || event.metaKey) &&
+        event.key.toLowerCase() === "p";
+
+    if (!printShortcut) return;
+
+    event.preventDefault();
+
+    if (disableprint) {
+
+        showNotification(
+            "Print mode cannot be used when a game is not active",
+            5000
+        );
+
+        return;
+    }
+
+    window.print();
+
+});
+
+let elapsedMs = 0;
+let startTime = 0;
+let timerId = null;
+let timerPaused = false;
+let hintCooldownCounter = 0;
+
+function startTimer() {
+    clearInterval(timerId);
+
+    startTime = Date.now() - elapsedMs;
+
+    timerId = setInterval(() => {
+        elapsedMs = Date.now() - startTime;
+
+        winTime.textContent = formatTime(Math.floor(elapsedMs / 1000));
+        pauseTime.textContent = formatTime(Math.floor(elapsedMs / 1000));
+        continueTime.textContent = formatTime(Math.floor(elapsedMs / 1000));
+
+        timerEl.textContent =
+            `Time: ${formatTime(Math.floor(elapsedMs / 1000))}`;
+        if (hintcounter == settings.hints.hintlimit.limit && !hintlimitreached) {
+            hintlimitreached = true
+            updateHintCooldownDisplay();
+        }
+        updateHintCooldownDisplay();
+        hintCooldownCounter++;
+
+        if (hintCooldownCounter >= 10) {
+            hintCooldownCounter = 0;
+
+            if (
+                settings.hints.cooldown.enabled &&
+                settings.hints.cooldown.cooldowntype === "time" &&
+                cooldowntime > 0
+            ) {
+                cooldowntime--;
+
+                if (cooldowntime === 0 && !hintlimitreached) {
+                    hintcount = settings.hints.cooldown.hintsaftercooldown;
+                } else {
+                    hintcount = 0
+                }
+
+                updateHintCooldownDisplay();
+            }
+        }
+    }, 100);
+}
+
+function pauseTimer() {
+    if (!timerPaused) {
+        // PAUSE
+        timerPaused = true;
+
+        clearInterval(timerId);
+
+        elapsedMs = Date.now() - startTime;
+
+        pauseBtn.innerHTML = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor"><path d="M4 2C2.9 2 2 2.9 2 4V20C2 21.1 2.9 22 4 22C4.3 22 4.6 21.93 4.87 21.79L21.2 13.25C22.27 12.69 22.27 11.31 21.2 10.75L4.87 2.21C4.6 2.07 4.3 2 4 2Z"></path></svg>';
+        pauseBtn2.innerHTML = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor"><path d="M4 2C2.9 2 2 2.9 2 4V20C2 21.1 2.9 22 4 22C4.3 22 4.6 21.93 4.87 21.79L21.2 13.25C22.27 12.69 22.27 11.31 21.2 10.75L4.87 2.21C4.6 2.07 4.3 2 4 2Z"></path></svg>';
+        document.title = "Ceedoku - Paused";
+
+        if (runninggame) {
+            saveGame()
+        };
+        showPauseScreen()
+    } else {
+        // RESUME
+        timerPaused = false;
+
+        startTimer();
+
+        pauseBtn.innerHTML = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor"><path d="M2 4C2 2.9 2.9 2 4 2H8C9.1 2 10 2.9 10 4V20C10 21.1 9.1 22 8 22H4C2.9 22 2 21.1 2 20Z"/><path d="M14 4C14 2.9 14.9 2 16 2H20C21.1 2 22 2.9 22 4V20C22 21.1 21.1 22 20 22H16C14.9 22 14 21.1 14 20Z"/></svg>';
+        pauseBtn2.innerHTML = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor"><path d="M2 4C2 2.9 2.9 2 4 2H8C9.1 2 10 2.9 10 4V20C10 21.1 9.1 22 8 22H4C2.9 22 2 21.1 2 20Z"/><path d="M14 4C14 2.9 14.9 2 16 2H20C21.1 2 22 2.9 22 4V20C22 21.1 21.1 22 20 22H16C14.9 22 14 21.1 14 20Z"/></svg>';
+        document.title = `Ceedoku - ${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}`
+        hidepausescreen()
+    }
+}
+window.addEventListener("visibilitychange", lostfocuspause)
+
+function lostfocuspause() {
+    if (runninggame) {
+        if (!timerPaused) {
+            timerPaused = true;
+
+            clearInterval(timerId);
+
+            elapsedMs = Date.now() - startTime;
+
+            pauseBtn.innerHTML = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor"><path d="M2 4C2 2.9 2.9 2 4 2H8C9.1 2 10 2.9 10 4V20C10 21.1 9.1 22 8 22H4C2.9 22 2 21.1 2 20Z"/><path d="M14 4C14 2.9 14.9 2 16 2H20C21.1 2 22 2.9 22 4V20C22 21.1 21.1 22 20 22H16C14.9 22 14 21.1 14 20Z"/></svg>';
+            pauseBtn2.innerHTML = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor"><path d="M2 4C2 2.9 2.9 2 4 2H8C9.1 2 10 2.9 10 4V20C10 21.1 9.1 22 8 22H4C2.9 22 2 21.1 2 20Z"/><path d="M14 4C14 2.9 14.9 2 16 2H20C21.1 2 22 2.9 22 4V20C22 21.1 21.1 22 20 22H16C14.9 22 14 21.1 14 20Z"/></svg>';
+            document.title = "Ceedoku - Paused";
+            showPauseScreen()
+        }
+    }
+};
+
+
+function winpauseTimer() {
+    if (!timerPaused) {
+        // PAUSE
+        timerPaused = true;
+
+        clearInterval(timerId);
+
+        elapsedMs = Date.now() - startTime;
+
+        pauseBtn.innerHTML = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor"><path d="M4 2C2.9 2 2 2.9 2 4V20C2 21.1 2.9 22 4 22C4.3 22 4.6 21.93 4.87 21.79L21.2 13.25C22.27 12.69 22.27 11.31 21.2 10.75L4.87 2.21C4.6 2.07 4.3 2 4 2Z"></path></svg>';
+        pauseBtn.innerHTML = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor"><path d="M4 2C2.9 2 2 2.9 2 4V20C2 21.1 2.9 22 4 22C4.3 22 4.6 21.93 4.87 21.79L21.2 13.25C22.27 12.69 22.27 11.31 21.2 10.75L4.87 2.21C4.6 2.07 4.3 2 4 2Z"></path></svg>';
+        document.title = "Ceedoku - Paused";
+    }
+};
+
+function resumeTimer() {
+    if (!timerPaused) return;
+
+    timerPaused = false;
+
+    startTimer();
+
+    pauseBtn.innerHTML = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor"><path d="M2 4C2 2.9 2.9 2 4 2H8C9.1 2 10 2.9 10 4V20C10 21.1 9.1 22 8 22H4C2.9 22 2 21.1 2 20Z"/><path d="M14 4C14 2.9 14.9 2 16 2H20C21.1 2 22 2.9 22 4V20C22 21.1 21.1 22 20 22H16C14.9 22 14 21.1 14 20Z"/></svg>';
+    pauseBtn2.innerHTML = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor"><path d="M2 4C2 2.9 2.9 2 4 2H8C9.1 2 10 2.9 10 4V20C10 21.1 9.1 22 8 22H4C2.9 22 2 21.1 2 20Z"/><path d="M14 4C14 2.9 14.9 2 16 2H20C21.1 2 22 2.9 22 4V20C22 21.1 21.1 22 20 22H16C14.9 22 14 21.1 14 20Z"/></svg>';
+    document.title = `Ceedoku - ${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}`
+    hidepausescreen()
+}
+
+function renderBoard() {
+    boardEl.innerHTML = "";
+
+    for (let i = 0; i < 81; i += 1) {
+
+        const cell = document.createElement("button");
+        cell.tabIndex = -1;
+        cell.className = "cell";
+        cell.type = "button";
+        cell.dataset.index = String(i);
+        cell.setAttribute("role", "gridcell");
+        cell.setAttribute("aria-label", `Row ${Math.floor(i / 9) + 1}, column ${i % 9 + 1}`);
+        cell.addEventListener("click", () => selectCell(i));
+        boardEl.appendChild(cell);
+    }
+    paintBoard();
+}
+
+function renderNumberPad() {
+    numberGrid.innerHTML = "";
+    for (let value = 1; value <= 9; value += 1) {
+        const button = document.createElement("button");
+        button.className = "number-button";
+        button.type = "button";
+        button.textContent = value;
+        button.dataset.value = String(value);
+        button.setAttribute("aria-label", `Use ${value}`);
+        button.addEventListener("click", () => placeNumber(value));
+
+        numberGrid.appendChild(button);
+    }
+}
+
+
+function renderNotes(noteSet) {
+    const grid = document.createElement("div");
+    grid.className = "note-grid";
+    for (let value = 1; value <= 9; value += 1) {
+        const mark = document.createElement("span");
+        mark.textContent = noteSet.has(value) ? value : "";
+        grid.appendChild(mark);
+    }
+    return grid;
+}
+
+function exportsave() {
+	showexportnamemenu()
+};
+function exportsavename() {
+	if (nosave) return;
+	FSJ(localStorage.getItem("save"), exportnameinput.value);
+	importexportOverlay.querySelector("h1").textContent = "Save Exported";
+	importexportOverlay.querySelector("h1").style.color = "var(--text2)";
+	hideexportnamemenu();
+	setTimeout(() => {
+    	importexportOverlay.querySelector("h1").textContent = "Import/Export Saves";
+		hideimportexportgame()
+	}, 5000);
+}
+function importsave() {
+    importSaveInput.value = "";
+    importSaveInput.click();
+}
+function getCompletedCellSet(units = getCompletedUnits()) {
+    const completed = new Set();
+    units.rows.forEach((done, index) => {
+        if (done) rows[index].forEach((cellIndex) => completed.add(cellIndex));
+    });
+    units.cols.forEach((done, index) => {
+        if (done) cols[index].forEach((cellIndex) => completed.add(cellIndex));
+    });
+    units.boxes.forEach((done, index) => {
+        if (done) boxes[index].forEach((cellIndex) => completed.add(cellIndex));
+    });
+    return completed;
+}
+
+function paintBoard() {
+    const selectedValue = selected >= 0 ? values[selected] : 0;
+    const selectedRow = Math.floor(selected / 9);
+    const selectedCol = selected % 9;
+    const selectedBoxRow = Math.floor(selectedRow / 3);
+    const selectedBoxCol = Math.floor(selectedCol / 3);
+
+    const completedCells = getCompletedCellSet();
+
+    boardEl.querySelectorAll(".cell").forEach((cell) => {
+        const i = Number(cell.dataset.index);
+        const row = Math.floor(i / 9);
+        const col = i % 9;
+        const boxRow = Math.floor(row / 3);
+        const boxCol = Math.floor(col / 3);
+
+        const value = values[i];
+        const complete = completedCells.has(i);
+        const userValue = value !== 0 && !givens[i];
+
+        // Remove everything except active animation effects.
+        for (const child of [...cell.childNodes]) {
+            if (
+                child.nodeType === Node.ELEMENT_NODE &&
+                child.classList.contains("complete-effect")
+            ) {
+                continue;
+            }
+
+            child.remove();
+        }
+
+        if (value) {
+            cell.append(value);
+        } else if (notes[i]?.size) {
+            cell.append(renderNotes(notes[i]));
+        }
+
+        cell.classList.toggle("given", givens[i]);
+        cell.classList.toggle("selected", i === selected);
+        cell.classList.toggle("completed", complete);
+        cell.classList.toggle("correct", userValue && value === solution[i] && !complete);
+        cell.classList.toggle("error", userValue && value !== solution[i] && !complete);
+
+        if (!canusehelp) {
+            cell.classList.remove("error")
+            cell.classList.remove("correct")
+        }
+
+        // Highlight same row, column and box
+        cell.classList.toggle(
+            "related",
+            selected >= 0 &&
+            (
+                row === selectedRow ||
+                col === selectedCol ||
+                (boxRow === selectedBoxRow && boxCol === selectedBoxCol)
+            )
+        );
+
+        // Highlight matching numbers
+        cell.classList.toggle(
+            "same-number",
+            selectedValue !== 0 &&
+            value === selectedValue
+        );
+
+        cell.setAttribute("aria-selected", i === selected ? "true" : "false");
+    });
+
+    updateNumberCounts();
+    updateStatus();
+    updateHistoryButtons();
+    if (runninggame) {
+        saveGame()
+    }
+}
+
+function saveGame() {
+    if (runninggame) {
+        if (solution.length !== 81) return;
+        localStorage.setItem("save", JSON.stringify({
+            solution,
+            values,
+            givens,
+            notes: notes.map(set => [...set]),
+            selected,
+            difficulty,
+            pencilMode,
+            eraseMode,
+            mistakes,
+            elapsedMs,
+            timerPaused,
+            undoStack,
+            redoStack,
+            finished,
+            pageMode,
+            hintcount,
+            hintcounter,
+            cooldownmoves,
+            cooldowntime,
+            cooldowntypetouse,
+            canusehelp
+        }));
+    }
+}
+
+function selectCell(index) {
+    selected = index;
+    paintBoard();
+    if (eraseMode) {
+        eraseSelected();
+    }
+}
+
+function cellSnapshot(index) {
+    return {
+        value: values[index],
+        notes: [...(notes[index] || [])].sort((a, b) => a - b)
+    };
+}
+
+function sameCellState(a, b) {
+    return a.value === b.value && a.notes.length === b.notes.length && a.notes.every((note, index) => note === b.notes[index]);
+}
+
+function restoreCell(index, state) {
+    values[index] = state.value;
+    notes[index] = new Set(state.notes);
+}
+
+function makeChangeList(beforeStates) {
+    const changes = [];
+    beforeStates.forEach((before, index) => {
+        const after = cellSnapshot(index);
+        if (!sameCellState(before, after)) changes.push({
+            index,
+            before,
+            after
+        });
+    });
+    return changes;
+}
+
+function pushChanges(changes, activeIndex = selected) {
+    if (!changes.length) return;
+    undoStack.push({
+        selected: activeIndex,
+        changes
+    });
+    redoStack = [];
+    updateHistoryButtons();
+}
+
+function collectNewlyCompleted(previous, next) {
+    const indexes = new Set();
+    next.rows.forEach((done, index) => {
+        if (done && !previous.rows[index]) rows[index].forEach((cellIndex) => indexes.add(cellIndex));
+    });
+    next.cols.forEach((done, index) => {
+        if (done && !previous.cols[index]) cols[index].forEach((cellIndex) => indexes.add(cellIndex));
+    });
+    next.boxes.forEach((done, index) => {
+        if (done && !previous.boxes[index]) boxes[index].forEach((cellIndex) => indexes.add(cellIndex));
+    });
+    return indexes;
+}
+
+function showWinScreen() {
+    winpauseTimer();
+    if (settings.haptics.puzzlecomplete) {
+        vibrate([20, 50, 40]);
+    }
+    if (settings.SFX.enabled && settings.SFX.win) {
+        winSound.currentTime = 0;
+        winSound.play().catch(() => {});
+    }
+    winDifficulty.textContent =
+        difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+
+
+    winMistakes.textContent = mistakes;
+    winOverlay.hidden = false;
+
+    requestAnimationFrame(() => {
+        winOverlay.classList.add("show");
+    });
+    setTimeout(() => {
+        if (settings.VFX.enabled && settings.VFX.confetti) {
+            fireconfetti();
+        }
+    }, 200);
+}
+
+function showPauseScreen() {
+    pauseDifficulty.textContent =
+        difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+
+
+    pauseMistakes.textContent = mistakes;
+    pauseOverlay.hidden = false;
+
+    requestAnimationFrame(() => {
+        pauseOverlay.classList.add("show");
+    });
+}
+
+function hidewinscreen() {
+    winOverlay.classList.remove("show");
+
+
+}
+
+function hidecontinuegame() {
+    continueOverlay.classList.remove("show");
+
+
+}
+function hideimportexportgame() {
+	// reset the title of the import/export game menu back to default on close of the menu.
+	importexportOverlay.querySelector("h1").textContent = "Import/Export Saves";
+	importexportOverlay.querySelector("h1").style.color = "var(--text2)";
+	importexportOverlay.hidden = true;
+	importexportOverlay.classList.remove("show");
+}
+const exportnamemenu = document.getElementById("namefileOverlay")
+const exportnamemenuinput = document.getElementById("savenameinput")
+const exportnameinput = exportnamemenuinput
+function showexportnamemenu() {
+	exportnamemenu.hidden = false;
+	requestAnimationFrame(() => {
+        exportnamemenu.classList.add("show");
+		exportnamemenuinput.focus();
+    });
+}
+function hideexportnamemenu() {
+	exportnamemenu.hidden = true;
+	exportnamemenu.classList.remove("show");
+	exportnameinput.value = ""
+}
+function showimportexportmenu() {
+	importexportOverlay.hidden = false;
+	requestAnimationFrame(() => {
+        importexportOverlay.classList.add("show");
+    });
+}
+function hidedeleteGame() {
+    deleteOverlay.classList.remove("show");
+}
+
+function hidemainmenu() {
+    document.getElementById("mainmenubutton").style.display = ""
+    mainmenu.classList.remove("show");
+    mainmenu.inert = true
+
+}
+
+function hidepausescreen() {
+    pauseOverlay.classList.remove("show");
+}
+
+function scrubNotes(indexes, beforeStates) {
+    indexes.forEach((index) => {
+        if (!beforeStates.has(index)) beforeStates.set(index, cellSnapshot(index));
+        notes[index].clear();
+    });
+}
+
+function togglePencilMode(force) {
+    pencilMode = typeof force === "boolean" ? force : !pencilMode;
+
+    if (pencilMode) {
+        eraseMode = false;
+    }
+
+    pencilButton.setAttribute("aria-pressed", pencilMode);
+    eraseButton.setAttribute("aria-pressed", eraseMode);
+}
+
+function toggleEraseMode(force) {
+    eraseMode = typeof force === "boolean" ? force : !eraseMode;
+
+    if (eraseMode) {
+        pencilMode = false;
+    }
+
+    eraseButton.setAttribute("aria-pressed", eraseMode);
+    pencilButton.setAttribute("aria-pressed", pencilMode);
+}
+
+function placeNumber(value, options = {}) {
+    if (timerPaused) {
+        return
+    };
+    if (finished || givens[selected]) return;
+    if (eraseMode) {
+        toggleEraseMode(false);
+    }
+    const beforeStates = new Map([
+        [selected, cellSnapshot(selected)]
+    ]);
+
+    if (pencilMode) {
+        if (values[selected] !== 0) return;
+        if (notes[selected].has(value)) notes[selected].delete(value);
+        else notes[selected].add(value);
+        if (!options.fromHistory) pushChanges(makeChangeList(beforeStates), selected);
+        paintBoard();
+        return;
+    }
+
+    if (values[selected] === value && notes[selected].size === 0) return;
+    const previousCompleted = getCompletedUnits();
+    values[selected] = value;
+    notes[selected].clear();
+    const nextCompleted = getCompletedUnits();
+    scrubNotes(collectNewlyCompleted(previousCompleted, nextCompleted), beforeStates);
+    if (!options.fromHistory) pushChanges(makeChangeList(beforeStates), selected);
+    if (value !== 0 && value !== solution[selected] && !options.fromHistory) mistakes += 1;
+    paintBoard();
+    animateNewCompletions(previousCompleted, selected);
+    checkWin();
+    if (!options.fromHistory && cooldownmoves > 0 && !hintlimitreached) {
+        cooldownmoves--;
+        updateHintCooldownDisplay();
+        if (cooldownmoves === 0) {
+            hintcount = settings.hints.cooldown.hintsaftercooldown;
+            enableHintButton();
+            updateHintCooldownDisplay();
+        }
+    }
+}
+
+function eraseSelected() {
+    if (finished || givens[selected]) return;
+    if (values[selected] === 0 && notes[selected].size === 0) return;
+    const beforeStates = new Map([
+        [selected, cellSnapshot(selected)]
+    ]);
+    values[selected] = 0;
+    notes[selected].clear();
+    pushChanges(makeChangeList(beforeStates), selected);
+    paintBoard();
+}
+
+function applyHistoryMove(move, direction) {
+    if (!move) return;
+    const previousCompleted = getCompletedUnits();
+    selected = move.selected;
+    move.changes.forEach((change) => {
+        restoreCell(change.index, direction === "undo" ? change.before : change.after);
+    });
+    paintBoard();
+    animateNewCompletions(previousCompleted, selected);
+    checkWin();
+}
+
+function undo() {
+    const move = undoStack.pop();
+    if (!move) return;
+    redoStack.push(move);
+    applyHistoryMove(move, "undo");
+}
+
+function redo() {
+    const move = redoStack.pop();
+    if (!move) return;
+    undoStack.push(move);
+    applyHistoryMove(move, "redo");
+}
+
+function getCandidates(index) {
+    if (values[index] !== 0) return [];
+
+    const row = Math.floor(index / 9);
+    const col = index % 9;
+    const box = Math.floor(row / 3) * 3 + Math.floor(col / 3);
+
+    const used = new Set();
+
+    for (const i of rows[row]) {
+        if (i !== index && values[i] && values[i] === solution[i]) {
+            used.add(values[i]);
+        }
+    }
+
+    for (const i of cols[col]) {
+        if (i !== index && values[i] && values[i] === solution[i]) {
+            used.add(values[i]);
+        }
+    }
+
+    for (const i of boxes[box]) {
+        if (i !== index && values[i] && values[i] === solution[i]) {
+            used.add(values[i]);
+        }
+    }
+
+    const candidates = [];
+
+    for (let n = 1; n <= 9; n++) {
+        if (!used.has(n)) {
+            candidates.push(n);
+        }
+    }
+
+    return candidates;
+}
+
+function findNakedSingle(index) {
+    const candidates = getCandidates(index);
+
+    if (candidates.length === 1) {
+        return {
+            index,
+            value: candidates[0]
+        };
+    }
+
+    return null;
+}
+
+function findHiddenSingleForCell(index) {
+
+    // Ignore cells that already have a value.
+    if (givens[index] || values[index] !== 0) {
+        return null;
+    }
+
+    // Find every number that this cell could legally contain.
+    const candidates = getCandidates(index);
+
+    // Work out which row, column and box this cell belongs to.
+    const row = rows[Math.floor(index / 9)];
+    const col = cols[index % 9];
+    const box = boxes[Math.floor(index / 27) * 3 + Math.floor((index % 9) / 3)];
+
+    // Check each candidate separately.
+    for (const number of candidates) {
+
+        // ---------- ROW ----------
+        let rowUnique = true;
+
+        for (const other of row) {
+
+            // Don't compare the cell to itself.
+            if (other === index) continue;
+
+            // Ignore filled cells.
+            if (values[other] !== 0) continue;
+
+            // If another cell can also be this number,
+            // then this isn't unique in the row.
+            if (getCandidates(other).includes(number)) {
+                rowUnique = false;
+                break;
+            }
+        }
+
+        if (rowUnique) {
+            return {
+                index,
+                value: number
+            };
+        }
+
+        // ---------- COLUMN ----------
+        let colUnique = true;
+
+        for (const other of col) {
+
+            if (other === index) continue;
+
+            if (values[other] !== 0) continue;
+
+            if (getCandidates(other).includes(number)) {
+                colUnique = false;
+                break;
+            }
+        }
+
+        if (colUnique) {
+            return {
+                index,
+                value: number
+            };
+        }
+
+        // ---------- BOX ----------
+        let boxUnique = true;
+
+        for (const other of box) {
+
+            if (other === index) continue;
+
+            if (values[other] !== 0) continue;
+
+            if (getCandidates(other).includes(number)) {
+                boxUnique = false;
+                break;
+            }
+        }
+
+        if (boxUnique) {
+            return {
+                index,
+                value: number
+            };
+        }
+    }
+
+    // None of this cell's candidates were hidden singles.
+    return null;
+}
+
+function findMoveForCell(index) {
+    return (
+        findNakedSingle(index) ||
+        findHiddenSingleForCell(index) ||
+        null
+    );
+}
+
+function enableHintButton() {
+    document.getElementById("hintButton").classList.remove("disabled");
+    document.getElementById("hintButton").disabled = false;
+}
+
+function disableHintButton() {
+    document.getElementById("hintButton").classList.add("disabled");
+    document.getElementById("hintButton").disabled = true;
+}
+
+function disablehistorybuttons() {
+    redoButton.disabled = true;
+    undoButton.disabled = true;
+}
+
+function enablehistorybuttons() {
+    redoButton.disabled = false;
+    undoButton.disabled = false;
+}
+
+function disableotherbuttons() {
+    eraseButton.disabled = true;
+    pencilButton.disabled = true;
+    pencilMode = false;
+    eraseMode = false;
+    pencilButton.setAttribute("aria-pressed", "false");
+    eraseButton.setAttribute("aria-pressed", "false");
+}
+
+function enableotherbuttons() {
+    pencilButton.disabled = !settings.tools.enabled || !settings.tools.pencil.enabled;
+    eraseButton.disabled = !settings.tools.enabled || !settings.tools.erase.enabled;
+}
+
+function testhistorybuttons() {
+    if (canusehelp && settings.tools.enabled) {
+        if (settings.tools.history.enabled) {
+            enablehistorybuttons();
+        } else {
+            disablehistorybuttons();
+        }
+
+        enableotherbuttons();
+    } else {
+        disablehistorybuttons();
+        disableotherbuttons();
+    }
+}
+
+function testHintButton() {
+    if (!settings.hints.enabled) {
+        disableHintButton();
+    } else {
+        enableHintButton();
+    }
+    if (!canusehelp) {
+        disableHintButton();
+    }
+}
+
+testHintButton();
+
+function hint() {
+    updateHintCooldownDisplay();
+    if (!settings.hints.enabled) return;
+    if (hintlimitreached) {
+        updateHintCooldownDisplay();
+        getHintCooldownText()
+        return 
+    };
+    if (hintcount <= 0 && settings.hints.cooldown.enabled) return;
+    if (finished) return;
+
+    let move = null;
+
+    // Try the selected cell first
+    if (
+        selected !== null &&
+        !givens[selected] &&
+        values[selected] === 0
+    ) {
+        move = findMoveForCell(selected);
+    }
+
+    // Otherwise search the whole board
+    if (!move) {
+        for (let i = 0; i < 81; i++) {
+            if (givens[i] || values[i] !== 0) continue;
+
+            move = findMoveForCell(i);
+
+            if (move) break;
+        }
+    }
+
+    // No logical move found
+    if (!move) return;
+    if (settings.hints.cooldown.enabled && !hintlimitreached) {
+        hintcount--;
+        if (settings.hints.hintlimit.enabled) {
+            hintcounter++
+            updateHintCooldownDisplay();
+            if (hintcounter == settings.hints.hintlimit.limit) {
+                hintlimitreached = true
+                updateHintCooldownDisplay();
+                return
+            }
+        }
+        if (hintcount <= 0) {
+            canusecurrenthintsystem = true;
+            cooldowntypetouse = settings.hints.cooldown.cooldowntype
+            starthintcooldown();
+            saveGame();
+        }
+        updateHintCooldownDisplay();
+    } else if (!hintlimitreached && settings.hints.hintlimit.enabled) {
+        hintcounter++
+        updateHintCooldownDisplay();        
+        if (hintcounter == settings.hints.hintlimit.limit) {
+            hintlimitreached = true
+            updateHintCooldownDisplay();
+            return
+        }
+    }
+        
+    const target = move.index;
+    selected = target;
+
+    const beforeStates = new Map([
+        [target, cellSnapshot(target)]
+    ]);
+    const previousCompleted = getCompletedUnits();
+
+    values[target] = move.value;
+    notes[target].clear();
+
+    const nextCompleted = getCompletedUnits();
+
+    scrubNotes(
+        collectNewlyCompleted(previousCompleted, nextCompleted),
+        beforeStates
+    );
+
+    pushChanges(makeChangeList(beforeStates), target);
+
+    paintBoard();
+    animateNewCompletions(previousCompleted, selected);
+    checkWin();
+}
+
+function starthintcooldown() {
+    if (!usingsavegame) {
+        if (settings.hints.cooldown.cooldowntype === "move") {
+            cooldownmoves = settings.hints.cooldown.cooldowntime;
+        }
+
+        if (settings.hints.cooldown.cooldowntype === "time") {
+            cooldowntime = settings.hints.cooldown.cooldowntime;
+            hintCooldownCounter = 0;
+            updateHintCooldownDisplay();
+        }
+    } else {
+        if (!canusecurrenthintsystem) {
+            if (cooldowntypetouse === "move") {
+                cooldownmoves = savecooldownmoves;
+            }
+
+            if (cooldowntypetouse === "time") {
+                cooldowntime = savecooldowntime;
+                hintCooldownCounter = 0;
+                updateHintCooldownDisplay();
+            }
+        } else {
+            if (settings.hints.cooldown.cooldowntype === "move") {
+                cooldownmoves = settings.hints.cooldown.cooldowntime;
+            }
+
+            if (settings.hints.cooldown.cooldowntype === "time") {
+                cooldowntime = settings.hints.cooldown.cooldowntime;
+                hintCooldownCounter = 0;
+                updateHintCooldownDisplay();
+            }
+        }
+    }
+}
+
+function getHintCooldownText() {
+    if (hintlimitreached && settings.hints.hintlimit.enabled) {
+        disableHintButton();
+        return `Limit Hit`
+    }
+    if (hintcount > 0) {
+        if (settings.hints.enabled) {
+            enableHintButton()
+        }
+        return `${hintcount} hint${hintcount === 1 ? "" : "s"}`;
+    }
+
+    if (settings.hints.cooldown.cooldowntype === "move") {
+        disableHintButton()
+        return `${cooldownmoves} move${cooldownmoves === 1 ? "" : "s"}`;
+    }
+
+    if (settings.hints.cooldown.cooldowntype === "time") {
+        disableHintButton()
+        return `${cooldowntime} sec${cooldowntime === 1 ? "" : "s"}`;
+    }
+
+    return "It broke?!";
+}
+
+function updateHintCooldownDisplay() {
+    testHintButton();
+    if (hintlimitreached) {
+        getHintCooldownText();
+        return
+    }
+    if (!settings.hints.enabled) {
+        hintcooldowndisplay.textContent = "Disabled";
+        return;
+    }
+    if (!canusehelp) {
+        hintcooldowndisplay.textContent = "Disabled";
+        disableHintButton();
+        return;
+    }
+
+    if (!settings.hints.cooldown.enabled) {
+        hintcooldowndisplay.textContent = "∞";
+        hintcooldowndisplay.style.fontWeight = "800";
+        return;
+    }
+
+    hintcooldowndisplay.style.fontWeight = "unset";
+    hintcooldowndisplay.textContent = getHintCooldownText();
+}
+updateHintCooldownDisplay();
+
+function updateHistoryButtons() {
+    if (canusehelp && settings.tools.enabled && settings.tools.history.enabled) {
+        undoButton.disabled = undoStack.length === 0;
+        redoButton.disabled = redoStack.length === 0;
+    } else {
+        undoButton.disabled = true
+        redoButton.disabled = true
+    }
+}
+
+function updateNumberCounts() {
+    const counts = Array(10).fill(0);
+    values.forEach((value) => {
+        if (value > 0) counts[value] += 1;
+    });
+    numberGrid.querySelectorAll(".number-button").forEach((button) => {
+        const value = Number(button.dataset.value);
+        button.classList.toggle("used-up", counts[value] >= 9);
+    });
+}
+
+function updateStatus() {
+    const empty = values.filter((value) => value === 0).length;
+    mistakeStatus.textContent = `Mistakes: ${mistakes}`;
+    emptyStatus.textContent = `Empty: ${empty}`;
+}
+
+function isUnitComplete(indexes) {
+    const seen = new Set();
+    for (const index of indexes) {
+        const value = values[index];
+        if (value === 0 || value !== solution[index] || seen.has(value)) return false;
+        seen.add(value);
+    }
+    return seen.size === 9;
+}
+
+function getCompletedUnits() {
+    return {
+        rows: rows.map(isUnitComplete),
+        cols: cols.map(isUnitComplete),
+        boxes: boxes.map(isUnitComplete)
+    };
+}
+
+function animateIndexes(indexes, origin, kind) {
+    const distancesPlayed = new Set();
+
+    const boardDistances =
+        kind === "board"
+            ? getBoardDistances(origin)
+            : null;
+
+
+    const maxDistance =
+        kind === "board"
+            ? Math.max(...boardDistances)
+            : 8;
+
+    const fadeDelay = maxDistance * 60 + 500;
+
+    indexes.forEach((index) => {
+
+        const cell = boardEl.querySelector(
+            `[data-index="${index}"]`
+        );
+
+        if (!cell) return;
+
+        const row = Math.floor(index / 9);
+        const col = index % 9;
+
+        const originRow = Math.floor(origin / 9);
+        const originCol = origin % 9;
+
+        let distance;
+
+        if (kind === "row") {
+
+            distance = Math.abs(col - originCol);
+
+        } else if (kind === "column") {
+
+            distance = Math.abs(row - originRow);
+
+        } else if (kind === "box") {
+
+            distance =
+                Math.abs(row - originRow) +
+                Math.abs(col - originCol);
+
+        } else {
+
+            distance = boardDistances[index];
+
+        }
+
+        // Play one sound per distance.
+        if (
+            settings.SFX.enabled &&
+            settings.SFX.completion
+        ) {
+            if (!distancesPlayed.has(distance)) {
+
+                distancesPlayed.add(distance);
+
+                setTimeout(() => {
+                    playPop(
+                        Math.min(1 + distance * 0.5)
+                    );
+                }, distance * 60);
+            }
+        }
+
+        if (
+            settings.VFX.enabled &&
+            settings.VFX.completion
+        ) {
+
+            const animationKind =
+                kind === "board"
+                    ? "board"
+                    : kind;
+
+            // Create the animation effect.
+            const effect = document.createElement("div");
+
+            effect.className =
+                `complete-effect ${animationKind}`;
+
+            effect.style.setProperty(
+                "--sweep-delay",
+                `${distance * 60}ms`
+            );
+
+            effect.style.setProperty(
+                "--fade-delay",
+                `${fadeDelay}ms`
+            );
+
+            // Effect goes first.
+            cell.appendChild(effect);
+
+            // Create a new number on top of the effect.
+            const number = document.createElement("p");
+
+            number.textContent = values[index];
+
+            number.style.margin = "0px";
+            number.style.position = "absolute";
+            number.style.zIndex = "2";
+
+            // Given cells get the heavier font weight.
+            if (givens[index]) {
+                number.style.fontWeight = "760";
+            }
+
+            // Match the cell's current state.
+            if (cell.classList.contains("error")) {
+
+                number.style.color = "var(--danger)";
+
+            } else if (cell.classList.contains("correct")) {
+
+                number.style.color = "var(--lime-text)";
+
+            } else {
+
+                number.style.color = "var(--text)";
+            }
+
+            // Number goes after the effect.
+            cell.appendChild(number);
+
+            effect.addEventListener(
+                "animationend",
+                (e) => {
+
+                    // Remove the effect after fading.
+                    if (
+                        e.animationName !==
+                        "rippleFade"
+                    ) {
+                        return;
+                    }
+
+                    effect.remove();
+                    number.remove();
+                }
+            );
+        }
+    });
+}
+const allIndexes = [...Array(81).keys()];
+animateIndexes(allIndexes, selected, "board");
+
+function animateNewCompletions(previous, origin) {
+    const next = getCompletedUnits();
+    next.rows.forEach((done, index) => {
+        if (done && !previous.rows[index]) animateIndexes(rows[index], origin, "row");
+    });
+    next.cols.forEach((done, index) => {
+        if (done && !previous.cols[index]) animateIndexes(cols[index], origin, "column");
+    });
+    next.boxes.forEach((done, index) => {
+        if (done && !previous.boxes[index]) animateIndexes(boxes[index], origin, "box");
+    });
+}
+
+function playBoardRipple() {
+    const distances = getBoardDistances(selected);
+    const distancesPlayed = new Set();
+
+    boardEl.querySelectorAll(".cell").forEach((cell, index) => {
+
+        const distance = distances[index];
+
+        // Sound
+        if (settings.SFX.enabled && settings.SFX.completion) {
+            if (!distancesPlayed.has(distance)) {
+                distancesPlayed.add(distance);
+
+                setTimeout(() => {
+                    playPop(Math.min(1 + distance * 0.25));
+                }, distance * 60);
+            }
+        }
+
+        // Animation
+        if (settings.VFX.enabled && settings.VFX.completion) {
+
+            cell.classList.remove("complete-sweep", "board");
+
+            cell.style.setProperty(
+                "--sweep-delay",
+                `${distance * 60}ms`
+            );
+
+            requestAnimationFrame(() => {
+                cell.classList.add("complete-sweep", "board");
+            });
+
+            setTimeout(() => {
+                cell.classList.remove("complete-sweep", "board");
+                cell.style.removeProperty("--sweep-delay");
+            }, 1000 + distance * 60);
+        }
+    });
+}
+document.addEventListener("pointerup", () => {
+    updateHintCooldownDisplay();
+});
+
+function getBoardDistances(startIndex) {
+    const distances = Array(81).fill(-1);
+    const queue = [startIndex];
+
+    distances[startIndex] = 0;
+
+    while (queue.length) {
+        const current = queue.shift();
+
+        const row = Math.floor(current / 9);
+        const col = current % 9;
+
+        const neighbors = [];
+
+        if (row > 0) neighbors.push(current - 9);
+        if (row < 8) neighbors.push(current + 9);
+        if (col > 0) neighbors.push(current - 1);
+        if (col < 8) neighbors.push(current + 1);
+
+        for (const next of neighbors) {
+            if (distances[next] !== -1) continue;
+
+            distances[next] = distances[current] + 1;
+            queue.push(next);
+        }
+    }
+
+    return distances;
+}
+
+function checkWin() {
+
+    if (finished) return;
+
+    if (values.every((value, index) => value === solution[index])) {
+        popSound.playbackRate = 2;
+        pauseBtn2.style.display = "none"
+        runninggame = false
+        localStorage.removeItem("save");
+        finished = true;
+
+        clearInterval(timerId);
+
+        playBoardRipple();
+        checkTime()
+        const maxDistance = Math.max(...getBoardDistances(selected));
+
+        setTimeout(showWinScreen, maxDistance * 60 + 900);
+    }
+}
+
+
+function closeDifficultyMenu() {
+    menuOpen = false;
+    difficultyMenu.classList.remove("open");
+    difficultyToggle.setAttribute("aria-expanded", "false");
+}
+
+function openDifficultyMenu() {
+    menuOpen = true;
+    difficultyMenu.classList.add("open");
+    difficultyToggle.setAttribute("aria-expanded", "true");
+    updateDifficultyMenu();
+}
+
+function openmainDifficultyMenu() {
+    newOverlay.hidden = false;
+
+    requestAnimationFrame(() => {
+        newOverlay.classList.add("show");
+    });
+}
+
+function closewinDifficultyMenu() {
+    winmenuOpen = false;
+    winDifficultyMenu.classList.remove("open");
+    winDifficultyToggle.setAttribute("aria-expanded", "false");
+}
+
+function closepauseDifficultyMenu() {
+    pausemenuOpen = false;
+    pauseDifficultyMenu.classList.remove("open");
+    pauseDifficultyToggle.setAttribute("aria-expanded", "false");
+}
+
+function openwinDifficultyMenu() {
+    winmenuOpen = true;
+    windifficultyMenu.classList.add("open");
+
+    winDifficultyToggle.setAttribute("aria-expanded", "false");
+    updatewinDifficultyMenu();
+}
+
+function openpauseDifficultyMenu() {
+    pausemenuOpen = true;
+    pauseDifficultyMenu.classList.add("open");
+
+    pauseDifficultyToggle.setAttribute("aria-expanded", "false");
+    updatepauseDifficultyMenu();
+}
+
+function closemainDifficultyMenu() {
+    newOverlay.hidden = true;
+    requestAnimationFrame(() => {
+        newOverlay.classList.remove("show");
+    });
+}
+
+function hidenewgame() {
+    closemainDifficultyMenu()
+}
+
+function toggleDifficultyMenu() {
+    if (menuOpen) {
+        closeDifficultyMenu();
+    } else {
+        openDifficultyMenu();
+    }
+}
+
+function togglemainDifficultyMenu() {
+    if (mainmenuOpen) {
+        closemainDifficultyMenu();
+    } else {
+        openmainDifficultyMenu();
+    }
+}
+
+function togglewinDifficultyMenu() {
+    if (winmenuOpen) {
+        closewinDifficultyMenu();
+    } else {
+        openwinDifficultyMenu();
+    }
+}
+
+function togglepauseDifficultyMenu() {
+    if (pausemenuOpen) {
+        closepauseDifficultyMenu();
+    } else {
+        openpauseDifficultyMenu();
+    }
+}
+
+function updateDifficultyMenu() {
+    difficultyMenu.querySelectorAll(".menu-item").forEach((item) => {
+        item.setAttribute("aria-selected", item.dataset.difficulty === difficulty ? "true" : "false");
+    });
+}
+
+function updatemainDifficultyMenu() {
+    return
+}
+
+function updatewinDifficultyMenu() {
+    windifficultyMenu.querySelectorAll(".menu-item").forEach((item) => {
+        item.setAttribute("aria-selected", item.dataset.difficulty === difficulty ? "true" : "false");
+    });
+}
+
+function updatepauseDifficultyMenu() {
+    pauseDifficultyMenu.querySelectorAll(".menu-item").forEach((item) => {
+        item.setAttribute("aria-selected", item.dataset.difficulty === difficulty ? "true" : "false");
+    });
+}
+let nosave = false;
+
+function deletesavefile() {
+    localStorage.removeItem("save");
+}
+
+function deletesave() {
+    deletesavefile();
+}
+
+function delsave() {
+    deletesave();
+}
+
+function delsavefile() {
+    delsave();
+}
+
+function loadtheme() {
+    const savedTheme = localStorage.getItem("theme");
+
+    if (savedTheme) {
+        pageMode = savedTheme;
+
+        document.body.classList.remove("light", "dark");
+        document.body.classList.add(pageMode);
+
+		if (modeButton) {
+			modeButton.innerHTML = pageMode === "dark"
+				? '<svg style="transform:translatey(1px)" viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4" style="fill: currentColor;"></circle><path d="M12 2V4"></path><path d="M12 20V22"></path><path d="M4.93 4.93L6.34 6.34"></path><path d="M17.66 17.66L19.07 19.07"></path><path d="M2 12H4"></path><path d="M20 12H22"></path><path d="M4.93 19.07L6.34 17.66"></path><path d="M17.66 6.34L19.07 4.93"></path></svg>'
+				: '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.5C19.4 15.05 18.16 15.35 16.85 15.35C12.33 15.35 8.65 11.67 8.65 7.15C8.65 5.84 8.95 4.6 9.5 3.5C5.6 4.45 2.7 7.97 2.7 12.15C2.7 17.06 6.68 21.05 11.6 21.05C15.78 21.05 19.55 18.4 20.5 14.5Z"></path></svg>';
+		}
+    }
+
+    // ---------------- TIMER UI ----------------
+    winTime.textContent = formatTime(Math.floor(elapsedMs / 1000));
+    timerEl.textContent =
+        `Time: ${formatTime(Math.floor(elapsedMs / 1000))}`;
+    continueTime.textContent = formatTime(Math.floor(elapsedMs / 1000));
+    pauseTime.textContent = formatTime(Math.floor(elapsedMs / 1000));
+    pauseMistakes.textContent = formatTime(Math.floor(elapsedMs / 1000));
+    continueMistakes.textContent = formatTime(Math.floor(elapsedMs / 1000));
+}
+
+function updateGiveUpButton() {
+	const igiveup = document.getElementById("igiveup")
+	const exportbutton = document.getElementById("exportbutton")
+	
+    igiveup.classList.toggle("disabled", nosave);
+	exportbutton.classList.toggle("disabled", nosave);
+	exportbutton.disabled = nosave
+	igiveup.disabled = nosave
+	
+    if (nosave) {
+        igiveup.title = "No save found!"
+		exportbutton.title = "No save found!"
+    };
+	if (!nosave) {
+		igiveup.title = "Continue your current save game."
+		exportbutton.title = "Export your current save game."
+	}
+}
+loadgame();
+loadtheme();
+
+function continueGame() {
+    printBtn.style.display = "";
+	disableprint = false
+    hideBestTime();
+    updatePauseBtn2();
+    usingsavegame = true;
+    
+    if (savehintcount > 0) {
+        hintcount = savehintcount
+        cooldowntime = 0
+        cooldownmoves = 0
+        canusecurrenthintsystem = true
+    } else {
+        hintcount = 0;
+        starthintcooldown()
+    }
+	// update soo many ui elements and stuff on continuing a game
+    updateHintCooldownDisplay();
+    runninggame = true;
+    hidemainmenu();
+    pauseBtn.innerHTML = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor"><path d="M2 4C2 2.9 2.9 2 4 2H8C9.1 2 10 2.9 10 4V20C10 21.1 9.1 22 8 22H4C2.9 22 2 21.1 2 20Z"/><path d="M14 4C14 2.9 14.9 2 16 2H20C21.1 2 22 2.9 22 4V20C22 21.1 21.1 22 20 22H16C14.9 22 14 21.1 14 20Z"/></svg>';
+    pauseBtn2.innerHTML = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor"><path d="M2 4C2 2.9 2.9 2 4 2H8C9.1 2 10 2.9 10 4V20C10 21.1 9.1 22 8 22H4C2.9 22 2 21.1 2 20Z"/><path d="M14 4C14 2.9 14.9 2 16 2H20C21.1 2 22 2.9 22 4V20C22 21.1 21.1 22 20 22H16C14.9 22 14 21.1 14 20Z"/></svg>';
+	document.title = `Ceedoku - ${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}`;
+    difficultyBadge.textContent = difficulty.charAt(0).toUpperCase() + difficulty.slice(1)
+    winTime.textContent = formatTime(Math.floor(elapsedMs / 1000));
+    timerEl.textContent =
+        `Time: ${formatTime(Math.floor(elapsedMs / 1000))}`;
+    continueTime.textContent = formatTime(Math.floor(elapsedMs / 1000));
+    pauseTime.textContent = formatTime(Math.floor(elapsedMs / 1000));
+    pauseMistakes.textContent = mistakes
+    continueMistakes.textContent = mistakes
+    timerPaused = false;
+    hidewinscreen();
+    hidepausescreen();
+    closepauseDifficultyMenu();
+    closemainDifficultyMenu()
+    startTimer();
+    hidecontinuegame();
+    renderBoard()
+}
+
+setInterval(saveGame, 1000);
+
+async function newGame(nextDifficulty = difficulty) {
+    printBtn.style.display = "";
+	disableprint = false
+    hideBestTime();
+    updatePauseBtn2();
+    nosave = false
+    cooldowntypetouse = settings.hints.cooldown.cooldowntype
+    usingsavegame = false;
+    cooldownmoves = 0;
+    cooldowntime = 0;
+    hintcounter = 0;
+    hintlimitreached = false
+    hintcount = settings.hints.cooldown.startinghints;
+    canusecurrenthintsystem = true
+
+    if (settings.hints.cooldown.startinghints === 0) {
+        starthintcooldown()
+    }
+
+    localStorage.setItem("difficulty", difficulty);
+    runninggame = true
+    finished = false
+    difficulty = nextDifficulty;
+
+    if (difficulty === "godlike") {
+        canusehelp = false
+        pencilMode = false
+        eraseMode = false
+    } else {
+        canusehelp = true
+    }
+
+    updateHintCooldownDisplay();
+
+    if (window.matchMedia("(orientation: landscape)").matches) {
+        let scaleValue = difficulty === "impossible" ? "1.2" : "1.3";
+        document.querySelectorAll(".win-stat").forEach(el => el.style.scale = scaleValue);
+    }
+
+    const built = await makePuzzle(DIFFICULTIES[difficulty].holes);
+
+    document.title = `Ceedoku - ${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}`;
+    difficultyBadge.textContent = difficulty.charAt(0).toUpperCase() + difficulty.slice(1)
+    solution = built.full;
+    puzzle = built.draft;
+    values = [...puzzle];
+    givens = puzzle.map(v => v !== 0);
+    notes = Array.from({
+        length: 81
+    }, () => new Set());
+
+    selected = values.findIndex(v => v === 0);
+    if (selected === -1) selected = 40;
+
+    mistakes = 0;
+
+    elapsedMs = 0;
+    timerPaused = false;
+    startTime = 0;
+    clearInterval(timerId);
+
+    undoStack = [];
+    redoStack = [];
+
+    renderBoard();
+
+    timerEl.textContent = "Time: 00:00";
+    winTime.textContent = "00:00";
+    pauseTime.textContent = "00:00";
+    continueTime.textContent = "00:00"
+    pauseBtn.innerHTML = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor"><path d="M2 4C2 2.9 2.9 2 4 2H8C9.1 2 10 2.9 10 4V20C10 21.1 9.1 22 8 22H4C2.9 22 2 21.1 2 20Z"/><path d="M14 4C14 2.9 14.9 2 16 2H20C21.1 2 22 2.9 22 4V20C22 21.1 21.1 22 20 22H16C14.9 22 14 21.1 14 20Z"/></svg>';
+    pauseBtn2.innerHTML = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor"><path d="M2 4C2 2.9 2.9 2 4 2H8C9.1 2 10 2.9 10 4V20C10 21.1 9.1 22 8 22H4C2.9 22 2 21.1 2 20Z"/><path d="M14 4C14 2.9 14.9 2 16 2H20C21.1 2 22 2.9 22 4V20C22 21.1 21.1 22 20 22H16C14.9 22 14 21.1 14 20Z"/></svg>';
+    title.textContent = "Ceedoku"
+    hidewinscreen();
+    hidepausescreen();
+    closepauseDifficultyMenu();
+    closemainDifficultyMenu()
+    startTimer();
+    hidecontinuegame();
+    hidemainmenu();
+    document.getElementById("igiveup").classList.remove("disabled", !nosave);
+    testhistorybuttons();
+}
+
+
+
+renderNumberPad();
+
+
+undoButton.addEventListener("click", () => {
+    if (timerPaused) return;
+    undo();
+});
+
+redoButton.addEventListener("click", () => {
+    if (timerPaused) return;
+    redo();
+});
+
+hintButton.addEventListener("click", () => {
+    if (!canusehelp) return;
+    if (timerPaused) return;
+    hint();
+});
+
+eraseButton.addEventListener("click", () => {
+    if (!canusehelp || !settings.tools.enabled || !settings.tools.erase.enabled) return;
+    if (timerPaused) return;
+    toggleEraseMode();
+});
+
+pencilButton.addEventListener("click", () => {
+    if (timerPaused) return;
+    if (!canusehelp || !settings.tools.enabled || !settings.tools.pencil.enabled) return;
+    togglePencilMode();
+});
+newGameButton.addEventListener("click", () => newGame());
+winNewGameButton.addEventListener("click", () => newGame());
+pauseNewGameButton.addEventListener("click", () => newGame());
+difficultyToggle.addEventListener("click", (event) => {
+    event.stopPropagation();
+    toggleDifficultyMenu();
+});
+winDifficultyToggle.addEventListener("click", (event) => {
+    event.stopPropagation();
+    togglewinDifficultyMenu();
+});
+pauseDifficultyToggle.addEventListener("click", (event) => {
+    event.stopPropagation();
+    togglewinDifficultyMenu();
+});
+difficultyMenu.addEventListener("click", (event) => {
+    const item = event.target.closest(".menu-item");
+    if (!item) return;
+    newGame(item.dataset.difficulty);
+});
+pausedifficultyMenu.addEventListener("click", (event) => {
+    const item = event.target.closest(".menu-item");
+    if (!item) return;
+    newGame(item.dataset.difficulty);
+});
+winDifficultyMenu.addEventListener("click", (event) => {
+    const item = event.target.closest(".menu-item");
+    if (!item) return;
+    newGame(item.dataset.difficulty);
+});
+
+
+mainDifficultyMenu.addEventListener("click", (event) => {
+    const item = event.target.closest(".menu-item");
+
+    if (!item) return;
+
+    document.querySelectorAll(".menu-item").forEach(i => {
+        i.setAttribute("aria-selected", "false");
+    });
+
+
+    item.setAttribute("aria-selected", "true");
+
+    selectedDifficulty = item.dataset.difficulty;
+
+    localStorage.setItem("difficulty", selectedDifficulty);
+    const bestTimes = JSON.parse(localStorage.getItem("besttimes")) || {};
+    const bestTime = bestTimes[selectedDifficulty];
+
+    document.getElementById("besttimedisplay").textContent = `Best Time: ${typeof bestTime === "number" ? formatTime(Math.floor(bestTime / 1000)) : "**:**"}`;
+});
+
+function continuenewGame() {
+    newGame(selectedDifficulty);
+}
+
+document.addEventListener("click", (event) => {
+    if (!winnewGameBand.contains(event.target)) {
+        closeDifficultyMenu();
+    }
+
+    if (timerPaused) return;
+});
+
+document.addEventListener("keyup", (event) => {
+    if (!runninggame) return;
+
+    if (event.code === "Space") {
+        event.preventDefault();
+        pauseTimer();
+    }
+});
+
+document.addEventListener("keydown", (event) => {
+    if (timerPaused) return;
+    if (!runninggame) return;
+
+    const key = event.key.toLowerCase();
+
+    if ((event.ctrlKey || event.metaKey) && key === "z") {
+        event.preventDefault();
+
+        if (event.shiftKey) {
+            if (!canusehelp || !settings.tools.enabled || !settings.tools.history.enabled) return;
+            redo();
+        } else {
+            if (!canusehelp) return;
+            undo();
+        }
+
+        return;
+    }
+
+    if ((event.ctrlKey || event.metaKey) && key === "y") {
+        event.preventDefault();
+
+        if (!canusehelp || !settings.tools.enabled || !settings.tools.history.enabled) return;
+        redo();
+
+        return;
+    }
+
+    if (event.ctrlKey || event.metaKey) return;
+
+    if (key === "p") {
+        event.preventDefault();
+
+        if (!canusehelp || !settings.tools.enabled || !settings.tools.pencil.enabled) return;
+        togglePencilMode();
+
+        return;
+    }
+
+    if (key === "h") {
+        event.preventDefault();
+
+        if (!canusehelp) return;
+        hint();
+
+        return;
+    }
+
+    if (key === "e") {
+        event.preventDefault();
+
+        if (!canusehelp || !settings.tools.enabled || !settings.tools.erase.enabled) return;
+        toggleEraseMode();
+
+        return;
+    }
+
+    if (/^[1-9]$/.test(key)) {
+        placeNumber(Number(key));
+        return;
+    }
+
+    if (key === "backspace" || key === "delete" || key === "0") {
+        if (!canusehelp || !settings.tools.enabled || !settings.tools.erase.enabled) return;
+        eraseSelected();
+        return;
+    }
+
+    if (["arrowup", "arrowdown", "arrowleft", "arrowright"].includes(key)) {
+        event.preventDefault();
+
+        const row = Math.floor(selected / 9);
+        const col = selected % 9;
+
+        const nextRow =
+            key === "arrowup" ?
+            (row + 8) % 9 :
+            key === "arrowdown" ?
+            (row + 1) % 9 :
+            row;
+
+        const nextCol =
+            key === "arrowleft" ?
+            (col + 8) % 9 :
+            key === "arrowright" ?
+            (col + 1) % 9 :
+            col;
+
+        selectCell(nextRow * 9 + nextCol);
+    }
+});
+
+function deleteGame() {
+    delsave()
+    location.reload()
+}
+
+const elementstoanimate = document.querySelectorAll(".whatdoievencallthis");
+
+const observer = new MutationObserver(() => {
+    const isDark = document.body.classList.contains("dark");
+
+    elementstoanimate.forEach(element => {
+        element.animate(
+            isDark ? [{
+                    filter: "brightness(0.1)"
+                },
+                {
+                    filter: "brightness(1)"
+                }
+            ] : [{
+                    filter: "brightness(1)"
+                },
+                {
+                    filter: "brightness(0.1)"
+                }
+            ], {
+                duration: 200,
+                easing: "ease",
+                fill: "forwards"
+            }
+        );
+    });
+});
+
+const isDark2 = document.body.classList.contains("dark");
+elementstoanimate.forEach(element => {
+    element.animate(
+        isDark2 ? [{
+                filter: "brightness(0.1)"
+            },
+            {
+                filter: "brightness(1)"
+            }
+        ] : [{
+                filter: "brightness(1)"
+            },
+            {
+                filter: "brightness(0.1)"
+            }
+        ], {
+            duration: 200,
+            easing: "ease",
+            fill: "forwards"
+        }
+    );
+});
+observer.observe(document.body, {
+    attributes: true,
+    attributeFilter: ["class"]
+});
+pauseBtn2.style.display = "none"
+const defaultItem = document.querySelector(`#mainDifficultyMenu .menu-item[data-difficulty="${selectedDifficulty}"]`);
+defaultItem.setAttribute("aria-selected", "true");
+const bestTimesa = JSON.parse(localStorage.getItem("besttimes")) || {};
+const bestTimea = bestTimesa[selectedDifficulty];
+
+document.getElementById("besttimedisplay").textContent =
+    `Best Time: ${typeof bestTimea === "number" ? formatTime(Math.floor(bestTimea / 1000)) : "**:**"}`;
+exportnamemenuinput.addEventListener("input", () => {
+    if (exportnamemenuinput.value === "") {
+		document.getElementById("savenamebutton").classList.add("disabled")
+		document.getElementById("savenamebutton").disabled = true
+		return
+	}
+	if (exportnamemenuinput.value != "") {
+		document.getElementById("savenamebutton").classList.remove("disabled")
+		document.getElementById("savenamebutton").disabled = false
+		return
+	}
+});
+if (exportnamemenuinput.value === "") {
+	document.getElementById("savenamebutton").classList.add("disabled")
+	document.getElementById("savenamebutton").disabled = true
+}
+exportnamemenuinput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+        if (!exportnamemenuinput.disabled && exportnamemenuinput.value !== "") {
+            exportsavename();
+        }
+    }
+});
+
+function setcooldownvalue(input) {
+	if (input === "time") {
+		hintCooldownMethod.value = "time"
+		return
+	} else if (input === "move") {
+		hintCooldownMethod.value = "moves"
+		return
+	}
+	
+	return
+}
+		
