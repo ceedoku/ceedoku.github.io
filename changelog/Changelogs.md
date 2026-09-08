@@ -1,3 +1,16 @@
+- ### Ceedoku 9.1.3
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - Android users having the page not act correctly when the keyboard shows.
+  >>> - Locally downloaded copies of the game sometimes not loading the styling or the script (or for Android users, always not loading them). *"because for some reason this is not the default behaviour of a webpage on android! - WHY IS IT LIKE THIS??? \*loses it\*" - Ceebug (Main developer)*
+  > #### Developer Changes:
+  >> ##### Improved:
+  >>> - Structure of the codebase, now most code lives in `./src/js`, `./src/css`, or `./src/pwa` and for images and sounds they are in `./src/images` and `./src/sounds` and the images folder is reorganised from the ground up.
+  >>> - the `README.md` file.
+  >> ##### Added:
+  >>> - `./AGENTS.md`, `./CLAUDE.md` and `./.cursor/rules/agents.mdc` for agent instructions.
+  >>> - A `LICENCE` file
+  >>> - A `CONTRIBUTING.md` file
 - ### 9.1.2
   > #### Changes:
   >> ##### Fixed:
