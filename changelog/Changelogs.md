@@ -6,7 +6,7 @@
   > #### Developer Changes:
   >> ##### Improved:
   >>> - Structure of the codebase, now most code lives in `./src/js`, `./src/css`, or `./src/pwa` and for images and sounds they are in `./src/images` and `./src/sounds` and the images folder is reorganised from the ground up.
-  >>> - the `README.md` file.
+  >>> - The `README.md` file.
   >> ##### Added:
   >>> - `./AGENTS.md`, `./CLAUDE.md` and `./.cursor/rules/agents.mdc` for agent instructions.
   >>> - A `LICENCE` file
