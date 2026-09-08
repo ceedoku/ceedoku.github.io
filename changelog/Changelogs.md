@@ -1,7 +1,7 @@
 - ### 9.2.0
   > #### Changes:
   >> ##### Updated:
-  >>> - The link for the version to direct to the new per version changelogs page
+  >>> - The link for the version to direct to the new per version changelogs page.
 - ### 9.1.3
   > #### Changes:
   >> ##### Fixed:
