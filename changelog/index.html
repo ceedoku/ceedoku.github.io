@@ -442,4 +442,41 @@ document.addEventListener("click", function(event) {
     }
 
 });
+</script>
+<script>
+async function loadReleaseChangelog() {
+
+    const params = new URLSearchParams(window.location.search);
+    const requestedVersion = params.get("v");
+
+    if (!requestedVersion) {
+        return;
+    }
+
+    const version = requestedVersion.replace(/^v/i, "");
+
+    const url =
+        version.toLowerCase() === "latest"
+            ? "https://api.github.com/repos/ceebug/Ceedoku/releases/latest"
+            : `https://api.github.com/repos/ceebug/Ceedoku/releases/tags/v${encodeURIComponent(version)}`;
+
+    try {
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            return;
+        }
+
+        const release = await response.json();
+
+        document.getElementById("markdown-content").innerHTML =
+            marked.parse(release.body || "");
+
+    } catch (error) {
+        // Keep the normal Changelogs.md content.
+    }
+}
+
+loadReleaseChangelog();
 </script></body></html>
