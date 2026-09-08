@@ -1270,40 +1270,73 @@ function formatMarkdownLine(line) {
 
 function formatReleaseText(text) {
 
-    return escapeHTML(text)
+    /*
+     * Protect escaped Markdown characters.
+     */
 
-        /*
-         * Bold
-         *
-         * **text**
-         */
+    const escaped = [];
 
-        .replace(
-            /\*\*(.*?)\*\*/g,
-            "<strong>$1</strong>"
-        )
+    text = text.replace(
+        /\\([\\`*])/g,
+        (_, character) => {
 
-        /*
-         * Italic
-         *
-         * *text*
-         */
+            const index =
+                escaped.push(character) - 1;
 
-        .replace(
-            /(?<!\*)\*(?!\*)(.*?)(?<!\*)\*(?!\*)/g,
-            "<em>$1</em>"
-        )
+            return `\uE000${index}\uE001`;
 
-        /*
-         * Inline code
-         *
-         * `text`
-         */
+        }
+    );
 
-        .replace(
-            /`(.*?)`/g,
-            "<code>$1</code>"
-        );
+
+    /*
+     * Escape HTML.
+     */
+
+    text = escapeHTML(text);
+
+
+    /*
+     * Bold
+     */
+
+    text = text.replace(
+        /\*\*(.*?)\*\*/g,
+        "<strong>$1</strong>"
+    );
+
+
+    /*
+     * Italic
+     */
+
+    text = text.replace(
+        /(?<!\*)\*(?!\*)(.*?)(?<!\*)\*(?!\*)/g,
+        "<em>$1</em>"
+    );
+
+
+    /*
+     * Inline code
+     */
+
+    text = text.replace(
+        /`(.*?)`/g,
+        "<code>$1</code>"
+    );
+
+
+    /*
+     * Restore escaped characters WITHOUT the backslash.
+     */
+
+    text = text.replace(
+        /\uE000(\d+)\uE001/g,
+        (_, index) => escaped[index]
+    );
+
+
+    return text;
 
 }
 
