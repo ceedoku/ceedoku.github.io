@@ -63,8 +63,11 @@
         }
 	ul {
 		padding-left: 15px !important
+		margin-top: 0px
 	}
-
+	.show {
+		display: unset !important
+	}
         html.dark,
 	body.dark {
           color-scheme: dark;
@@ -138,16 +141,51 @@ input[type="submit"] {
   cursor: pointer;
 }
 	#markdown-content {
-    width: 100%;
     color: var(--text);
 }
+.something {
+	background-color: var(--surface);
+	padding: 10px;
+	border-radius: 28px;
+	border: 1px solid var(--surface-2);
+	margin-bottom: 10px;
+	padding-bottom: 0px;
+	margin-top: 5px;
+}
 
-#markdown-content h1,
 #markdown-content h2,
+#markdown-content h1,
 #markdown-content h3,
 #markdown-content h4,
 #markdown-content h5 {
     color: var(--text2);
+}
+#downloadbox h2,
+#downloadbox h1,
+#downloadbox h3,
+#downloadbox h4,
+#downloadbox h5 {
+    color: var(--text2);
+	margin: 0px;
+}
+#markdown-content.something h1,
+#markdown-content.something h2,
+#markdown-content.something h3,
+#markdown-content.something h4,
+#markdown-content.something h5 {
+    margin: 0px;
+}
+
+#markdown-content.something h4 {
+	margin-bottom: 10px;
+}
+
+#markdown-content.release-changelog > blockquote > blockquote:first-of-type {
+    margin-top: 10px;
+}
+
+#markdown-content.something blockquote {
+	margin: 0px;
 }
 
 #markdown-content blockquote {
@@ -155,7 +193,7 @@ input[type="submit"] {
     padding-left: 15px;
     margin-left: 0;
     color: var(--muted);
-	position: relative
+	position: relative;
 }
 #markdown-content blockquote::before {
     content: "";
@@ -182,8 +220,12 @@ input[type="submit"] {
 
     ul {
         padding-left: 25px;
-	padding-right: 5px
+	padding-right: 5px;
     }
+	
+	#downloadboxlink {
+		flex: 1;
+	}
 
     li {
         margin-bottom: 5px;
@@ -344,11 +386,24 @@ hr {
 	margin-right: 10px
 }
 
+#markdown-content.something blockquote {
+	margin-left: 15px;
+}
 
+#markdown-content.something h3 {
+	margin-bottom: 10px;
+	margin-left: 5px;
+}
+
+#downloadbox > div > div {
+	margin-right: auto;
+}
 /* Mobile layout */
 
 @media (max-width: 700px) {
-
+	#downloadbox > div > div {
+		margin-right: unset;
+	}
     .titlebar {
         display: none;
     }
@@ -371,7 +426,7 @@ hr {
 	margin-top: 5px
     }}</style>
 </head>
-<body class="dark activity-stream" style="height: fit-content;"><header class="titlebar" style="">
+<body class="dark activity-stream" style="height:fit-content;min-height:100vh;display:block;"><header class="titlebar" style="">
 
     <a href="https://ceedoku.github.io/home">
         <img src="./title.png" class="logo" alt="Ceedoku">
@@ -404,8 +459,57 @@ hr {
         <button class="close-menu" onclick="toggleMenu()">
         Close Menu
     </button>
-</div><div class="about-container" style="display:flex;flex-direction:column;width: 100dvw;padding-left: 10px;padding-right: 10px;"><button class="menu-button" onclick="toggleMenu()" style="color: rgb(71, 186, 130); --darkreader-inline-color: var(--darkreader-text-47ba82, #59c18e);" data-darkreader-inline-color="">☰</button><img class="img" src=".\title.png" alt="CEEDOKU" class="title"><h2 class="why" style="color: var(--text2); margin-bottom: 0px; margin-top: 0px;">Changelogs</h2></div><div id="markdown-content">
-</div><script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script><script>
+</div><div class="about-container" style="display:flex;flex-direction:column;width:100%;box-sizing:border-box;padding-left:10px;padding-right:10px;height:fit-content;"><button class="menu-button" onclick="toggleMenu()" style="color: rgb(71, 186, 130); --darkreader-inline-color: var(--darkreader-text-47ba82, #59c18e);" data-darkreader-inline-color="">☰</button><img class="img" src=".\title.png" alt="CEEDOKU" class="title"><h2 class="why" style="color: var(--text2); margin-bottom: 0px; margin-top: 0px;">Changelogs</h2></div><div id="markdown-content">
+</div><div id="downloadbox" style="background:var(--surface);margin:10px;margin-top:0;padding:14px;border-radius:28px;border:1px solid var(--surface-2);box-shadow:0 4px 20px rgba(0,0,0,.12);height: fit-content;" class="show">
+    <div style="display:flex;align-items:stretch;gap:10px;flex-direction:row;flex-wrap: wrap;">
+
+        <div style="min-width:180px;display:flex;gap:10px;">
+
+    <div id="downloadicon" style="display: none; align-items: center; justify-content: center; border-radius: 14px; background: var(--surface-2); color: var(--blue); font-size: 26px; font-weight: 600; padding: 4%; box-sizing: border-box;">
+        <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.88 120.89" style="">
+            <path fill="currentColor" d="M84.58,47a7.71,7.71,0,1,1,10.8,11L66.09,86.88a7.72,7.72,0,0,1-10.82,0L26.4,58.37a7.71,7.71,0,1,1,10.81-11L53.1,63.12l.16-55.47a7.72,7.72,0,0,1,15.43.13l-.15,55L84.58,47ZM0,113.48.1,83.3.1,83.3a7.72,7.72,0,1,1,15.43.14l-.07,22q46,.09,91.91,0l.07-22.12a7.72,7.72,0,1,1,15.44.14l-.1,30h-.09a7.71,7.71,0,0,1-7.64,7.36q-53.73.1-107.38,0A7.7,7.7,0,0,1,0,113.48Z"></path>
+        </svg>
+    </div>
+
+    <div id="downloadtext" style="width:fit-content;">
+        <h3 style="margin:0;font-size:17px;font-weight:650;">
+            Download an offline copy of this version
+        </h3>
+        <p style="margin:4px 0 0;color:var(--muted);font-size:14px;">
+            Play this version of Ceedoku without an internet connection.
+        </p>
+    </div>
+
+</div>
+
+        <a id="downloadboxlink" href="https://github.com/Ceebug/Ceedoku/releases/download/v9.1.3/Ceedoku_9.1.3.zip" style="flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;padding:10px 60px;border-radius:14px;background:var(--blue);color:#fff;text-decoration:none;font-weight:600;height:48px;box-sizing:border-box;">
+            Download
+        </a>
+
+    </div>
+</div>
+</div>
+<script>
+const downloadIcon = document.getElementById("downloadicon");
+const downloadText = document.getElementById("downloadtext");
+
+function sizeDownloadIcon() {
+    downloadIcon.style.display = "none";
+
+    requestAnimationFrame(() => {
+        const height = downloadText.getBoundingClientRect().height;
+
+        downloadIcon.style.height = height + "px";
+        downloadIcon.style.width = height + "px";
+
+        downloadIcon.style.display = "flex";
+    });
+}
+
+sizeDownloadIcon();
+window.addEventListener("resize", sizeDownloadIcon);
+</script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script><script>
 fetch("Changelogs.md")
     .then(response => {
         if (!response.ok) {
@@ -446,10 +550,15 @@ document.addEventListener("click", function(event) {
 <script>
 async function loadReleaseChangelog() {
 
+    const downloadBox =
+        document.getElementById("downloadbox");
+
     const params = new URLSearchParams(window.location.search);
     const requestedVersion = params.get("v");
 
     if (!requestedVersion) {
+        downloadBox.style.display = "none";
+        downloadBox.classList.remove("show");
         return;
     }
 
@@ -465,18 +574,70 @@ async function loadReleaseChangelog() {
         const response = await fetch(url);
 
         if (!response.ok) {
+            downloadBox.style.display = "none";
+            downloadBox.classList.remove("show");
             return;
         }
 
         const release = await response.json();
 
-        document.getElementById("markdown-content").innerHTML =
-            marked.parse(release.body || "");
+        const markdownContent =
+            document.getElementById("markdown-content");
+
+        const heading =
+            document.querySelector(".about-container > h2");
+
+        const releaseVersion =
+            release.name.replace(/^Ceedoku\s+/i, "");
+
+        if (heading) {
+            heading.textContent =
+                `Version ${releaseVersion}`;
+        }
+
+        markdownContent.classList.add("something");
+
+        const changelog =
+            (release.body || "")
+                .split(/\r?\n/)
+                .slice(1)
+                .join("\n");
+
+        markdownContent.innerHTML =
+            "<h3>Release Changelog</h3>" +
+            marked.parse(changelog);
+
+        const offlineAsset =
+            release.assets.find(asset =>
+                asset.name.toLowerCase().endsWith(".zip")
+            );
+
+        const downloadLink =
+            document.getElementById("downloadboxlink");
+
+        if (downloadLink && offlineAsset) {
+
+            downloadLink.href =
+                offlineAsset.browser_download_url;
+
+            downloadBox.classList.add("show");
+
+        } else {
+
+            downloadBox.style.display = "none";
+            downloadBox.classList.remove("show");
+
+        }
 
     } catch (error) {
-        // Keep the normal Changelogs.md content.
+
+        downloadBox.style.display = "none";
+        downloadBox.classList.remove("show");
+
+        return;
     }
 }
 
 loadReleaseChangelog();
-</script></body></html>
+</script>
+</body></html>
