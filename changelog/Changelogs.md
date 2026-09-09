@@ -1,3 +1,7 @@
+- ### [9.3.0](https://ceedoku.github.io/changelog/release?v=9.3.0)
+  > #### Changes:
+  >> ##### Added:
+  >>> - A shadow to the spinner
 - ### [9.2.0](https://ceedoku.github.io/changelog/release?v=9.2.0)
   > #### Changes:
   >> ##### Updated:
