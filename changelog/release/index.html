@@ -471,11 +471,64 @@
 		<div class="about-container" style="display:flex;flex-direction:column;width:100%;box-sizing:border-box;padding-left:10px;padding-right:10px;height:fit-content;">
 			<button class="menu-button" onclick="toggleMenu()" style="color: rgb(71, 186, 130); --darkreader-inline-color: var(--darkreader-text-47ba82, #59c18e);" data-darkreader-inline-color="">☰</button>
 			<img class="img" src=".\title.png" alt="CEEDOKU" class="title">
+			<a id="back" href="https://ceedoku.github.io/changelog" style=";width: fit-content;margin-bottom: 5px;margin-left: 2px;">
+				<p style="display: flex;gap: 10px;margin: 0;">
+					<svg style="display:inline;stroke-width: 10;stroke-linecap: round;stroke-linejoin: round;height: 12;overflow: visible;margin-right: 7px;" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.883 122.882" enable-background="new 0 0 122.883 122.882" xml:space="preserve" style="height: 21px;transform: translatey(2px);">
+						<path stroke="currentColor" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" class="a" d="m36 119.9l53-63z"/>
+						<path stroke="currentColor" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" class="a" d="m36 119.9l53 63z"/>
+						<path stroke="currentColor" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" class="a" d="m37 119.9h173z"/>
+					</svg>
+					View all changelogs
+				</p>
+			</a>
 			<h2 class="why" style="color: var(--text2); margin-bottom: 0px; margin-top: 0px;">Changelogs</h2>
 		</div>
 		<div id="markdown-content">
 			<!-- parsed markdown content will appear in here -->
 		</div>
+		<div id="downloadbox" style="display:block;background:var(--surface);margin:10px;margin-top:0;padding:14px;border-radius:28px;border:1px solid var(--surface-2);box-shadow:0 4px 20px rgba(0,0,0,.12);height: fit-content;" class="show">
+			<div style="display:flex;align-items:stretch;gap:10px;flex-direction:row;flex-wrap: wrap;">
+				<div style="min-width:180px;display:flex;gap:10px;">
+					<div id="downloadicon" style="display: none; align-items: center; justify-content: center; border-radius: 14px; background: var(--surface-2); color: var(--blue); font-size: 26px; font-weight: 600; padding: 3%; box-sizing: border-box;">
+						<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.88 120.89" style="">
+							<path fill="currentColor" d="M84.58,47a7.71,7.71,0,1,1,10.8,11L66.09,86.88a7.72,7.72,0,0,1-10.82,0L26.4,58.37a7.71,7.71,0,1,1,10.81-11L53.1,63.12l.16-55.47a7.72,7.72,0,0,1,15.43.13l-.15,55L84.58,47ZM0,113.48.1,83.3.1,83.3a7.72,7.72,0,1,1,15.43.14l-.07,22q46,.09,91.91,0l.07-22.12a7.72,7.72,0,1,1,15.44.14l-.1,30h-.09a7.71,7.71,0,0,1-7.64,7.36q-53.73.1-107.38,0A7.7,7.7,0,0,1,0,113.48Z"/>
+						</svg>
+					</div>
+					<div id="downloadtext" style="width:fit-content;">
+						<h3 style="margin:0;font-size:17px;font-weight:650;">
+							Download an offline copy of this version
+						</h3>
+						<p style="margin:4px 0 0;color:var(--muted);font-size:14px;">
+							Play this version of Ceedoku without an internet connection.
+						</p>
+					</div>
+				</div>
+				<a id="downloadboxlink" href="https://github.com/Ceebug/Ceedoku/releases/download/v9.1.3/Ceedoku_9.1.3.zip" style="flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;padding:10px 60px;border-radius:14px;background:var(--blue);color:#fff;text-decoration:none;font-weight:600;height:48px;box-sizing:border-box;">
+					Download
+				</a>
+			</div>
+		</div>
+		<script>
+			// this script sets the size of the download icon
+			const downloadIcon = document.getElementById("downloadicon");
+			const downloadText = document.getElementById("downloadtext");
+
+			function sizeDownloadIcon() {
+				downloadIcon.style.display = "none";
+
+				requestAnimationFrame(() => {
+					const height = downloadText.getBoundingClientRect().height;
+
+					downloadIcon.style.height = height + "px";
+					downloadIcon.style.width = height + "px";
+
+					downloadIcon.style.display = "flex";
+				});
+			}
+
+			sizeDownloadIcon();
+			window.addEventListener("resize", sizeDownloadIcon);
+		</script>
 		<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js">
 			// this just loads the marked.js library
 		</script>
@@ -491,19 +544,94 @@
 				const sidebar = document.getElementById("sidebar");
 				const button = document.querySelector(".menu-button");
 
-				if (sidebar.classList.contains("open") && !sidebar.contains(event.target) && !button.contains(event.target)) {
+				if (
+					sidebar.classList.contains("open") &&
+					!sidebar.contains(event.target) &&
+					!button.contains(event.target)
+				) {
 					sidebar.classList.remove("open");
 				}
 
 			});
 		</script>
 		<script>
-			const params = new URLSearchParams(window.location.search);
-			const version = params.get("v");
+			// this script loads the release info page if ?v=an_actual_release_number
+			async function loadReleaseChangelog() {
 
-			if (version) {
-				window.location.replace(`https://ceedoku.github.io/changelog/release?v=${encodeURIComponent(version)}`);
-			};
+				const params = new URLSearchParams(window.location.search);
+				const requestedVersion = params.get("v");
+
+				if (!requestedVersion) {
+					downloadBox.style.display = "none";
+					downloadBox.classList.remove("show");
+					return;
+				}
+
+				const version = requestedVersion.replace(/^v/i, "");
+
+				const url =
+					version.toLowerCase() === "latest"
+						? "https://api.github.com/repos/ceebug/Ceedoku/releases/latest"
+						: `https://api.github.com/repos/ceebug/Ceedoku/releases/tags/v${encodeURIComponent(version)}`;
+
+				try {
+
+					const response = await fetch(url);
+
+					if (!response.ok) {
+						// redirect to https://ceedoku.github.io/changelog
+						return;
+					}
+
+					const release = await response.json();
+					const markdownContent = document.getElementById("markdown-content");
+					const heading = document.querySelector(".about-container > h2");
+					const releaseVersion = release.name.replace(/^Ceedoku\s+/i, "");
+
+					if (heading) {
+						heading.textContent =
+							`Version ${releaseVersion}`;
+					}
+					
+					document.title = `Ceedoku • Changelogs - Version ${releaseVersion}`
+
+					markdownContent.classList.add("something");
+
+					const changelog =
+						(release.body || "")
+							.split(/\r?\n/)
+							.slice(1)
+							.join("\n");
+
+					markdownContent.innerHTML =
+						"<h3>Release Changelog</h3>" +
+						marked.parse(changelog);
+
+					const offlineAsset =
+						release.assets.find(asset =>
+							asset.name.toLowerCase().endsWith(".zip")
+						);
+
+					const downloadLink = document.getElementById("downloadboxlink");
+
+					if (downloadLink && offlineAsset) {
+
+						downloadLink.href =
+							offlineAsset.browser_download_url;
+
+
+					} else {
+						window.location.replace("https://ceedoku.github.io/changelog");
+						return;
+					}
+
+				} catch (error) {
+					window.location.replace("https://ceedoku.github.io/changelog");
+					return;
+				}
+			}
+
+			loadReleaseChangelog();
 		</script>
 	</body>
 </html>
