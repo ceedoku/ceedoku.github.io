@@ -1,5 +1,6 @@
 <html itemscope="" itemtype="http://schema.org/WebPage" lang="en-AU">
 	<head>
+		<meta content="Keep up to date with the latest versions of Ceedoku on this Changelogs page." name="description">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<style>
 			kbd {
@@ -505,5 +506,22 @@
 				window.location.replace(`https://ceedoku.github.io/changelog/release?v=${encodeURIComponent(version)}`);
 			};
 		</script>
+		<script>
+			const contentDiv = document.getElementById('markdown-content');
+
+			fetch('./Changelogs.md')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to load file: ${response.statusText}`);
+                }
+                return response.text();
+            })
+            .then(markdownText => {
+                contentDiv.innerHTML = marked.parse(markdownText);
+            })
+            .catch(error => {
+                console.error('Error rendering markdown:', error);
+                contentDiv.innerHTML = '<p style="color: red;">Error loading content.</p>';
+            });
 	</body>
 </html>
