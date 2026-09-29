@@ -683,17 +683,11 @@ onclick="toggleMenu()"
 
         <div class="hero-buttons">
 
-            <button
-                class="home-button primary"
-                onclick="location.href='https://ceedoku.github.io';"
-            >
+            <button class="home-button primary" onclick="location.href='https://ceedoku.github.io';">
                 Play Ceedoku
             </button>
 
-            <button
-                class="home-button"
-                onclick="location.href='https://ceedoku.github.io/about#download';"
-            >
+            <button class="home-button" onclick="location.href='https://ceedoku.github.io/about#download';">
                 Download
             </button>
 
@@ -704,6 +698,32 @@ onclick="toggleMenu()"
 </section>
 
 <section class="home-section">
+
+    <h2>What is Ceedoku?</h2>
+
+    <div class="home-card">
+
+        <p style="margin-top:0px">
+            Ceedoku is a free, lightweight, and open-source Sudoku game
+            made by
+            <a href="https://gravatar.com/ceebug">Ceebug</a>.
+            It is designed to fit your needs while using as few resources
+            as possible, allowing Ceedoku to run on a wide range of devices.
+        </p>
+
+        <p>
+            With multiple difficulty levels, hints, saving, dark mode,
+            animations, haptics, sound effects, and more, Ceedoku gives
+            you a simple yet powerful Sudoku experience.
+        </p>
+
+        <button class="home-button" onclick="location.href='https://ceedoku.github.io/about#features';">
+            View all features
+        </button>
+
+    </div>
+
+</section><section class="home-section">
 
     <h2>Why Ceedoku?</h2>
 
@@ -759,36 +779,7 @@ onclick="toggleMenu()"
 
 </section>
 
-<section class="home-section">
 
-    <h2>What is Ceedoku?</h2>
-
-    <div class="home-card">
-
-        <p style="margin-top:0px">
-            Ceedoku is a free, lightweight, and open-source Sudoku game
-            made by
-            <a href="https://gravatar.com/ceebug">Ceebug</a>.
-            It is designed to fit your needs while using as few resources
-            as possible, allowing Ceedoku to run on a wide range of devices.
-        </p>
-
-        <p>
-            With multiple difficulty levels, hints, saving, dark mode,
-            animations, haptics, sound effects, and more, Ceedoku gives
-            you a simple yet powerful Sudoku experience.
-        </p>
-
-        <button
-            class="home-button"
-            onclick="location.href='https://ceedoku.github.io/about#features';"
-        >
-            View all features
-        </button>
-
-    </div>
-
-</section>
 
 <section class="home-section">
 
@@ -803,26 +794,17 @@ onclick="toggleMenu()"
 
         <div class="install-options">
 
-            <button
-                class="install-option"
-                onclick="location.href='https://ceedoku.github.io';"
-            >
+            <button class="install-option" onclick="location.href='https://ceedoku.github.io';">
                 <strong>Use the website</strong><br>
                 <span>Play Ceedoku directly in your browser.</span>
             </button>
 
-            <button
-                class="install-option"
-                onclick="location.href='https://ceedoku.github.io/install';"
-            >
+            <button class="install-option" onclick="location.href='https://ceedoku.github.io/install';">
                 <strong>Install from browser</strong><br>
                 <span>Install Ceedoku as an app from your browser.</span>
             </button>
 
-            <button
-                class="install-option"
-                onclick="location.href='https://ceedoku.github.io/downloadinstaller';"
-            >
+            <button class="install-option" onclick="location.href='https://ceedoku.github.io/downloadinstaller';">
                 <strong>Install from executable</strong><br>
                 <span>Download and install the executable for your OS.</span>
             </button>
@@ -843,23 +825,12 @@ onclick="toggleMenu()"
 
             <div style="display: flex;">
 
-                <h3
-                    id="latest-release-name"
-                    style="margin: 0px;font-size: 23px;color: var(--text3);margin-bottom: 10px;"
-                >
-                    9.0.0
-                </h3>
+                <h3 id="latest-release-name" style="margin: 0px 0px 10px; font-size: 23px; color: var(--text3); --darkreader-inline-color: var(--darkreader-text--text3, var(--darkreader-text-000000, #e8e6e3));" data-darkreader-inline-color="">Loading...</h3>
 
-                <p
-                    id="latest-release-date"
-                    style="background: var(--surface-2);padding: 10px;padding-top: 6px;padding-bottom: 6px;border-radius: 90px;width: fit-content;height: fit-content;margin-left: 10px;"
-                >
-                    Released 23 August 2026
-                </p>
-
+                <p id="latest-release-date" style="background: var(--surface-2); padding: 6px 10px; border-radius: 90px; width: fit-content; height: fit-content; margin-left: 10px; --darkreader-inline-bg: var(--darkreader-bg--surface-2);" data-darkreader-inline-bg="">Loading time of release...</p>
             </div>
 
-            <div id="latest-release-notes"></div>
+            <div id="latest-release-notes">Loading release notes...</div>
 
         </div>
 
@@ -869,11 +840,11 @@ onclick="toggleMenu()"
 
 <section class="home-section">
 
-    <div class="home-card open-source-card">
+    <h2>Open source</h2><div class="home-card open-source-card">
 
         <div>
 
-            <h2>Open source</h2>
+            
 
             <p>
                 Ceedoku is open source and its source code is publicly
@@ -883,10 +854,7 @@ onclick="toggleMenu()"
 
         </div>
 
-        <button
-            class="home-button"
-            onclick="location.href='https://github.com/ceebug/ceedoku';"
-        >
+        <button class="home-button" onclick="location.href='https://github.com/ceebug/ceedoku';">
             View source code
         </button>
 
