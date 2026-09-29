@@ -562,8 +562,7 @@
 				const requestedVersion = params.get("v");
 
 				if (!requestedVersion) {
-					downloadBox.style.display = "none";
-					downloadBox.classList.remove("show");
+					window.location.replace("https://ceedoku.github.io/changelog");
 					return;
 				}
 
@@ -579,7 +578,7 @@
 					const response = await fetch(url);
 
 					if (!response.ok) {
-						// redirect to https://ceedoku.github.io/changelog
+						window.location.replace("https://ceedoku.github.io/changelog");
 						return;
 					}
 
