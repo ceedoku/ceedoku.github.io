@@ -781,6 +781,149 @@ body.menu-open {
   background: var(--accent, #73a7ff);
   color: #0b0d11;
 }
+/* Match Feedback page navbar styling */
+
+.titlebar {
+height: 80px;
+padding: 0 28px;
+justify-content: space-between;
+gap: 24px;
+background: rgba(16, 20, 24, 0.88);
+border-bottom: 1px solid rgba(78, 97, 119, 0.3);
+backdrop-filter: blur(16px);
+-webkit-backdrop-filter: blur(16px);
+}
+
+.brand {
+display: inline-flex;
+align-items: center;
+min-width: 0;
+}
+
+.brand img {
+display: block;
+width: 160px;
+max-width: 100%;
+height: auto;
+object-fit: contain;
+}
+
+.nav-links {
+display: flex;
+align-items: center;
+gap: 8px;
+}
+
+.nav-links a {
+padding: 10px 13px;
+border-radius: 10px;
+color: var(--text);
+font-size: 14px;
+font-weight: 550;
+transition: color 160ms ease, background 160ms ease;
+}
+
+.nav-links a:hover,
+.nav-links a[aria-current="page"] {
+color: var(--text2);
+background: var(--surface-2);
+}
+
+.nav-links a[aria-current="page"] {
+color: var(--blue);
+}
+
+/* Mobile sidebar links */
+
+.mobile-sidebar {
+gap: 8px;
+padding: 24px 18px;
+background: var(--surface);
+border-right: 1px solid var(--line);
+box-shadow: var(--shadow);
+}
+
+.sidebar-top {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 12px;
+margin-bottom: 20px;
+}
+
+.sidebar-top img {
+width: 145px;
+max-width: 75%;
+height: auto;
+}
+
+.sidebar-close {
+width: 40px;
+height: 40px;
+display: grid;
+place-items: center;
+color: var(--text2);
+background: var(--surface-2);
+border: 1px solid var(--line);
+border-radius: 10px;
+cursor: pointer;
+}
+
+.sidebar-close svg {
+width: 20px;
+height: 20px;
+}
+
+.mobile-sidebar > a {
+padding: 13px 14px;
+border-radius: 10px;
+color: var(--text);
+font-size: 15px;
+transition: color 160ms ease, background 160ms ease;
+}
+
+.mobile-sidebar > a:hover,
+.mobile-sidebar > a[aria-current="page"] {
+color: var(--text2);
+background: var(--surface-2);
+}
+
+.mobile-sidebar > a[aria-current="page"] {
+color: var(--blue);
+}
+
+/* Mobile menu button */
+
+.menu-button {
+width: 44px;
+height: 44px;
+padding: 10px;
+align-items: center;
+justify-content: center;
+color: var(--text2);
+background: var(--surface);
+border: 1px solid var(--line);
+border-radius: 12px;
+}
+
+.menu-button svg {
+width: 22px;
+height: 22px;
+}
+
+@media (max-width: 700px) {
+.menu-button {
+position: fixed;
+top: 14px;
+left: 14px;
+z-index: 15;
+display: flex;
+background: rgba(23, 29, 36, 0.92);
+backdrop-filter: blur(12px);
+-webkit-backdrop-filter: blur(12px);
+}
+}
+
 </style>
 
 <title>Ceedoku Homepage</title>
