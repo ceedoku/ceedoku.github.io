@@ -1,404 +1,531 @@
-<html itemscope="" itemtype="http://schema.org/WebPage" lang="en-AU"><head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-:root {
-    --surface: #171d24;
-    --text: #dce3e9;
-    --blue: #73a7ff;
-    --shadow: 0 5px 48px rgba(0,0,0,.32);
-}
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="en-AU">
+<head>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzOCAzOCIgd2lkdGg9IjM4IiBoZWlnaHQ9IjM4Ij4KCiAgPGRlZnM+CiAgICA8Y2xpcFBhdGggaWQ9ImNsaXAiPgogICAgICA8cmVjdCB3aWR0aD0iMzgiIGhlaWdodD0iMzgiIHJ4PSIxMCI+PC9yZWN0PgogICAgPC9jbGlwUGF0aD4KICA8L2RlZnM+CgogIDxnIGNsaXAtcGF0aD0idXJsKCNjbGlwKSI+CiAgICA8cmVjdCB3aWR0aD0iMzgiIGhlaWdodD0iMzgiIGZpbGw9IiMxYTczZTgiPjwvcmVjdD4KCiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxOSAxOSkiPgogICAgICA8IS0tIDI0IHJhaW5ib3cgd2VkZ2VzIC0tPgogICAgICA8cGF0aCBkPSJNMCwwIEwwLC0zMCBBMzAsMzAgMCAwLDEgNy43NiwtMjguOTggWiIgZmlsbD0iIzFhNzNlOCI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEw3Ljc2LC0yOC45OCBBMzAsMzAgMCAwLDEgMTUsLTI1Ljk4IFoiIGZpbGw9IiMyMTgwZDgiPjwvcGF0aD4KICAgICAgPHBhdGggZD0iTTAsMCBMMTUsLTI1Ljk4IEEzMCwzMCAwIDAsMSAyMS4yMSwtMjEuMjEgWiIgZmlsbD0iIzJiOGRkMCI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwyMS4yMSwtMjEuMjEgQTMwLDMwIDAgMCwxIDI1Ljk4LC0xNSBaIiBmaWxsPSIjMzVhMjhhIj48L3BhdGg+CiAgICAgIDxwYXRoIGQ9Ik0wLDAgTDI1Ljk4LC0xNSBBMzAsMzAgMCAwLDEgMjguOTgsLTcuNzYgWiIgZmlsbD0iIzQwYjU2YSI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwyOC45OCwtNy43NiBBMzAsMzAgMCAwLDEgMzAsMCBaIiBmaWxsPSIjNjhiZjU1Ij48L3BhdGg+CgogICAgICA8cGF0aCBkPSJNMCwwIEwzMCwwIEEzMCwzMCAwIDAsMSAyOC45OCw3Ljc2IFoiIGZpbGw9IiM4ZmM4NDAiPjwvcGF0aD4KICAgICAgPHBhdGggZD0iTTAsMCBMMjguOTgsNy43NiBBMzAsMzAgMCAwLDEgMjUuOTgsMTUgWiIgZmlsbD0iI2I3ZDEyYSI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwyNS45OCwxNSBBMzAsMzAgMCAwLDEgMjEuMjEsMjEuMjEgWiIgZmlsbD0iI2RiYzcxNCI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwyMS4yMSwyMS4yMSBBMzAsMzAgMCAwLDEgMTUsMjUuOTggWiIgZmlsbD0iI2ZiYmMwNCI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwxNSwyNS45OCBBMzAsMzAgMCAwLDEgNy43NiwyOC45OCBaIiBmaWxsPSIjZjRhMjA0Ij48L3BhdGg+CiAgICAgIDxwYXRoIGQ9Ik0wLDAgTDcuNzYsMjguOTggQTMwLDMwIDAgMCwxIDAsMzAgWiIgZmlsbD0iI2VjODYwYiI+PC9wYXRoPgoKICAgICAgPHBhdGggZD0iTTAsMCBMMCwzMCBBMzAsMzAgMCAwLDEgLTcuNzYsMjguOTggWiIgZmlsbD0iI2U1NmExMyI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwtNy43NiwyOC45OCBBMzAsMzAgMCAwLDEgLTE1LDI1Ljk4IFoiIGZpbGw9IiNkZjUzMWEiPjwvcGF0aD4KICAgICAgPHBhdGggZD0iTTAsMCBMLTE1LDI1Ljk4IEEzMCwzMCAwIDAsMSAtMjEuMjEsMjEuMjEgWiIgZmlsbD0iI2Q5MzAyNSI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwtMjEuMjEsMjEuMjEgQTMwLDMwIDAgMCwxIC0yNS45OCwxNSBaIiBmaWxsPSIjY2YyZjRkIj48L3BhdGg+CiAgICAgIDxwYXRoIGQ9Ik0wLDAgTC0yNS45OCwxNSBBMzAsMzAgMCAwLDEgLTI4Ljk4LDcuNzYgWiIgZmlsbD0iI2M2MzA3NiI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwtMjguOTgsNy43NiBBMzAsMzAgMCAwLDEgLTMwLDAgWiIgZmlsbD0iI2I4MzQ5YyI+PC9wYXRoPgoKICAgICAgPHBhdGggZD0iTTAsMCBMLTMwLDAgQTMwLDMwIDAgMCwxIC0yOC45OCwtNy43NiBaIiBmaWxsPSIjYTUzY2JmIj48L3BhdGg+CiAgICAgIDxwYXRoIGQ9Ik0wLDAgTC0yOC45OCwtNy43NiBBMzAsMzAgMCAwLDEgLTI1Ljk4LC0xNSBaIiBmaWxsPSIjOGQ0OWQ0Ij48L3BhdGg+CiAgICAgIDxwYXRoIGQ9Ik0wLDAgTC0yNS45OCwtMTUgQTMwLDMwIDAgMCwxIC0yMS4yMSwtMjEuMjEgWiIgZmlsbD0iIzZmNWRlMyI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwtMjEuMjEsLTIxLjIxIEEzMCwzMCAwIDAsMSAtMTUsLTI1Ljk4IFoiIGZpbGw9IiM0ZjZkZWIiPjwvcGF0aD4KICAgICAgPHBhdGggZD0iTTAsMCBMLTE1LC0yNS45OCBBMzAsMzAgMCAwLDEgLTcuNzYsLTI4Ljk4IFoiIGZpbGw9IiMzMzdiZWUiPjwvcGF0aD4KICAgICAgPHBhdGggZD0iTTAsMCBMLTcuNzYsLTI4Ljk4IEEzMCwzMCAwIDAsMSAwLC0zMCBaIiBmaWxsPSIjMWE3M2U4Ij48L3BhdGg+CiAgICA8L2c+CiAgPC9nPgoKICA8IS0tIDPDlzMgZ3JpZCAtLT4KICA8ZyBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LC45MikiPgogICAgPHJlY3QgeD0iNyIgeT0iNyIgd2lkdGg9IjYiIGhlaWdodD0iNiIgcng9IjIiPjwvcmVjdD4KICAgIDxyZWN0IHg9IjE2IiB5PSI3IiB3aWR0aD0iNiIgaGVpZ2h0PSI2IiByeD0iMiI+PC9yZWN0PgogICAgPHJlY3QgeD0iMjUiIHk9IjciIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CgogICAgPHJlY3QgeD0iNyIgeT0iMTYiIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CiAgICA8cmVjdCB4PSIxNiIgeT0iMTYiIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CiAgICA8cmVjdCB4PSIyNSIgeT0iMTYiIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CgogICAgPHJlY3QgeD0iNyIgeT0iMjUiIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CiAgICA8cmVjdCB4PSIxNiIgeT0iMjUiIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CiAgICA8cmVjdCB4PSIyNSIgeT0iMjUiIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CiAgPC9nPgoKPC9zdmc+">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ceedoku • About the game</title>
 
-.titlebar {
-	position: sticky;
-	top: 0;
-}
-
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    background: #101418;
-    color: var(--text);
-    font-family: Inter, system-ui, sans-serif;
-}
-
-
-/* Title bar */
-
-.titlebar {
-    width: 100%;
-    height: 80px;
-    display: flex;
-    align-items: center;
-    padding: 10px 20px;
-    background: var(--surface);
-    box-shadow: var(--shadow);
-}
-
-.logo {
-    height: 60px;
-}
-
-.desktop-menu {
-    margin-left: auto;
-    display: flex;
-    gap: 25px;
-}
-
-.desktop-menu a,
-.mobile-sidebar a {
-    color: var(--text);
-    text-decoration: none;
-}
-
-.desktop-menu a:hover,
-.mobile-sidebar a:hover {
-    color: var(--blue);
-}
-
-
-/* Mobile button */
-
-.menu-button {
-    display: none;
-    margin-left: auto;
-    background: none;
-    border: none;
-    color: var(--text);
-    font-size: 32px;
-    cursor: pointer;
-}
-
-
-/* Mobile sidebar */
-
-.mobile-sidebar {
-    position: fixed;
-    top: 0;
-    left: -280px;
-
-    width: 280px;
-    height: 100dvh;
-
-    background: var(--surface);
-
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-
-    padding: 20px;
-
-    transition: left .3s ease;
-
-    z-index: 1000;
-}
-
-.mobile-sidebar.open {
-    left: 0;
-}
-.sidebar-spacer {
-    flex: 1;
-}
-
-.close-menu {
-    background: none;
-    border: 1px solid var(--text);
-    color: var(--text);
-    padding: 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.close-menu:hover {
-    color: var(--blue);
-}
-
-.sidebar-logo {
-    width: 200px;
-    margin-bottom: 20px;
-}
-.menu-button {
-    display: none;
-    background: none;
-    border: none;
-    color: var(--text);
-    font-size: 32px;
-    cursor: pointer;
-}
-
-
-/* Mobile layout */
-
-@media (max-width: 700px) {
-
-    .titlebar {
-        display: none;
-    }
-
-    .menu-button {
-        display: block;
-        position: absolute;
-        top: 28px;
-        left: 15px;
-        z-index: 999;
-		height: fit-content !important;
-        margin: 0;
-        padding: 0;
-    }
-
-}</style>
-<style>
+    <style>
         :root {
-          color-scheme: light;
-          --bg: #101418;
-          --surface: #ffffff;
-          --surface-2: #202833;
-          --surface-3: #dde8f2;
-          --text: #213044;
-	  --text2: #000000;
-	  --text3: var(--muted);
-	  --text4: #435368;
-          --muted: #66778c;
-          --line: #b7c5d6;
-          --line-strong: #4c5867;
-	  --blue: #73a7ff;
-          --blue-soft: #d7e8ff;
-          --blue-softer: #eaf3ff;
-          --lime: #9cff35;
-          --lime-soft: #dcffb5;
-		  --penciaalerasebutton: #d7e1ee;
-          --lime-text: #195700;
-          --lime-glow: rgba(156, 255, 53, .56);
-          --danger: #d93025;
-          --danger-soft: #ffe7e5;
-          --shell: rgba(255, 255, 255, .48);
-          --shadow: 0 0px 46px rgba(28, 48, 74, .12);
-          --radius: 999px;
-	  --shadow-color: #bebebe;
-	  --shadow-color2: #bebebe;
-          --cell-size: clamp(34px, 8.2vmin, 64px);
-          --board-size: calc(var(--cell-size) * 9);
-          font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            --surface: #171d24;
+            --text: #dce3e9;
+            --blue: #73a7ff;
+            --shadow: 0 5px 48px rgba(0, 0, 0, .32);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #101418;
+            color: var(--text);
+            font-family: Inter, system-ui, sans-serif;
+        }
+
+        /* New navbar */
+
+        .titlebar {
+            position: sticky;
+            top: 0;
+            z-index: 1001;
+            width: 100%;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            padding: 10px 24px;
+            gap: 24px;
+            background: rgba(23, 29, 36, .96);
+            border-bottom: 1px solid rgba(115, 167, 255, .12);
+            box-shadow: 0 5px 24px rgba(0, 0, 0, .2);
+        }
+
+        .logo {
+            display: block;
+            height: 56px;
+            width: auto;
+        }
+
+        .desktop-menu {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .desktop-menu a,
+        .mobile-sidebar a {
+            color: var(--text);
+            text-decoration: none;
+            transition: color .15s ease, background .15s ease;
+        }
+
+        .desktop-menu a {
+            padding: 10px 12px;
+            border-radius: 9px;
+            white-space: nowrap;
+        }
+
+        .desktop-menu a:hover,
+        .desktop-menu a:focus-visible {
+            color: var(--blue);
+            background: rgba(115, 167, 255, .09);
+        }
+
+        .menu-button {
+            display: none;
+            margin-left: auto;
+            padding: 9px 12px;
+            background: var(--surface);
+            border: 1px solid rgba(115, 167, 255, .25);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: 25px;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .menu-button:hover,
+        .menu-button:focus-visible {
+            color: var(--blue);
+            border-color: var(--blue);
+        }
+
+        .sidebar-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 1002;
+            background: rgba(0, 0, 0, .58);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity .25s ease, visibility .25s ease;
+        }
+
+        .sidebar-backdrop.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1003;
+            width: min(300px, 85vw);
+            height: 100vh;
+            height: 100dvh;
+            padding: 24px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow-y: auto;
+            background: var(--surface);
+            border-right: 1px solid rgba(115, 167, 255, .18);
+            box-shadow: 12px 0 36px rgba(0, 0, 0, .28);
+            transform: translateX(-105%);
+            visibility: hidden;
+            transition: transform .28s ease, visibility .28s ease;
+        }
+
+        .mobile-sidebar.open {
+            transform: translateX(0);
+            visibility: visible;
+        }
+
+        .mobile-sidebar a {
+            display: block;
+            padding: 12px 14px;
+            border-radius: 9px;
+        }
+
+        .mobile-sidebar a:hover,
+        .mobile-sidebar a:focus-visible {
+            color: var(--blue);
+            background: rgba(115, 167, 255, .09);
+        }
+
+        .sidebar-logo {
+            display: block;
+            width: min(200px, 100%);
+            height: auto;
+            margin: 0 auto 20px;
+        }
+
+        .sidebar-spacer {
+            flex: 1;
+            min-height: 20px;
+        }
+
+        .close-menu {
+            width: 100%;
+            min-height: 44px;
+            padding: 10px 14px;
+            background: var(--surface-2, #202833);
+            border: 1px solid rgba(115, 167, 255, .3);
+            border-radius: 9px;
+            color: var(--text);
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .close-menu:hover,
+        .close-menu:focus-visible {
+            color: var(--blue);
+            border-color: var(--blue);
+        }
+
+        body.menu-open {
+            overflow: hidden;
+        }
+
+        @media (max-width: 900px) {
+            .titlebar {
+                padding: 10px 16px;
+            }
+
+            .desktop-menu {
+                gap: 2px;
+            }
+
+            .desktop-menu a {
+                padding: 9px 8px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .titlebar {
+                display: none;
+            }
+
+            .menu-button {
+                display: block;
+                position: fixed;
+                top: max(16px, env(safe-area-inset-top));
+                left: 15px;
+                z-index: 1001;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .mobile-sidebar,
+            .sidebar-backdrop,
+            .desktop-menu a,
+            .mobile-sidebar a {
+                transition: none;
+            }
+        }
+    </style>
+
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #101418;
+            --surface: #ffffff;
+            --surface-2: #202833;
+            --surface-3: #dde8f2;
+            --text: #213044;
+            --text2: #000000;
+            --text3: var(--muted);
+            --text4: #435368;
+            --muted: #66778c;
+            --line: #b7c5d6;
+            --line-strong: #4c5867;
+            --blue: #73a7ff;
+            --blue-soft: #d7e8ff;
+            --blue-softer: #eaf3ff;
+            --lime: #9cff35;
+            --lime-soft: #dcffb5;
+            --penciaalerasebutton: #d7e1ee;
+            --lime-text: #195700;
+            --lime-glow: rgba(156, 255, 53, .56);
+            --danger: #d93025;
+            --danger-soft: #ffe7e5;
+            --shell: rgba(255, 255, 255, .48);
+            --shadow: 0 0 46px rgba(28, 48, 74, .12);
+            --radius: 999px;
+            --shadow-color: #bebebe;
+            --shadow-color2: #bebebe;
+            --cell-size: clamp(34px, 8.2vmin, 64px);
+            --board-size: calc(var(--cell-size) * 9);
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+                BlinkMacSystemFont, "Segoe UI", sans-serif;
         }
 
         html.dark,
-	body.dark {
-          color-scheme: dark;
-          --bg: #101418;
-          --surface: #171d24;
-          --surface-2: #202833;
-          --surface-3: #2a3442;
-          --text: #95a4b6;
-          --muted: #98a7b8;
-          --line: #4e6177;
-          --blue: #73a7ff;
-          --blue-soft: #203a5f;
-          --blue-softer: #1b2c45;
-          --lime: #a7ff48;
-	      --pencilerasebutton: #26313f;
-          --lime-soft: #263d1d;
-	  --text2: #dce3e9;
-	  --text3: #bec9da;
-	  --text4: #bbc6d4;
-          --lime-text: #bcff76;
-          --lime-glow: rgba(167, 255, 72, .46);
-          --danger: #ff8a80;
-	  --shadow-color: #232930;
-	  --shadow-color2: #343c45;
-          --danger-soft: #4c2424;
-          --shell: rgba(255, 255, 255, .045);
-          --shadow: 0 5px 48px rgba(0, 0, 0, .32);
+        body.dark {
+            color-scheme: dark;
+            --bg: #101418;
+            --surface: #171d24;
+            --surface-2: #202833;
+            --surface-3: #2a3442;
+            --text: #95a4b6;
+            --muted: #98a7b8;
+            --line: #4e6177;
+            --blue: #73a7ff;
+            --blue-soft: #203a5f;
+            --blue-softer: #1b2c45;
+            --lime: #a7ff48;
+            --pencilerasebutton: #26313f;
+            --lime-soft: #263d1d;
+            --text2: #dce3e9;
+            --text3: #bec9da;
+            --text4: #bbc6d4;
+            --lime-text: #bcff76;
+            --lime-glow: rgba(167, 255, 72, .46);
+            --danger: #ff8a80;
+            --shadow-color: #232930;
+            --shadow-color2: #343c45;
+            --danger-soft: #4c2424;
+            --shell: rgba(255, 255, 255, .045);
+            --shadow: 0 5px 48px rgba(0, 0, 0, .32);
         }
-     
+
         * {
-          box-sizing: border-box;
+            box-sizing: border-box;
         }
-    	a,
-a:visited {
-    color: inherit;
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 2px;
-    transition: color 0.15s ease;
-    cursor: pointer;
-}
 
-a:hover,
-a:focus-visible {
-    color: var(--blue);
-}
+        a,
+        a:visited {
+            color: inherit;
+            text-decoration: underline;
+            text-decoration-thickness: 1px;
+            text-underline-offset: 2px;
+            transition: color .15s ease;
+            cursor: pointer;
+        }
 
-a:active {
-    color: var(--blue);
-}
-    
+        a:hover,
+        a:focus-visible,
+        a:active {
+            color: var(--blue);
+        }
+
         body {
-          margin: 0;
-          background:
-            radial-gradient(circle at 15% 15%, color-mix(in srgb, var(--blue) 10%, transparent), transparent 30%),
-            linear-gradient(135deg, var(--bg), color-mix(in srgb, var(--surface-2) 40%, var(--bg)));
-          color: var(--text);
-          display: grid;
-          place-items: center;
-          letter-spacing: 0;
-		  padding-bottom: 5px !important
+            margin: 0;
+            background:
+                radial-gradient(
+                    circle at 15% 15%,
+                    color-mix(in srgb, var(--blue) 10%, transparent),
+                    transparent 30%
+                ),
+                linear-gradient(
+                    135deg,
+                    var(--bg),
+                    color-mix(in srgb, var(--surface-2) 40%, var(--bg))
+                );
+            color: var(--text);
+            display: grid;
+            place-items: center;
+            letter-spacing: 0;
+            padding-bottom: 5px !important;
         }
-html {
-    min-height: 100%;
-    background:
-        radial-gradient(circle at 15% 15%, color-mix(in srgb, var(--blue) 10%, transparent), transparent 30%),
-        linear-gradient(135deg, var(--bg), color-mix(in srgb, var(--surface-2) 40%, var(--bg)));
-}
-button, 
-input[type="button"], 
-input[type="submit"] {
-  cursor: pointer;
-}
 
+        html {
+            min-height: 100%;
+            background:
+                radial-gradient(
+                    circle at 15% 15%,
+                    color-mix(in srgb, var(--blue) 10%, transparent),
+                    transparent 30%
+                ),
+                linear-gradient(
+                    135deg,
+                    var(--bg),
+                    color-mix(in srgb, var(--surface-2) 40%, var(--bg))
+                );
+        }
 
+        button,
+        input[type="button"],
+        input[type="submit"] {
+            cursor: pointer;
+        }
 
-    @media (orientation: portrait) and (max-width: 700px) {
+        @media (orientation: portrait) and (max-width: 700px) {
+            ul {
+                padding-left: 25px;
+                padding-right: 5px;
+            }
 
-    ul {
-        padding-left: 25px;
-	padding-right: 5px
-    }
+            li {
+                margin-bottom: 5px;
+            }
 
-    li {
-        margin-bottom: 5px;
-    }
+            li:last-child {
+                margin-bottom: 0;
+            }
 
-    li:last-child {
-        margin-bottom: 0;
-    }
-    .card {
-	padding-top: 0px !important;
-    } 
-    .why {
-	margin-top: 15px !important
-    }
-    button {
-		height: 100px
-	}
-    .whatamidoingwithmylife {
-		height: fit-content !important;
-		flex-direction: column
-	}
-    .img {
-	width: 80%;
-	transform: translatex(55px);
-	margin-top: 23px
-    }
-    .close-menu {
-		height: fit-content
-	}
-}
-.focus {
-    position: relative;
-    transform: translateY(-3px);
-    border: 1px solid rgba(115, 167, 255, 0.75) !important;
-    z-index: 1;
+            .card {
+                padding-top: 0 !important;
+            }
 
-    box-shadow:
-        /* tight inner glow */
-        inset 0 0 4px rgba(55, 115, 255, 0.9),
-        inset 0 0 9px rgba(55, 115, 255, 0.45),
+            .why {
+                margin-top: 15px !important;
+            }
 
-        /* tight outer glow */
-        0 0 4px rgba(115, 167, 255, 0.55),
-        0 0 11px rgba(70, 130, 255, 0.55),
-        0 0 24px rgba(55, 110, 255, 0.28),
+            button {
+                height: 100px;
+            }
 
-        /* card shadow */
-        0 12px 40px rgba(0, 0, 0, 0.28);
+            .whatamidoingwithmylife {
+                height: fit-content !important;
+                flex-direction: column;
+            }
 
-    animation: ceedoku-focus-pulse 1.5s ease-in-out infinite alternate;
-}
+            .img {
+                width: 80%;
+                transform: translateX(55px);
+                margin-top: 23px;
+            }
 
-@keyframes ceedoku-focus-pulse {
-    from {
-        box-shadow:
-            inset 0 0 3px rgba(55, 115, 255, 0.75),
-            inset 0 0 7px rgba(55, 115, 255, 0.35),
+            .close-menu {
+                height: fit-content;
+            }
+        }
 
-            0 0 3px rgba(115, 167, 255, 0.45),
-            0 0 9px rgba(70, 130, 255, 0.42),
-            0 0 19px rgba(55, 110, 255, 0.20),
+        .focus {
+            position: relative;
+            transform: translateY(-3px);
+            border: 1px solid rgba(115, 167, 255, .75) !important;
+            z-index: 1;
+            box-shadow:
+                inset 0 0 4px rgba(55, 115, 255, .9),
+                inset 0 0 9px rgba(55, 115, 255, .45),
+                0 0 4px rgba(115, 167, 255, .55),
+                0 0 11px rgba(70, 130, 255, .55),
+                0 0 24px rgba(55, 110, 255, .28),
+                0 12px 40px rgba(0, 0, 0, .28);
+            animation: ceedoku-focus-pulse 1.5s ease-in-out infinite alternate;
+        }
 
-            0 12px 40px rgba(0, 0, 0, 0.28);
-    }
+        @keyframes ceedoku-focus-pulse {
+            from {
+                box-shadow:
+                    inset 0 0 3px rgba(55, 115, 255, .75),
+                    inset 0 0 7px rgba(55, 115, 255, .35),
+                    0 0 3px rgba(115, 167, 255, .45),
+                    0 0 9px rgba(70, 130, 255, .42),
+                    0 0 19px rgba(55, 110, 255, .20),
+                    0 12px 40px rgba(0, 0, 0, .28);
+            }
 
-    to {
-        box-shadow:
-            inset 0 0 5px rgba(55, 115, 255, 0.95),
-            inset 0 0 10px rgba(55, 115, 255, 0.50),
+            to {
+                box-shadow:
+                    inset 0 0 5px rgba(55, 115, 255, .95),
+                    inset 0 0 10px rgba(55, 115, 255, .50),
+                    0 0 5px rgba(115, 167, 255, .65),
+                    0 0 12px rgba(70, 130, 255, .62),
+                    0 0 27px rgba(55, 110, 255, .32),
+                    0 12px 40px rgba(0, 0, 0, .28);
+            }
+        }
 
-            0 0 5px rgba(115, 167, 255, 0.65),
-            0 0 12px rgba(70, 130, 255, 0.62),
-            0 0 27px rgba(55, 110, 255, 0.32),
+        body {
+            background-attachment: fixed;
+        }
 
-            0 12px 40px rgba(0, 0, 0, 0.28);
-    }
-}
-body {
-	background-attachment: fixed
-}
-.titlebar {
-  background: var(--bg);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-}
+        .titlebar {
+            background: var(--bg);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+        }
 
-.menu-button {
-  background: var(--surface);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-}
+        .menu-button {
+            background: var(--surface);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+        }
     </style>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzOCAzOCIgd2lkdGg9IjM4IiBoZWlnaHQ9IjM4Ij4KCiAgPGRlZnM+CiAgICA8Y2xpcFBhdGggaWQ9ImNsaXAiPgogICAgICA8cmVjdCB3aWR0aD0iMzgiIGhlaWdodD0iMzgiIHJ4PSIxMCI+PC9yZWN0PgogICAgPC9jbGlwUGF0aD4KICA8L2RlZnM+CgogIDxnIGNsaXAtcGF0aD0idXJsKCNjbGlwKSI+CiAgICA8cmVjdCB3aWR0aD0iMzgiIGhlaWdodD0iMzgiIGZpbGw9IiMxYTczZTgiPjwvcmVjdD4KCiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxOSAxOSkiPgogICAgICA8IS0tIDI0IHJhaW5ib3cgd2VkZ2VzIC0tPgogICAgICA8cGF0aCBkPSJNMCwwIEwwLC0zMCBBMzAsMzAgMCAwLDEgNy43NiwtMjguOTggWiIgZmlsbD0iIzFhNzNlOCI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEw3Ljc2LC0yOC45OCBBMzAsMzAgMCAwLDEgMTUsLTI1Ljk4IFoiIGZpbGw9IiMyMTgwZDgiPjwvcGF0aD4KICAgICAgPHBhdGggZD0iTTAsMCBMMTUsLTI1Ljk4IEEzMCwzMCAwIDAsMSAyMS4yMSwtMjEuMjEgWiIgZmlsbD0iIzJiOGRkMCI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwyMS4yMSwtMjEuMjEgQTMwLDMwIDAgMCwxIDI1Ljk4LC0xNSBaIiBmaWxsPSIjMzVhMjhhIj48L3BhdGg+CiAgICAgIDxwYXRoIGQ9Ik0wLDAgTDI1Ljk4LC0xNSBBMzAsMzAgMCAwLDEgMjguOTgsLTcuNzYgWiIgZmlsbD0iIzQwYjU2YSI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwyOC45OCwtNy43NiBBMzAsMzAgMCAwLDEgMzAsMCBaIiBmaWxsPSIjNjhiZjU1Ij48L3BhdGg+CgogICAgICA8cGF0aCBkPSJNMCwwIEwzMCwwIEEzMCwzMCAwIDAsMSAyOC45OCw3Ljc2IFoiIGZpbGw9IiM4ZmM4NDAiPjwvcGF0aD4KICAgICAgPHBhdGggZD0iTTAsMCBMMjguOTgsNy43NiBBMzAsMzAgMCAwLDEgMjUuOTgsMTUgWiIgZmlsbD0iI2I3ZDEyYSI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwyNS45OCwxNSBBMzAsMzAgMCAwLDEgMjEuMjEsMjEuMjEgWiIgZmlsbD0iI2RiYzcxNCI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwyMS4yMSwyMS4yMSBBMzAsMzAgMCAwLDEgMTUsMjUuOTggWiIgZmlsbD0iI2ZiYmMwNCI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwxNSwyNS45OCBBMzAsMzAgMCAwLDEgNy43NiwyOC45OCBaIiBmaWxsPSIjZjRhMjA0Ij48L3BhdGg+CiAgICAgIDxwYXRoIGQ9Ik0wLDAgTDcuNzYsMjguOTggQTMwLDMwIDAgMCwxIDAsMzAgWiIgZmlsbD0iI2VjODYwYiI+PC9wYXRoPgoKICAgICAgPHBhdGggZD0iTTAsMCBMMCwzMCBBMzAsMzAgMCAwLDEgLTcuNzYsMjguOTggWiIgZmlsbD0iI2U1NmExMyI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwtNy43NiwyOC45OCBBMzAsMzAgMCAwLDEgLTE1LDI1Ljk4IFoiIGZpbGw9IiNkZjUzMWEiPjwvcGF0aD4KICAgICAgPHBhdGggZD0iTTAsMCBMLTE1LDI1Ljk4IEEzMCwzMCAwIDAsMSAtMjEuMjEsMjEuMjEgWiIgZmlsbD0iI2Q5MzAyNSI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwtMjEuMjEsMjEuMjEgQTMwLDMwIDAgMCwxIC0yNS45OCwxNSBaIiBmaWxsPSIjY2YyZjRkIj48L3BhdGg+CiAgICAgIDxwYXRoIGQ9Ik0wLDAgTC0yNS45OCwxNSBBMzAsMzAgMCAwLDEgLTI4Ljk4LDcuNzYgWiIgZmlsbD0iI2M2MzA3NiI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwtMjguOTgsNy43NiBBMzAsMzAgMCAwLDEgLTMwLDAgWiIgZmlsbD0iI2I4MzQ5YyI+PC9wYXRoPgoKICAgICAgPHBhdGggZD0iTTAsMCBMLTMwLDAgQTMwLDMwIDAgMCwxIC0yOC45OCwtNy43NiBaIiBmaWxsPSIjYTUzY2JmIj48L3BhdGg+CiAgICAgIDxwYXRoIGQ9Ik0wLDAgTC0yOC45OCwtNy43NiBBMzAsMzAgMCAwLDEgLTI1Ljk4LC0xNSBaIiBmaWxsPSIjOGQ0OWQ0Ij48L3BhdGg+CiAgICAgIDxwYXRoIGQ9Ik0wLDAgTC0yNS45OCwtMTUgQTMwLDMwIDAgMCwxIC0yMS4yMSwtMjEuMjEgWiIgZmlsbD0iIzZmNWRlMyI+PC9wYXRoPgogICAgICA8cGF0aCBkPSJNMCwwIEwtMjEuMjEsLTIxLjIxIEEzMCwzMCAwIDAsMSAtMTUsLTI1Ljk4IFoiIGZpbGw9IiM0ZjZkZWIiPjwvcGF0aD4KICAgICAgPHBhdGggZD0iTTAsMCBMLTE1LC0yNS45OCBBMzAsMzAgMCAwLDEgLTcuNzYsLTI4Ljk4IFoiIGZpbGw9IiMzMzdiZWUiPjwvcGF0aD4KICAgICAgPHBhdGggZD0iTTAsMCBMLTcuNzYsLTI4Ljk4IEEzMCwzMCAwIDAsMSAwLC0zMCBaIiBmaWxsPSIjMWE3M2U4Ij48L3BhdGg+CiAgICA8L2c+CiAgPC9nPgoKICA8IS0tIDPDlzMgZ3JpZCAtLT4KICA8ZyBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LC45MikiPgogICAgPHJlY3QgeD0iNyIgeT0iNyIgd2lkdGg9IjYiIGhlaWdodD0iNiIgcng9IjIiPjwvcmVjdD4KICAgIDxyZWN0IHg9IjE2IiB5PSI3IiB3aWR0aD0iNiIgaGVpZ2h0PSI2IiByeD0iMiI+PC9yZWN0PgogICAgPHJlY3QgeD0iMjUiIHk9IjciIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CgogICAgPHJlY3QgeD0iNyIgeT0iMTYiIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CiAgICA8cmVjdCB4PSIxNiIgeT0iMTYiIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CiAgICA8cmVjdCB4PSIyNSIgeT0iMTYiIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CgogICAgPHJlY3QgeD0iNyIgeT0iMjUiIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CiAgICA8cmVjdCB4PSIxNiIgeT0iMjUiIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CiAgICA8cmVjdCB4PSIyNSIgeT0iMjUiIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHJ4PSIyIj48L3JlY3Q+CiAgPC9nPgoKPC9zdmc+">
-  <title>Ceedoku • About the game</title></head><body class="dark activity-stream" style="height: fit-content;/*! padding: 10px; */"><header class="titlebar" style="">
+</head>
 
-    <a href="https://ceedoku.github.io/home">
-        <img src="./title.png" class="logo" alt="Ceedoku" style="">
-    </a>
+<body class="dark activity-stream" style="height: fit-content;">
 
-    <nav class="desktop-menu">
-		<a href="https://ceedoku.github.io/feedback">Feedback</a>
-        <a href="https://ceedoku.github.io/about"><strong>About the Game</strong></a>
+    <header class="titlebar">
+        <a href="https://ceedoku.github.io/home">
+            <img src="./title.png" class="logo" alt="Ceedoku">
+        </a>
+
+        <nav class="desktop-menu" aria-label="Main navigation">
+            <a href="https://ceedoku.github.io/home">Home</a>
+            <a href="https://ceedoku.github.io/feedback">Feedback</a>
+            <a href="https://ceedoku.github.io/about" aria-current="page">
+                <strong>About the Game</strong>
+            </a>
+            <a href="https://ceedoku.github.io/download">Download</a>
+            <a href="https://ceedoku.github.io/install">Installation Guide</a>
+            <a href="https://ceedoku.github.io/changelog">Changelogs</a>
+        </nav>
+    </header>
+
+    <button
+        class="menu-button"
+        id="menuButton"
+        type="button"
+        aria-label="Open navigation menu"
+        aria-controls="sidebar"
+        aria-expanded="false"
+        onclick="toggleMenu()"
+    >☰</button>
+
+    <div
+        class="sidebar-backdrop"
+        id="sidebarBackdrop"
+        aria-hidden="true"
+    ></div>
+
+    <nav
+        class="mobile-sidebar"
+        id="sidebar"
+        aria-label="Mobile navigation"
+        aria-hidden="true"
+        inert
+    >
+        <a href="https://ceedoku.github.io/home">
+            <img src="./title.png" class="sidebar-logo" alt="Ceedoku">
+        </a>
+
+        <a href="https://ceedoku.github.io/home">Home</a>
+        <a href="https://ceedoku.github.io/feedback">Feedback</a>
+        <a href="https://ceedoku.github.io/about" aria-current="page">
+            <strong>About the Game</strong>
+        </a>
         <a href="https://ceedoku.github.io/download">Download</a>
         <a href="https://ceedoku.github.io/install">Installation Guide</a>
         <a href="https://ceedoku.github.io/changelog">Changelogs</a>
+
+        <div class="sidebar-spacer"></div>
+
+        <button class="close-menu" type="button" onclick="toggleMenu()">
+            Close Menu
+        </button>
     </nav>
 
-</header>
+    <div class="about-container" style="display: flex; flex-direction: column; width: calc(100dvw - 20px);">
 
-<button class="menu-button" onclick="toggleMenu()" style="color: rgb(71, 186, 130); --darkreader-inline-color: var(--darkreader-text-47ba82, #59c18e);" data-darkreader-inline-color="">☰</button>
+        <img class="img" src="./title.png" alt="CEEDOKU">
 
+        <h2 style="color: var(--text2); margin-bottom: 0; margin-top: 0;">
+            What is Ceedoku?
+        </h2>
 
-<div class="mobile-sidebar" id="sidebar">
+        <div class="card" style="padding: 8px 25px 25px; background-color: var(--surface); border-radius: 20px; border: 1px solid rgb(35, 43, 54); margin-top: 1dvh; margin-bottom: 10px; padding-bottom: 8px;">
+            <p>
+                Ceedoku is a free, lightweight, and open-source Sudoku game made by
+                <a href="https://github.com/ceebug">Ceebug</a>. It is designed to fit
+                your needs while using as few resources as possible, allowing Ceedoku
+                to run on a wide range of devices. With plenty of features including
+                multiple difficulty levels, dark mode, hints, saving, and more,
+                Ceedoku gives you a simple yet powerful Sudoku experience.
+            </p>
+        </div>
 
-    <a href="https://ceedoku.github.io/home">
-        <img src="./title.png" class="sidebar-logo" alt="Ceedoku">
-    </a>
-	<a href="https://ceedoku.github.io/feedback">Feedback</a>
-    <a href="https://ceedoku.github.io/about"><strong>About the Game</strong></a>
-    <a href="https://ceedoku.github.io/download">Download</a>
-    <a href="https://ceedoku.github.io/install">Installation Guide</a>
-    <a href="https://ceedoku.github.io/changelog">Changelogs</a>
-    <div class="sidebar-spacer"></div>
-        <button class="close-menu" onclick="toggleMenu()">
-        Close Menu
-    </button>
-</div>
-    <div class="about-container" style="display: flex;flex-direction: column;width: calc(100dvw - 20px);">
+        <h2 id="features" class="why" style="color: var(--text2); margin-bottom: 0; margin-top: 0;">
+            Features:
+        </h2>
 
-        <img class="img" src=".\title.png" alt="CEEDOKU" style=""><h2 style="color: var(--text2); margin-bottom: 0px; margin-top: 0px; --darkreader-inline-color: var(--darkreader-text--text2, var(--darkreader-text-000000, #e8e6e3));" data-darkreader-inline-color="">What is Ceedoku?</h2><div class="card" style="padding: 8px 25px 25px; background-color: var(--surface); border-radius: 20px; border: 1px solid rgb(35, 43, 54); margin-top: 1dvh; --darkreader-inline-bgcolor: var(--darkreader-bg--surface, var(--darkreader-background-ffffff, #181a1b)); --darkreader-inline-border-top: var(--darkreader-border-232b36, #7d7467); --darkreader-inline-border-right: var(--darkreader-border-232b36, #7d7467); --darkreader-inline-border-bottom: var(--darkreader-border-232b36, #7d7467); --darkreader-inline-border-left: var(--darkreader-border-232b36, #7d7467);margin-bottom: 10px;padding-bottom: 8px;" data-darkreader-inline-bgcolor="" data-darkreader-inline-border-top="" data-darkreader-inline-border-right="" data-darkreader-inline-border-bottom="" data-darkreader-inline-border-left=""><p style="">Ceedoku is a free, lightweight, and open-source Sudoku game made by <a href="https://github.com/ceebug">Ceebug</a>. It is designed to fit your needs while using as few resources as possible, allowing Ceedoku to run on a wide range of devices. With plenty of features including multiple difficulty levels, dark mode, hints, saving, and more, Ceedoku gives you a simple yet powerful Sudoku experience.</p>
-        </div>        <h2 id="features" class="why" style="color: var(--text2); margin-bottom: 0px; margin-top: 0px; --darkreader-inline-color: var(--darkreader-text--text2, var(--darkreader-text-000000, #e8e6e3));" data-darkreader-inline-color="">Features:</h2>
-
-        <div id="featurescard" class="card" style="padding-top: 8px; padding-bottom: 8px; background-color: var(--surface); border-radius: 20px; border: 1px solid rgb(35, 43, 54); margin-top: 1dvh; --darkreader-inline-bgcolor: var(--darkreader-bg--surface, var(--darkreader-background-ffffff, #181a1b)); --darkreader-inline-border-top: var(--darkreader-border-232b36, #7d7467); --darkreader-inline-border-right: var(--darkreader-border-232b36, #7d7467); --darkreader-inline-border-bottom: var(--darkreader-border-232b36, #7d7467); --darkreader-inline-border-left: var(--darkreader-border-232b36, #7d7467);" data-darkreader-inline-bgcolor="" data-darkreader-inline-border-top="" data-darkreader-inline-border-right="" data-darkreader-inline-border-bottom="" data-darkreader-inline-border-left="">
+        <div id="featurescard" class="card" style="padding-top: 8px; padding-bottom: 8px; background-color: var(--surface); border-radius: 20px; border: 1px solid rgb(35, 43, 54); margin-top: 1dvh;">
             <ul>
                 <li><strong>Fully installable, right from your browser</strong></li>
                 <li><strong>Dark mode and light mode</strong> (Dark mode is default.)</li>
@@ -411,153 +538,206 @@ body {
                 <li><strong>Erase mode</strong></li>
                 <li><strong>Game saving</strong></li>
                 <li><strong>Theme preference saving</strong> (Pick between dark and light mode, then have the game remember which mode you picked and switch to it next time you open the app.)</li>
-				<li><strong>No ads</strong></li>
-				<li><strong>Pause on lost focus</strong> (Your game will be paused if you minimize, close, or otherwise make the app not visible.)</li>
-				<li><strong>Best times</strong></li>
-				<li><strong>Hint cooldowns</strong></li>
-				<li><strong>Haptics</strong></li>
-				<li><strong>Sound effects</strong>
-				<li><strong>Animations</strong></li>
-				<li><strong>Settings menu</strong> (To control the features.)</li>
-				<li><strong>Importing and exporting save files</strong> (Using <a href="https://ceedoku.github.io/csfspec">.CSF (Ceedoku Save Format)</a> for the save files.)</li>
-				<li><strong>Clickable release version to direct to the changelogs</strong></li>
-			<ul>
-        </div><h2 id="download"  style="color: var(--text2); margin-bottom: 0px; margin-top: 10px; --darkreader-inline-color: var(--darkreader-text--text2, var(--darkreader-text-000000, #e8e6e3));" data-darkreader-inline-color="">Download Ceedoku</h2>
-        <div id="downloadcard" class="card" style="padding: 8px 25px 25px; background-color: var(--surface); border-radius: 20px; border: 1px solid rgb(35, 43, 54); margin-top: 1dvh; --darkreader-inline-bgcolor: var(--darkreader-bg--surface, var(--darkreader-background-ffffff, #181a1b)); --darkreader-inline-border-top: var(--darkreader-border-232b36, #7d7467); --darkreader-inline-border-right: var(--darkreader-border-232b36, #7d7467); --darkreader-inline-border-bottom: var(--darkreader-border-232b36, #7d7467); --darkreader-inline-border-left: var(--darkreader-border-232b36, #7d7467);margin-bottom: 10px;" data-darkreader-inline-bgcolor="" data-darkreader-inline-border-top="" data-darkreader-inline-border-right="" data-darkreader-inline-border-bottom="" data-darkreader-inline-border-left=""><p style="">Ceedoku is a website, not an app. However, this does not mean you cannot install Ceedoku. Below are all the ways you can access Ceedoku. <br> Whether it be using the website, Installing from an executable, or something else; rest assured: Ceedoku can run on anything.</p><div class="whatamidoingwithmylife" style="width: 100%; height: 55px; background-color: var(--surface-2); border-radius: 8px; display: flex; padding: 4px; gap: 4px; --darkreader-inline-bgcolor: var(--darkreader-bg--surface-2, var(--darkreader-background-ffffff, #181a1b));" data-darkreader-inline-bgcolor=""><button onclick="location.href='https://ceedoku.github.io';" style="border-radius: 4px; width: 100%; border: 1px solid var(--muted); display: flex; justify-content: center; align-items: center; --darkreader-inline-border-short: 1px solid var(--darkreader-border--muted);" "="" data-darkreader-inline-border-short="">  <svg class="sphere-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="height: 65%; margin-right: 5px; stroke: rgb(72, 147, 255); --darkreader-inline-stroke: var(--darkreader-text-4893ff, #4ca9ff);" data-darkreader-inline-stroke="">
-    <circle cx="12" cy="12" r="10"></circle>
-    <line x1="2" y1="12" x2="22" y2="12"></line>
-    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-  </svg><p>Use the website</p>  </button><button onclick="location.href='https://ceedoku.github.io/downloadinstaller';" style="border-radius: 4px; width: 100%; border: 1px solid var(--muted); display: flex; justify-content: center; align-items: center; --darkreader-inline-border-short: 1px solid var(--darkreader-border--muted);" "="" data-darkreader-inline-border-short=""><svg class="dl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="height: 65%; margin-right: 5px; stroke: rgb(95, 255, 72); --darkreader-inline-stroke: var(--darkreader-text-5fff48, #62ff4c);" data-darkreader-inline-stroke="">
-    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-    <polyline points="7 10 12 15 17 10"></polyline>
-    <line x1="12" y1="15" x2="12" y2="3"></line>
-  </svg><p>Install from executable</p>  </button><button onclick="location.href='https://ceedoku.github.io/install';" style="border-radius: 4px; width: 100%; border: 1px solid var(--muted); display: flex; justify-content: center; align-items: center; --darkreader-inline-border-short: 1px solid var(--darkreader-border--muted);" data-darkreader-inline-border-short=""><svg class="dl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="height: 65%; margin-right: 5px; stroke: rgb(59, 255, 126); --darkreader-inline-stroke: var(--darkreader-text-3bff7e, #43ff83);" data-darkreader-inline-stroke="">
-  <path d="M7 6H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-2"></path>
-
-  <path d="M3 10h4 M17 10h4"></path>
-  <line x1="12" y1="3" x2="12" y2="15"></line>
-  <polyline points="8 13 12 17 16 13"></polyline>
-</svg>
-
-
-
-
-
-<p>Install from browser</p></button> <button onclick="location.href='https://github.com/ceebug/ceedoku';" style="border-radius: 4px; width: 100%; border: 1px solid var(--muted); display: flex; justify-content: center; align-items: center; --darkreader-inline-border-short: 1px solid var(--darkreader-border--muted);" data-darkreader-inline-border-short=""><img src="https://github.com/fluidicon.png" style="height: 65%;margin-right: 5px;"><p>Look at the source code</p></button></div>
+                <li><strong>No ads</strong></li>
+                <li><strong>Pause on lost focus</strong> (Your game will be paused if you minimize, close, or otherwise make the app not visible.)</li>
+                <li><strong>Best times</strong></li>
+                <li><strong>Hint cooldowns</strong></li>
+                <li><strong>Haptics</strong></li>
+                <li><strong>Sound effects</strong></li>
+                <li><strong>Animations</strong></li>
+                <li><strong>Settings menu</strong> (To control the features.)</li>
+                <li>
+                    <strong>Importing and exporting save files</strong> (Using
+                    <a href="https://ceedoku.github.io/csfspec">.CSF (Ceedoku Save Format)</a>
+                    for the save files.)
+                </li>
+                <li><strong>Clickable release version to direct to the changelogs</strong></li>
+            </ul>
         </div>
 
+        <h2 id="download" style="color: var(--text2); margin-bottom: 0; margin-top: 10px;">
+            Download Ceedoku
+        </h2>
+
+        <div id="downloadcard" class="card" style="padding: 8px 25px 25px; background-color: var(--surface); border-radius: 20px; border: 1px solid rgb(35, 43, 54); margin-top: 1dvh; margin-bottom: 10px;">
+            <p>
+                Ceedoku is a website, not an app. However, this does not mean you
+                cannot install Ceedoku. Below are all the ways you can access
+                Ceedoku. Whether it be using the website, installing from an
+                executable, or something else; rest assured: Ceedoku can run on anything.
+            </p>
+
+            <div class="whatamidoingwithmylife" style="width: 100%; height: 55px; background-color: var(--surface-2); border-radius: 8px; display: flex; padding: 4px; gap: 4px;">
+
+                <button onclick="location.href='https://ceedoku.github.io';" style="border-radius: 4px; width: 100%; border: 1px solid var(--muted); display: flex; justify-content: center; align-items: center;">
+                    <svg class="sphere-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="height: 65%; margin-right: 5px; stroke: rgb(72, 147, 255);">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                    </svg>
+                    <p>Use the website</p>
+                </button>
+
+                <button onclick="location.href='https://ceedoku.github.io/downloadinstaller';" style="border-radius: 4px; width: 100%; border: 1px solid var(--muted); display: flex; justify-content: center; align-items: center;">
+                    <svg class="dl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="height: 65%; margin-right: 5px; stroke: rgb(95, 255, 72);">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    <p>Install from executable</p>
+                </button>
+
+                <button onclick="location.href='https://ceedoku.github.io/install';" style="border-radius: 4px; width: 100%; border: 1px solid var(--muted); display: flex; justify-content: center; align-items: center;">
+                    <svg class="dl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="height: 65%; margin-right: 5px; stroke: rgb(59, 255, 126);">
+                        <path d="M7 6H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-2"></path>
+                        <path d="M3 10h4 M17 10h4"></path>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                        <polyline points="8 13 12 17 16 13"></polyline>
+                    </svg>
+                    <p>Install from browser</p>
+                </button>
+
+                <button onclick="location.href='https://github.com/ceebug/ceedoku';" style="border-radius: 4px; width: 100%; border: 1px solid var(--muted); display: flex; justify-content: center; align-items: center;">
+                    <img src="https://github.com/fluidicon.png" alt="" style="height: 65%; margin-right: 5px;">
+                    <p>Look at the source code</p>
+                </button>
+
+            </div>
         </div>
-    
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-    const downloadLinks = document.querySelectorAll(
-        'a[href="https://ceedoku.github.io/download"]'
-    );
+    </div>
 
-    const aboutLinks = document.querySelectorAll(
-        'a[href="https://ceedoku.github.io/about"]'
-    );
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const downloadLinks = document.querySelectorAll(
+                'a[href="https://ceedoku.github.io/download"]'
+            );
 
-    const downloadCard = document.getElementById("downloadcard");
-    const featuresCard = document.getElementById("featurescard");
+            const aboutLinks = document.querySelectorAll(
+                'a[href="https://ceedoku.github.io/about"]'
+            );
 
-    // Keep the links bold without changing the actual link.
-    function setBold(link, bold) {
-        const strong = link.querySelector(":scope > strong");
+            const downloadCard = document.getElementById("downloadcard");
+            const featuresCard = document.getElementById("featurescard");
 
-        if (bold && !strong) {
-            const wrapper = document.createElement("strong");
+            function setBold(link, bold) {
+                const strong = link.querySelector(":scope > strong");
 
-            while (link.firstChild) {
-                wrapper.appendChild(link.firstChild);
+                if (bold && !strong) {
+                    const wrapper = document.createElement("strong");
+
+                    while (link.firstChild) {
+                        wrapper.appendChild(link.firstChild);
+                    }
+
+                    link.appendChild(wrapper);
+                } else if (!bold && strong) {
+                    while (strong.firstChild) {
+                        link.insertBefore(strong.firstChild, strong);
+                    }
+
+                    strong.remove();
+                }
             }
 
-            link.appendChild(wrapper);
-        } else if (!bold && strong) {
-            while (strong.firstChild) {
-                link.insertBefore(strong.firstChild, strong);
+            function updateLinks() {
+                const atBottom =
+                    window.innerHeight + window.scrollY >=
+                    document.documentElement.scrollHeight - 1;
+
+                downloadLinks.forEach(link => setBold(link, atBottom));
+                aboutLinks.forEach(link => setBold(link, !atBottom));
             }
 
-            strong.remove();
+            const hash = window.location.hash.toLowerCase();
+
+            if (hash === "#download") {
+                downloadCard.classList.add("focus");
+            }
+
+            if (hash === "#features") {
+                featuresCard.classList.add("focus");
+                history.replaceState(null, "", "#features");
+
+                if (window.innerWidth < 700) {
+                    window.scrollBy(0, -5);
+                }
+            }
+
+            function removeFocus() {
+                downloadCard.classList.remove("focus");
+                featuresCard.classList.remove("focus");
+
+                window.removeEventListener("pointerdown", removeFocus);
+                window.removeEventListener("wheel", removeFocus);
+                window.removeEventListener("touchstart", removeFocus);
+                window.removeEventListener("keydown", removeFocus);
+                window.removeEventListener("contextmenu", removeFocus);
+                window.removeEventListener("selectstart", removeFocus);
+            }
+
+            window.addEventListener("pointerdown", removeFocus);
+            window.addEventListener("wheel", removeFocus);
+            window.addEventListener("touchstart", removeFocus);
+            window.addEventListener("keydown", removeFocus);
+            window.addEventListener("contextmenu", removeFocus);
+            window.addEventListener("selectstart", removeFocus);
+
+            window.addEventListener("scroll", updateLinks);
+            window.addEventListener("resize", updateLinks);
+
+            updateLinks();
+        });
+
+        function toggleMenu(forceClose = false) {
+            const sidebar = document.getElementById("sidebar");
+            const button = document.getElementById("menuButton");
+            const backdrop = document.getElementById("sidebarBackdrop");
+
+            const shouldOpen =
+                !forceClose && !sidebar.classList.contains("open");
+
+            sidebar.classList.toggle("open", shouldOpen);
+            backdrop.classList.toggle("open", shouldOpen);
+            document.body.classList.toggle("menu-open", shouldOpen);
+
+            button.setAttribute("aria-expanded", String(shouldOpen));
+            button.setAttribute(
+                "aria-label",
+                shouldOpen ? "Close navigation menu" : "Open navigation menu"
+            );
+
+            sidebar.setAttribute("aria-hidden", String(!shouldOpen));
+            sidebar.inert = !shouldOpen;
+            backdrop.setAttribute("aria-hidden", String(!shouldOpen));
+
+            if (shouldOpen) {
+                const firstLink = sidebar.querySelector("a");
+                if (firstLink) firstLink.focus();
+            } else {
+                button.focus();
+            }
         }
-    }
 
-    // Make Download bold at the bottom of the page,
-    // otherwise make About bold.
-    function updateLinks() {
-        const atBottom =
-            window.innerHeight + window.scrollY >=
-            document.documentElement.scrollHeight - 1;
+        document.getElementById("sidebarBackdrop").addEventListener("click", () => {
+            toggleMenu(true);
+        });
 
-        downloadLinks.forEach(link => setBold(link, atBottom));
-        aboutLinks.forEach(link => setBold(link, !atBottom));
-    }
+        document.addEventListener("keydown", event => {
+            if (event.key === "Escape") {
+                const sidebar = document.getElementById("sidebar");
 
-    // Check the URL when the page loads.
-    const hash = window.location.hash.toLowerCase();
+                if (sidebar.classList.contains("open")) {
+                    toggleMenu(true);
+                }
+            }
+        });
 
-    // If the URL has #download, highlight Download.
-    if (hash === "#download") {
-        downloadCard.classList.add("focus");
-    }
+        document.querySelectorAll(".mobile-sidebar a").forEach(link => {
+            link.addEventListener("click", () => {
+                toggleMenu(true);
+            });
+        });
+    </script>
 
-    // If the URL has #features, highlight Features.
-    // Also make sure the browser is using the Features hash.
-    if (hash === "#features") {
-        featuresCard.classList.add("focus");
-
-        history.replaceState(null, "", "#features");
-		if (window.innerWidth < 700) {
-			window.scrollBy(0, -5);
-		}
-    }
-
-    // Once the user interacts with the page, remove every focus.
-    function removeFocus() {
-        downloadCard.classList.remove("focus");
-        featuresCard.classList.remove("focus");
-
-        window.removeEventListener("pointerdown", removeFocus);
-        window.removeEventListener("wheel", removeFocus);
-        window.removeEventListener("touchstart", removeFocus);
-        window.removeEventListener("keydown", removeFocus);
-        window.removeEventListener("contextmenu", removeFocus);
-        window.removeEventListener("selectstart", removeFocus);
-    }
-
-    // Don't use scroll here because the browser scrolls to the hash
-    // automatically when the page loads.
-    window.addEventListener("pointerdown", removeFocus);
-    window.addEventListener("wheel", removeFocus);
-    window.addEventListener("touchstart", removeFocus);
-    window.addEventListener("keydown", removeFocus);
-    window.addEventListener("contextmenu", removeFocus);
-    window.addEventListener("selectstart", removeFocus);
-
-    window.addEventListener("scroll", updateLinks);
-    window.addEventListener("resize", updateLinks);
-
-    updateLinks();
-});
-
-function toggleMenu() {
-    document.getElementById("sidebar").classList.toggle("open");
-}
-
-document.addEventListener("click", function(event) {
-    const sidebar = document.getElementById("sidebar");
-    const button = document.querySelector(".menu-button");
-
-    if (
-        sidebar.classList.contains("open") &&
-        !sidebar.contains(event.target) &&
-        !button.contains(event.target)
-    ) {
-        sidebar.classList.remove("open");
-    }
-});
-</script>
-
-
-
-</body></html>
+</body>
+</html>
