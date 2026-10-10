@@ -746,6 +746,41 @@ body.menu-open {
         border-radius: 12px;
     }
 }
+/* Active page — desktop navbar */
+.nav-links a[aria-current="page"] {
+  background: var(--accent, #73a7ff);
+  color: #0b0d11;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-weight: 600;
+}
+
+/* Active page — mobile sidebar */
+.mobile-sidebar > a[aria-current="page"] {
+  background: var(--accent, #73a7ff);
+  color: #0b0d11;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-weight: 600;
+}
+
+/* Smooth hover effect for other navigation links */
+.nav-links a,
+.mobile-sidebar > a {
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.nav-links a:hover,
+.mobile-sidebar > a:hover {
+  background: var(--surface-hover, #252c36);
+}
+
+/* Keep the active link highlighted when hovered */
+.nav-links a[aria-current="page"]:hover,
+.mobile-sidebar > a[aria-current="page"]:hover {
+  background: var(--accent, #73a7ff);
+  color: #0b0d11;
+}
 </style>
 
 <title>Ceedoku Homepage</title>
