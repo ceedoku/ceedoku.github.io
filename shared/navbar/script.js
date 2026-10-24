@@ -1,21 +1,22 @@
 (() => {
   const links = [
-    ["Home", "/home"],
-    ["Feedback", "/feedback"],
-    ["About", "/about"],
-    ["Download", "/download"],
-    ["Install", "/install"],
-    ["Changelog", "/changelog"]
+    ["Home", "/home", "/home"],
+    ["Feedback", "/feedback", "/feedback"],
+    ["About", "/about", "/about"],
+    ["Download", "/about#download", "/download"],
+    ["Install", "/install", "/install"],
+    ["Changelog", "/changelog", "/changelog"]
   ];
   const currentPath = window.location.pathname.replace(/\/+$/, "") || "/";
-  const activePath = currentPath.startsWith("/changelog/release")
+  const activePath = currentPath === "/about" && window.location.hash === "#download"
+    ? "/download"
+    : currentPath.startsWith("/changelog/release")
     ? "/changelog"
     : currentPath;
-  const linkMarkup = links.map(([label, href]) => {
-    const current = activePath === href ? ' aria-current="page"' : "";
-    return `<a href="${href}"${current}>${label}</a>`;
+  const linkMarkup = links.map(([label, href, route]) => {
+    const current = activePath === route ? ' aria-current="page"' : "";
+    return `<a href="${href}" data-navbar-route="${route}"${current}>${label}</a>`;
   }).join("");
-
   const nav = document.createElement("div");
   nav.id = "site-navbar";
   nav.innerHTML = `
@@ -23,7 +24,10 @@
       <a class="site-brand" href="/home" aria-label="Ceedoku home">
         <img src="/title.png" alt="Ceedoku">
       </a>
-      <nav class="site-nav-links" aria-label="Main navigation">${linkMarkup}</nav>
+      <nav class="site-nav-links" aria-label="Main navigation">
+        <span class="site-nav-indicator" aria-hidden="true"></span>
+        ${linkMarkup}
+      </nav>
     </header>
     <button class="site-menu-button" type="button" aria-label="Open navigation menu"
       aria-controls="site-mobile-sidebar" aria-expanded="false">
@@ -45,16 +49,58 @@
 
   document.body.prepend(nav);
 
+  const desktopLinks = [...nav.querySelectorAll(".site-nav-links a")];
+  const indicator = nav.querySelector(".site-nav-indicator");
+
+  function moveIndicator(href) {
+    const link = desktopLinks.find((item) => item.dataset.navbarRoute === href);
+    if (!link) {
+      indicator.hidden = true;
+      return;
+    }
+
+    indicator.hidden = false;
+    indicator.style.setProperty("--indicator-x", `${link.offsetLeft}px`);
+    indicator.style.setProperty("--indicator-y", `${link.offsetTop}px`);
+    indicator.style.width = `${link.offsetWidth}px`;
+    indicator.style.height = `${link.offsetHeight}px`;
+  }
+
   window.setSiteNavbarActive = (href) => {
     nav.querySelectorAll(".site-nav-links a, .site-mobile-sidebar > a").forEach((link) => {
-      if (link.getAttribute("href") === href) {
+      if (link.dataset.navbarRoute === href) {
         link.setAttribute("aria-current", "page");
       } else {
         link.removeAttribute("aria-current");
       }
     });
+    moveIndicator(href);
   };
-  window.setSiteNavbarActive(activePath);
+
+  moveIndicator(activePath);
+  indicator.classList.add("is-ready");
+
+  window.addEventListener("resize", () => {
+    const selectedLink = nav.querySelector(".site-nav-links a[aria-current='page']");
+    if (selectedLink) moveIndicator(selectedLink.dataset.navbarRoute);
+  });
+
+  let pendingNavigation;
+  desktopLinks.forEach((link) => {
+    link.addEventListener("click", (event) => {
+      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      if (link.href === window.location.href) return;
+
+      event.preventDefault();
+      window.setSiteNavbarActive(link.dataset.navbarRoute);
+      window.clearTimeout(pendingNavigation);
+
+      const delay = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 460;
+      pendingNavigation = window.setTimeout(() => {
+        window.location.assign(link.href);
+      }, delay);
+    });
+  });
 
   const menuButton = nav.querySelector(".site-menu-button");
   const closeButton = nav.querySelector(".site-sidebar-close");
