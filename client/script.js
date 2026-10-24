@@ -189,7 +189,8 @@ screen.className = "download-screen " + data.os;
 title.textContent = "Download Ceedoku";
 description.textContent = "Your download should begin shortly.";
 meta.textContent = data.meta;
-icon.textContent = "↓";
+icon.classList.remove("is-complete");
+icon.classList.add("is-downloading");
 progress.style.width = "0%";
 
 fallback.hidden = false;
@@ -208,11 +209,14 @@ document.body.appendChild(link);
 link.click();
 link.remove();
 
-title.textContent = "Download requested";
+title.textContent = "Download started";
 description.textContent =
     "Your browser should begin downloading Ceedoku. If it doesn't, use the manual download link below.";
 progress.style.width = "100%";
-icon.textContent = "✓";
+window.setTimeout(() => {
+    icon.classList.remove("is-downloading");
+    icon.classList.add("is-complete");
+}, 300);
 
 }
 

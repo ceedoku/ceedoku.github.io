@@ -2,8 +2,19 @@
         document.addEventListener("DOMContentLoaded", () => {
             const downloadCard = document.getElementById("downloadcard");
             const featuresCard = document.getElementById("featurescard");
+            let anchorNavigationTimer;
+
+            document.addEventListener("site-navbar-anchor-navigation", event => {
+                window.siteNavbarAnchorNavigationRoute = event.detail.route;
+                window.setSiteNavbarActive(window.siteNavbarAnchorNavigationRoute);
+            });
 
             function updateLinks() {
+                if (window.siteNavbarAnchorNavigationRoute) {
+                    window.setSiteNavbarActive(window.siteNavbarAnchorNavigationRoute);
+                    return;
+                }
+
                 const atBottom =
                     window.innerHeight + window.scrollY >=
                     document.documentElement.scrollHeight - 1;
@@ -47,6 +58,20 @@
 
             window.addEventListener("scroll", updateLinks);
             window.addEventListener("resize", updateLinks);
+
+            function finishAnchorNavigation() {
+                if (!window.siteNavbarAnchorNavigationRoute) return;
+                window.siteNavbarAnchorNavigationRoute = null;
+                window.clearTimeout(anchorNavigationTimer);
+                updateLinks();
+            }
+
+            window.addEventListener("scroll", () => {
+                if (!window.siteNavbarAnchorNavigationRoute) return;
+                window.clearTimeout(anchorNavigationTimer);
+                anchorNavigationTimer = window.setTimeout(finishAnchorNavigation, 700);
+            });
+            window.addEventListener("scrollend", finishAnchorNavigation);
 
             updateLinks();
         });

@@ -48,6 +48,7 @@
     </nav>`;
 
   document.body.prepend(nav);
+  window.siteNavbarAnchorNavigationRoute = null;
 
   const desktopLinks = [...nav.querySelectorAll(".site-nav-links a")];
   const indicator = nav.querySelector(".site-nav-indicator");
@@ -67,6 +68,9 @@
   }
 
   window.setSiteNavbarActive = (href) => {
+    const lockedRoute = window.siteNavbarAnchorNavigationRoute;
+    if (lockedRoute && href !== lockedRoute) return;
+
     nav.querySelectorAll(".site-nav-links a, .site-mobile-sidebar > a").forEach((link) => {
       if (link.dataset.navbarRoute === href) {
         link.setAttribute("aria-current", "page");
@@ -78,7 +82,11 @@
   };
 
   moveIndicator(activePath);
-  indicator.classList.add("is-ready");
+  indicator.classList.add("is-positioned");
+  indicator.getBoundingClientRect();
+  window.addEventListener("load", () => {
+    requestAnimationFrame(() => indicator.classList.add("can-animate"));
+  }, { once: true });
 
   window.addEventListener("resize", () => {
     const selectedLink = nav.querySelector(".site-nav-links a[aria-current='page']");
@@ -91,11 +99,45 @@
       if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
       if (link.href === window.location.href) return;
 
+      const destination = new URL(link.href);
+      const currentPath = window.location.pathname.replace(/\/+$/, "") || "/";
+      const destinationPath = destination.pathname.replace(/\/+$/, "") || "/";
+
+      if (destinationPath === currentPath) {
+        window.siteNavbarAnchorNavigationRoute = link.dataset.navbarRoute;
+        document.dispatchEvent(new CustomEvent("site-navbar-anchor-navigation", {
+          detail: { route: link.dataset.navbarRoute }
+        }));
+        event.preventDefault();
+        indicator.classList.add("can-animate");
+        window.setSiteNavbarActive(link.dataset.navbarRoute);
+        window.clearTimeout(pendingNavigation);
+
+        const target = destination.hash
+          ? document.getElementById(decodeURIComponent(destination.hash.slice(1)))
+          : null;
+        if (destination.hash && !target) return;
+
+        history.pushState(null, "", destination.pathname + destination.search + destination.hash);
+        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const stickyHeaderHeight = document.querySelector(".site-titlebar")?.offsetHeight || 0;
+        const scrollTop = target
+          ? target.getBoundingClientRect().top + window.scrollY - stickyHeaderHeight - 16
+          : 0;
+        window.scrollTo({
+          top: Math.max(0, scrollTop),
+          behavior: reducedMotion ? "instant" : "smooth"
+        });
+        return;
+      }
+
       event.preventDefault();
+      indicator.classList.add("can-animate");
       window.setSiteNavbarActive(link.dataset.navbarRoute);
       window.clearTimeout(pendingNavigation);
 
       const delay = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 460;
+
       pendingNavigation = window.setTimeout(() => {
         window.location.assign(link.href);
       }, delay);
