@@ -1,3 +1,7 @@
+- ### [9.3.2](https://ceedoku.github.io/changelog/release?v=9.3.2)
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - Offline mode not working correctly.
 - ### [9.3.1](https://ceedoku.github.io/changelog/release?v=9.3.1)
   > #### Changes:
   >> ##### Fixed:
