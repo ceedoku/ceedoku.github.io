@@ -1,3 +1,7 @@
+- ### [9.5.1](https://ceedoku.github.io/changelog/release?v=9.5.1)
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - The best time not showing in monospace.
 - ### [9.5.0](https://ceedoku.github.io/changelog/release?v=9.5.0)
   > #### Changes:
   >> ##### Changed:
