@@ -1,14 +1,3 @@
-### [9.4.0](https://ceedoku.github.io/changelog/release?v=9.4.0)
-> #### Changes:
-> > ##### Added:
-> > > - A monospace font.
-> > ##### Fixed:
-> > > - Offline mode not working correctly.
-> > ##### Changed:
-> > > - Font to Roboto.
-> > > - Time values to use a monospace font.
-> > > - The timer to not say 'time' before the time.
-
 - ### [9.3.2](https://ceedoku.github.io/changelog/release?v=9.3.2)
   > #### Changes:
   >> ##### Fixed:
