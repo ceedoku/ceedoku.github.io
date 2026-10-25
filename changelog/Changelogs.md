@@ -1,3 +1,7 @@
+- ### [9.5.3](https://ceedoku.github.io/changelog/release?v=9.5.3)
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - [9.5.2 game crash.](https://github.com/ceebug/ceedoku/issues/11) (Wow I need to actually test things here. - Ceebug, Main Developer)
 - ### [9.5.2](https://ceedoku.github.io/changelog/release?v=9.5.2)
   > #### Changes:
   >> ##### Fixed:
