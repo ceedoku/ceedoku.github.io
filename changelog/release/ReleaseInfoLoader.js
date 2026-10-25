@@ -36,7 +36,7 @@
 							`Version ${releaseVersion}`;
 					}
 					
-					document.title = `Ceedoku ΓÇó Changelogs - Version ${releaseVersion}`
+					document.title = `Ceedoku • Changelogs - Version ${releaseVersion}`
 
 					markdownContent.classList.add("something");
 
