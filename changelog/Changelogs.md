@@ -1,3 +1,7 @@
+- ### [9.5.2](https://ceedoku.github.io/changelog/release?v=9.5.2)
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - ['Best time:' showing in monospace in the new game screen. (Only the time value should)](https://github.com/ceebug/ceedoku/issue/10)
 - ### [9.5.1](https://ceedoku.github.io/changelog/release?v=9.5.1)
   > #### Changes:
   >> ##### Fixed:
