@@ -1,3 +1,7 @@
+- ### [9.5.0](https://ceedoku.github.io/changelog/release?v=9.5.0)
+  > #### Changes:
+  >> ##### Changed:
+  >>> - The monospace font to Ceedoku Mono (A custom version of Roboto Mono)
 - ### [9.4.0](https://ceedoku.github.io/changelog/release?v=9.4.0)
   > #### Changes:
   >> ##### Added:
