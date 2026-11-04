@@ -1,3 +1,7 @@
+- ### [9.6.0](https://ceedoku.github.io/changelog/release?v=9.6.0)
+  > #### Changes:
+  >> ##### Added:
+  >>> - Popup that shows when JavaScript is disabled informing the user that they should go enable JavaScript for Ceedoku to work.
 - ### [9.5.3](https://ceedoku.github.io/changelog/release?v=9.5.3)
   > #### Changes:
   >> ##### Fixed:
