@@ -1,3 +1,9 @@
+- ### [10.0.1](https://ceedoku.github.io/changelog/release?v=10.0.1)
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - A crash bug involving custom difficulties.
+  >> ##### Changed:
+  >>> - The error message wording on the crash screen.
 - ### [10.0.0](https://ceedoku.github.io/changelog/release?v=10.0.0)
   > #### Changes:
   >> ##### Added:
