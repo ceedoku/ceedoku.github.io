@@ -1005,17 +1005,6 @@ historyToggle.addEventListener("change", () => {
 settings.hints.hintlimit.limit = Number(hintlimitinput.value) || 1;
 let hintlimitreached = false
 let hintcounter = 0
-function updateHintCooldownDisplay() {
-    if (canusehelp) {
-        if (!settings.hints.cooldown.enabled) {
-            hintCooldownDisplay.textContent = "∞";
-            hintCooldownDisplay.style.fontWeight = "800";
-        } else {
-            hintCooldownDisplay.style.fontWeight = "unset";
-            hintCooldownDisplay.textContent = getHintCooldownText();
-        }
-    }
-}
 let solution = [];
 let puzzle = [];
 let values = [];
@@ -1043,31 +1032,6 @@ let winmenuOpen = false;
 let pausemenuOpen = false;
 let pageMode = localStorage.getItem("theme") || "dark";
 
-function showWinScreen() {
-    winpauseTimer();
-    if (settings.haptics.puzzlecomplete) {
-        vibrate([20, 50, 40]);
-    }
-    if (settings.SFX.enabled && settings.SFX.win) {
-        winSound.currentTime = 0;
-        winSound.play().catch(() => {});
-    }
-    winDifficulty.textContent = getDifficultyLabel();
-
-
-    winMistakes.textContent = mistakes;
-    winOverlay.hidden = false;
-
-    requestAnimationFrame(() => {
-        winOverlay.classList.add("show");
-    });
-    setTimeout(() => {
-        if (settings.VFX.enabled && settings.VFX.confetti) {
-            fireconfetti();
-        }
-    }, 200);
-
-}
 
 function opensettingsmenu() {
     document.getElementById("settingsOverlay").classList.add("show");
@@ -1077,17 +1041,6 @@ function closesettingsmenu() {
     document.getElementById("settingsOverlay").classList.remove("show");
 }
 
-function showPauseScreen() {
-    pauseDifficulty.textContent = getDifficultyLabel();
-
-
-    pauseMistakes.textContent = mistakes;
-    pauseOverlay.hidden = false;
-
-    requestAnimationFrame(() => {
-        pauseOverlay.classList.add("show");
-    });
-}
 const isAndroidPWA =
     /Android/i.test(navigator.userAgent) &&
     (
@@ -3573,7 +3526,10 @@ function continueGame() {
 
 setInterval(saveGame, 1000);
 
-async function newGame(nextDifficulty = difficulty, customOptions = null) {
+async function newGame(
+    nextDifficulty = difficulty,
+    customOptions = difficulty === "custom" ? customDifficulty : null
+) {
     saveGame();
     runninggame = false;
     clearInterval(timerId);

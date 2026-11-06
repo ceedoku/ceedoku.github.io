@@ -211,9 +211,9 @@ Some of the important parts of the project include:
 This repository is primarily a static web app. The main languages used are:
 
 <!-- LANGUAGES_START -->
-- **JavaScript:** 67.04%<br>
-- **CSS:** 27.13%<br>
-- **HTML:** 5.83%
+- **JavaScript:** 66.91%<br>
+- **CSS:** 27.23%<br>
+- **HTML:** 5.86%
 <!-- LANGUAGES_END -->
 
 ## Contributing
@@ -257,7 +257,11 @@ The current version is displayed on the Ceedoku website and in the project's rel
 
 For the latest release, see the GitHub releases page:
 
-**https://github.com/ceebug/ceedoku/releases**
+**https://github.com/ceebug/ceedoku/releases/latest**
+
+Alternatively, you can use this page:
+
+**https://ceedoku.github.io/changelog/release/?v=latest**
 
 
 ## Project Status
