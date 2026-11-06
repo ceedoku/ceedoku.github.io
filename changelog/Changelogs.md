@@ -21,11 +21,11 @@
 - ### [9.5.3](https://ceedoku.github.io/changelog/release?v=9.5.3)
   > #### Changes:
   >> ##### Fixed:
-  >>> - [9.5.2 game crash.](https://github.com/ceebug/ceedoku/issues/11) (Wow I need to actually test things here. - Ceebug, Main Developer)
+  >>> - 9.5.2 game crash. (Wow I need to actually test things here. - Ceebug, Main Developer)
 - ### [9.5.2](https://ceedoku.github.io/changelog/release?v=9.5.2)
   > #### Changes:
   >> ##### Fixed:
-  >>> - ['Best time:' showing in monospace in the new game screen. (Only the time value should)](https://github.com/ceebug/ceedoku/issues/10)
+  >>> - 'Best time:' showing in monospace in the new game screen. (Only the time value should)
 - ### [9.5.1](https://ceedoku.github.io/changelog/release?v=9.5.1)
   > #### Changes:
   >> ##### Fixed:
