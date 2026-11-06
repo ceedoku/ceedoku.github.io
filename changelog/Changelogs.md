@@ -1,3 +1,18 @@
+- ### [10.0.0](https://ceedoku.github.io/changelog/release?v=10.0.0)
+  > #### Changes:
+  >> ##### Added:
+  >>> - Multiple independent saved games with editable titles and per-save actions, and reordering like trello cards.
+  >>> - Customisable keyboard bindings for every game keyboard shortcut.
+  >>> - Explain Hints - Enabled by default, can be disabled by a setting, helps you learn the methods the hint system knows.
+  >>> - Report crash button on the crash menu that directs you to the bug report page.
+  >>> - The ability to create custom difficulty save games, where you can change both if tools are enabled and the amount of holes the puzzle has.
+  >> ##### Fixed:
+  >>> - The game lagging if you switched the theme and didn't have a god PC.
+  >> ##### Changed:
+  >>> - The name of the Continue Game button to Play.
+  >>> - The position of the New Game button to inside the new play menu.
+  >>> - The select difficulty popup going offscreen.
+  >>> - 'Feedback Form' to 'Provide Feedback'.
 - ### [9.6.0](https://ceedoku.github.io/changelog/release?v=9.6.0)
   > #### Changes:
   >> ##### Added:
