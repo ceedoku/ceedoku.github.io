@@ -8,6 +8,7 @@
   >>> - The ability to create custom difficulty save games, where you can change both if tools are enabled and the amount of holes the puzzle has.
   >> ##### Fixed:
   >>> - The game lagging if you switched the theme and didn't have a god PC.
+  >>> - The dropdown for selecting hint cooldown type taking longer to get disabled and undisabled visually.
   >> ##### Changed:
   >>> - The name of the Continue Game button to Play.
   >>> - The position of the New Game button to inside the new play menu.
