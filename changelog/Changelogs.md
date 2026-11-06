@@ -1,3 +1,7 @@
+- ### [10.0.2](https://ceedoku.github.io/changelog/release?v=10.0.2)
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - 10.0.1 game crash
 - ### [10.0.1](https://ceedoku.github.io/changelog/release?v=10.0.1)
   > #### Changes:
   >> ##### Fixed:
