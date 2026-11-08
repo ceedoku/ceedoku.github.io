@@ -1,3 +1,7 @@
+- ### [10.0.3](https://ceedoku.github.io/changelog/release?v=10.0.3)
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - Most of the UI involving popups breaking on a mobile device.
 - ### [10.0.2](https://ceedoku.github.io/changelog/release?v=10.0.2)
   > #### Changes:
   >> ##### Fixed:
