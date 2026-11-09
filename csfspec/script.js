@@ -15,6 +15,6 @@ button.addEventListener("pointerup", (event) => {
     button.classList.add("spring");
 
     setTimeout(() => {
-        window.location.href = "https://ceedoku.github.io/CSF%20Specification%20v1.0.pdf";
+        window.location.href = "https://ceedoku.github.io/CSF%20Specification%20v2.0.pdf";
     }, 500);
 });
