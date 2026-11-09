@@ -359,7 +359,8 @@ function hideBestTime() {
 
 
 let canusecurrenthintsystem = false
-let usingsavegame = false
+let usingsavegame = false;
+let viewingCompletedSave = false;
 let cooldownmoves = 0
 let cooldowntime = 0
 const count = 150,
@@ -608,6 +609,8 @@ let cooldowntypetouse = "just declaring var"
 function showmainmenu() {
     printBtn.style.display = "none";
 	disableprint = true
+    viewingCompletedSave = false;
+    completedSaveBack.style.display = "none";
     hideBestTime();
     pauseBtn2.style.display = "none"
     if (!timerPaused) {
@@ -718,6 +721,7 @@ const pencilButton = document.getElementById("pencilButton");
 const pauseBtn = document.getElementById("pause-btn");
 
 const pauseBtn2 = document.getElementById("pause-btn2");
+const completedSaveBack = document.getElementById("completedSaveBack");
 const modeButton = document.getElementById("mode");
 const fullscreenButton = document.getElementById("fullscreen")
 
@@ -770,10 +774,11 @@ const toolsToggle = document.getElementById("toolstoggle");
 const historyToggle = document.getElementById("historytoggle");
 
 function updatePauseBtn2() {
-    pauseBtn2.style.display =
-        window.matchMedia("(orientation: portrait)").matches ?
-        "unset" :
-        "none";
+    pauseBtn2.style.display = viewingCompletedSave
+        ? "none"
+        : window.matchMedia("(orientation: portrait)").matches
+            ? "unset"
+            : "none";
 }
 
 function updateSettingsMenu() {
@@ -1433,11 +1438,9 @@ function renderSaveCards() {
         exportButton.textContent = "Export .CSF";
         exportButton.addEventListener("click", () => {
             closeSaveMoreMenu();
-            try {
-                FSJ(save.data, save.title);
-            } catch (error) {
-                reportSaveError(error);
-            }
+            pendingExportSave = save;
+            exportnameinput.value = save.title || "Sudoku game";
+            showexportnamemenu();
         });
         const duplicateButton = document.createElement("button");
         duplicateButton.type = "button";
@@ -1490,6 +1493,7 @@ function renderSaveCards() {
                 activeSaveId = record.id === "legacy" ? null : record.id;
                 syncLegacySave(record);
                 loadgame(record.data);
+                viewingCompletedSave = Boolean(finished);
                 continueGame();
                 hidePlayMenu();
             } catch (error) {
@@ -1570,7 +1574,7 @@ function loadgame(saveOverride) {
     if (
         game.difficulty === "custom" &&
         Number.isInteger(game.customDifficulty?.holes) &&
-        game.customDifficulty.holes >= 0 &&
+        game.customDifficulty.holes >= 1 &&
         game.customDifficulty.holes <= 64 &&
         typeof game.customDifficulty.toolsEnabled === "boolean"
     ) {
@@ -2213,6 +2217,7 @@ function paintBoard() {
 function saveGame() {
     if (!runninggame && !finished) return;
     if (solution.length !== 81) return;
+    if (difficulty === "custom" && (!Number.isInteger(customDifficulty?.holes) || customDifficulty.holes < 1 || customDifficulty.holes > 64)) return;
 
     const data = saveGameData();
     if (!saveManager) {
@@ -3502,7 +3507,8 @@ function continueGame() {
     }
 	// update soo many ui elements and stuff on continuing a game
     updateHintCooldownDisplay();
-    runninggame = true;
+    const completedSave = viewingCompletedSave && finished;
+    runninggame = !completedSave;
     hidemainmenu();
     pauseBtn.innerHTML = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor"><path d="M2 4C2 2.9 2.9 2 4 2H8C9.1 2 10 2.9 10 4V20C10 21.1 9.1 22 8 22H4C2.9 22 2 21.1 2 20Z"/><path d="M14 4C14 2.9 14.9 2 16 2H20C21.1 2 22 2.9 22 4V20C22 21.1 21.1 22 20 22H16C14.9 22 14 21.1 14 20Z"/></svg>';
     pauseBtn2.innerHTML = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor"><path d="M2 4C2 2.9 2.9 2 4 2H8C9.1 2 10 2.9 10 4V20C10 21.1 9.1 22 8 22H4C2.9 22 2 21.1 2 20Z"/><path d="M14 4C14 2.9 14.9 2 16 2H20C21.1 2 22 2.9 22 4V20C22 21.1 21.1 22 20 22H16C14.9 22 14 21.1 14 20Z"/></svg>';
@@ -3514,12 +3520,21 @@ function continueGame() {
 	timerEl.textContent = formatTime(Math.floor(elapsedMs / 1000));
     pauseMistakes.textContent = mistakes
     continueMistakes.textContent = mistakes
-    timerPaused = false;
+    if (completedSave) {
+        timerPaused = true;
+        clearInterval(timerId);
+        pauseBtn2.style.display = "none";
+        completedSaveBack.style.display = "";
+    } else {
+        viewingCompletedSave = false;
+        completedSaveBack.style.display = "none";
+        timerPaused = false;
+        startTimer();
+    }
     hidewinscreen();
     hidepausescreen();
     closepauseDifficultyMenu();
     closemainDifficultyMenu()
-    startTimer();
     hidecontinuegame();
     renderBoard()
 }
@@ -3532,6 +3547,8 @@ async function newGame(
 ) {
     saveGame();
     runninggame = false;
+    viewingCompletedSave = false;
+    completedSaveBack.style.display = "none";
     clearInterval(timerId);
     activeSaveId = null;
     printBtn.style.display = "";
@@ -3556,7 +3573,7 @@ async function newGame(
     difficulty = nextDifficulty;
     customDifficulty = difficulty === "custom" && customOptions
         ? {
-            holes: Math.max(0, Math.min(64, Math.trunc(Number(customOptions.holes) || 0))),
+            holes: Math.max(1, Math.min(64, Math.trunc(Number(customOptions.holes) || 1))),
             toolsEnabled: customOptions.toolsEnabled !== false
         }
         : null;
@@ -3608,7 +3625,7 @@ async function newGame(
     redoStack = [];
 
     runninggame = true;
-    if (saveManager) {
+    if (saveManager && (difficulty !== "custom" || (Number.isInteger(customDifficulty?.holes) && customDifficulty.holes >= 1 && customDifficulty.holes <= 64))) {
         try {
             const record = saveManager.add(
                 saveGameData(),
