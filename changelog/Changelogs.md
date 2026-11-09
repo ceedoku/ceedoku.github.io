@@ -1,3 +1,11 @@
+- ### [10.0.4](https://ceedoku.github.io/changelog/release?v=10.0.4)
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - Fixed custom-difficulty saves not exporting correctly.
+  >>> - Fixed the save-naming dialog not appearing when exporting a save from its options menu.
+  >>> - Fixed completed saves reopening in an unpaused state.
+  >>> - Fixed pause controls appearing when reopening completed saves.
+  >>> - Fixed the Back button not appearing when reopening completed saves.
 - ### [10.0.3](https://ceedoku.github.io/changelog/release?v=10.0.3)
   > #### Changes:
   >> ##### Fixed:
