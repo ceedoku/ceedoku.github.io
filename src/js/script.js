@@ -494,42 +494,42 @@ let disableprint = true
 loadSettings();
 let hintcount = settings.hints.cooldown.startinghints
 const winSound = new Audio("./src/sounds/win.ogg");
-const popSound = new Audio("./src/sounds/pop.ogg");
-popSound.preload = "auto";
-popSound.load();
 winSound.preload = "auto";
 winSound.load();
-const audioContext = new AudioContext();
-const popSource = audioContext.createMediaElementSource(popSound);
-const popGain = audioContext.createGain();
 
-popSource.connect(popGain);
-popGain.connect(audioContext.destination);
-let audioUnlocked = false;
+const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+const audioContext = AudioContextClass ? new AudioContextClass() : null;
+let popBufferPromise = null;
+
+if (audioContext) {
+    popBufferPromise = fetch("./src/sounds/pop.ogg")
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to load completion sound: ${response.status}`);
+            }
+
+            return response.arrayBuffer();
+        })
+        .then(data => audioContext.decodeAudioData(data))
+        .catch(error => {
+            console.warn("Completion sound could not be loaded:", error);
+            return null;
+        });
+}
 
 function unlockAudio() {
-    if (audioUnlocked) return;
+    if (!audioContext || audioContext.state === "running") return;
 
-    popSound.muted = true;
-
-    popSound.play()
-        .then(() => {
-            popSound.pause();
-            popSound.currentTime = 0;
-            popSound.muted = false;
-            audioUnlocked = true;
-        })
-        .catch(() => {
-            popSound.muted = false;
-        });
+    audioContext.resume().catch(error => {
+        console.warn("Audio context could not be resumed:", error);
+    });
 }
 
 function isTouchDevice() {
     return window.matchMedia("(hover: none) and (pointer: coarse)").matches;
 }
-document.addEventListener("pointerdown", unlockAudio, {
-    once: true
-});
+document.addEventListener("pointerdown", unlockAudio);
+document.addEventListener("keydown", unlockAudio);
 let vibrate;
 if ("vibrate" in navigator) {
     vibrate = function(duration = 10) {
@@ -542,51 +542,41 @@ if ("vibrate" in navigator) {
     vibrate = function() {};
 }
 
-let popQueue = Promise.resolve();
-let pitchInterval = null;
+function playPop(speed = 1, delay = 0) {
+    if (!settings.SFX.enabled || !audioContext || !popBufferPromise) return;
 
-function playPop(speed = 1) {
-    if (!settings.SFX) return;
+    const playbackRate = Math.max(0.1, Math.min(speed, 7));
+    const requestedStartTime = audioContext.currentTime + Math.max(0, delay);
 
-    if (pitchInterval) {
-        clearInterval(pitchInterval);
-        pitchInterval = null;
-    }
+    popBufferPromise.then(async buffer => {
+        if (!buffer || !settings.SFX.enabled) return;
 
-    popSound.pause();
-    popSound.currentTime = 0;
-
-    popSound.preservesPitch = false;
-    popSound.mozPreservesPitch = false;
-    popSound.webkitPreservesPitch = false;
-
-    let currentSpeed = speed;
-
-    if (currentSpeed > 7) {
-        currentSpeed = 7;
-    }
-
-    popSound.playbackRate = currentSpeed;
-
-    popSound.play().catch(err => {
-        console.log("pop failed -", err);
-    });
-
-    pitchInterval = setInterval(() => {
-        currentSpeed += 0.1;
-
-        if (currentSpeed > 7) {
-            currentSpeed = 7;
+        if (audioContext.state !== "running") {
+            await audioContext.resume();
         }
 
-        popSound.playbackRate = currentSpeed;
-    }, 50);
+        if (audioContext.state !== "running") return;
 
-    popSound.onended = () => {
-        clearInterval(pitchInterval);
-        pitchInterval = null;
-        popSound.playbackRate = 1;
-    };
+        const startTime = Math.max(audioContext.currentTime, requestedStartTime);
+        const source = audioContext.createBufferSource();
+
+        source.buffer = buffer;
+        source.playbackRate.setValueAtTime(playbackRate, startTime);
+
+        // Match the old gradual pitch increase without a timer or shared audio element.
+        if (playbackRate < 7) {
+            source.playbackRate.linearRampToValueAtTime(
+                7,
+                startTime + (7 - playbackRate) / 2
+            );
+        }
+
+        source.connect(audioContext.destination);
+        source.addEventListener("ended", () => source.disconnect(), { once: true });
+        source.start(startTime);
+    }).catch(error => {
+        console.warn("Completion sound failed:", error);
+    });
 }
 document.addEventListener("pointerdown", (event) => {
     const button = event.target.closest("button");
@@ -718,7 +708,6 @@ document.body.append(hintConnector, hintExplanationPanel);
 let pendingHintMove = null;
 const eraseButton = document.getElementById("eraseButton");
 const pencilButton = document.getElementById("pencilButton");
-const pauseBtn = document.getElementById("pause-btn");
 
 const pauseBtn2 = document.getElementById("pause-btn2");
 const completedSaveBack = document.getElementById("completedSaveBack");
@@ -1096,6 +1085,7 @@ function showPlayMenu() {
 }
 
 function hidePlayMenu() {
+    closeSaveMoreMenu();
     playOverlay.classList.remove("show");
     setTimeout(() => {
         if (!playOverlay.classList.contains("show")) playOverlay.hidden = true;
@@ -1163,6 +1153,44 @@ function closeSaveMoreMenu() {
 }
 
 let activeSaveCardDrag = null;
+let pendingSaveCardTouch = null;
+
+function startSaveCardDrag(card, list, save, saveIndex, clientX, clientY, pointerId = null) {
+    const rect = card.getBoundingClientRect();
+    const placeholder = document.createElement("div");
+    placeholder.className = "save-card-placeholder";
+    placeholder.setAttribute("aria-hidden", "true");
+    placeholder.style.height = `${rect.height}px`;
+    card.before(placeholder);
+    activeSaveCardDrag = {
+        card,
+        captureTarget: pointerId === null ? null : card,
+        list,
+        placeholder,
+        saveId: save.id,
+        originalIndex: saveIndex,
+        pointerId,
+        touchId: null,
+        startX: clientX,
+        startY: clientY,
+        offsetX: clientX - rect.left,
+        offsetY: clientY - rect.top,
+        moved: false
+    };
+    card.style.position = "fixed";
+    card.style.left = `${rect.left}px`;
+    card.style.top = `${rect.top}px`;
+    card.style.width = `${rect.width}px`;
+    card.style.zIndex = "5010";
+    card.style.pointerEvents = "none";
+    if (pointerId !== null) card.setPointerCapture(pointerId);
+}
+
+function cancelPendingSaveCardTouch() {
+    if (!pendingSaveCardTouch) return;
+    clearTimeout(pendingSaveCardTouch.timer);
+    pendingSaveCardTouch = null;
+}
 
 function moveSaveCardPlaceholder(clientY) {
     const { card, list, placeholder } = activeSaveCardDrag;
@@ -1173,6 +1201,22 @@ function moveSaveCardPlaceholder(clientY) {
     } else {
         list.appendChild(placeholder);
     }
+}
+
+function moveSaveCardDrag(clientX, clientY) {
+    const drag = activeSaveCardDrag;
+    const deltaX = clientX - drag.startX;
+    const deltaY = clientY - drag.startY;
+    if (!drag.moved && Math.hypot(deltaX, deltaY) < 5) return;
+    drag.moved = true;
+    drag.card.classList.add("dragging");
+    drag.card.style.left = `${clientX - drag.offsetX}px`;
+    drag.card.style.top = `${clientY - drag.offsetY}px`;
+
+    const listRect = drag.list.getBoundingClientRect();
+    if (clientY < listRect.top + 28) drag.list.scrollTop -= 12;
+    else if (clientY > listRect.bottom - 28) drag.list.scrollTop += 12;
+    moveSaveCardPlaceholder(clientY);
 }
 
 function reorderSaveTo(saveId, targetIndex) {
@@ -1212,7 +1256,10 @@ function finishSaveCardDrag(cancelled = false) {
     }
     drag.placeholder.replaceWith(drag.card);
 
-    if (drag.captureTarget.hasPointerCapture(drag.pointerId)) {
+    if (
+        drag.captureTarget &&
+        drag.captureTarget.hasPointerCapture(drag.pointerId)
+    ) {
         drag.captureTarget.releasePointerCapture(drag.pointerId);
     }
     if (cancelled || !drag.moved) return;
@@ -1230,30 +1277,81 @@ function finishSaveCardDrag(cancelled = false) {
 }
 
 document.addEventListener("pointermove", event => {
-    if (!activeSaveCardDrag || event.pointerId !== activeSaveCardDrag.pointerId) return;
-    const drag = activeSaveCardDrag;
-    const deltaX = event.clientX - drag.startX;
-    const deltaY = event.clientY - drag.startY;
-    if (!drag.moved && Math.hypot(deltaX, deltaY) < 5) return;
-    drag.moved = true;
-    drag.card.classList.add("dragging");
-    drag.card.style.left = `${event.clientX - drag.offsetX}px`;
-    drag.card.style.top = `${event.clientY - drag.offsetY}px`;
-
-    const listRect = drag.list.getBoundingClientRect();
-    if (event.clientY < listRect.top + 28) drag.list.scrollTop -= 12;
-    else if (event.clientY > listRect.bottom - 28) drag.list.scrollTop += 12;
-    moveSaveCardPlaceholder(event.clientY);
+    if (
+        !activeSaveCardDrag ||
+        activeSaveCardDrag.pointerId === null ||
+        event.pointerId !== activeSaveCardDrag.pointerId
+    ) return;
+    moveSaveCardDrag(event.clientX, event.clientY);
 });
 
 document.addEventListener("pointerup", event => {
-    if (activeSaveCardDrag && event.pointerId === activeSaveCardDrag.pointerId) {
+    if (
+        activeSaveCardDrag &&
+        activeSaveCardDrag.pointerId !== null &&
+        event.pointerId === activeSaveCardDrag.pointerId
+    ) {
         finishSaveCardDrag();
     }
 });
 
 document.addEventListener("pointercancel", event => {
-    if (activeSaveCardDrag && event.pointerId === activeSaveCardDrag.pointerId) {
+    if (
+        activeSaveCardDrag &&
+        activeSaveCardDrag.pointerId !== null &&
+        event.pointerId === activeSaveCardDrag.pointerId
+    ) {
+        finishSaveCardDrag(true);
+    }
+});
+
+document.addEventListener("touchmove", event => {
+    if (pendingSaveCardTouch) {
+        const touch = Array.from(event.changedTouches).find(item => item.identifier === pendingSaveCardTouch.touchId);
+        if (touch) {
+            pendingSaveCardTouch.clientX = touch.clientX;
+            pendingSaveCardTouch.clientY = touch.clientY;
+            if (Math.hypot(
+                touch.clientX - pendingSaveCardTouch.startX,
+                touch.clientY - pendingSaveCardTouch.startY
+            ) > 8) {
+                cancelPendingSaveCardTouch();
+            }
+        }
+        return;
+    }
+
+    if (!activeSaveCardDrag || activeSaveCardDrag.touchId === null) return;
+    const touch = Array.from(event.changedTouches).find(item => item.identifier === activeSaveCardDrag.touchId);
+    if (!touch) return;
+    event.preventDefault();
+    moveSaveCardDrag(touch.clientX, touch.clientY);
+}, { passive: false });
+
+document.addEventListener("touchend", event => {
+    if (pendingSaveCardTouch) {
+        const ended = Array.from(event.changedTouches).some(item => item.identifier === pendingSaveCardTouch.touchId);
+        if (ended) cancelPendingSaveCardTouch();
+    }
+    if (
+        activeSaveCardDrag &&
+        activeSaveCardDrag.touchId !== null &&
+        Array.from(event.changedTouches).some(item => item.identifier === activeSaveCardDrag.touchId)
+    ) {
+        finishSaveCardDrag();
+    }
+});
+
+document.addEventListener("touchcancel", event => {
+    if (pendingSaveCardTouch) {
+        const cancelled = Array.from(event.changedTouches).some(item => item.identifier === pendingSaveCardTouch.touchId);
+        if (cancelled) cancelPendingSaveCardTouch();
+    }
+    if (
+        activeSaveCardDrag &&
+        activeSaveCardDrag.touchId !== null &&
+        Array.from(event.changedTouches).some(item => item.identifier === activeSaveCardDrag.touchId)
+    ) {
         finishSaveCardDrag(true);
     }
 });
@@ -1297,43 +1395,47 @@ function renderSaveCards() {
     for (const [saveIndex, save] of saves.entries()) {
         const card = document.createElement("article");
         card.className = "save-card";
-        card.setAttribute("aria-label", `Saved game: ${save.title || "Sudoku game"}. Drag anywhere on the card to reorder.`);
+        card.setAttribute("aria-label", `Saved game: ${save.title || "Sudoku game"}. Long-press anywhere on the card to reorder.`);
         card.addEventListener("pointerdown", event => {
             if (
+                event.pointerType === "touch" ||
                 event.button !== 0 ||
                 activeSaveCardDrag ||
                 !saveManager ||
                 event.target.closest("button, a, input, select, textarea, [contenteditable='true']")
             ) return;
             event.preventDefault();
-            const rect = card.getBoundingClientRect();
-            const placeholder = document.createElement("div");
-            placeholder.className = "save-card-placeholder";
-            placeholder.setAttribute("aria-hidden", "true");
-            placeholder.style.height = `${rect.height}px`;
-            card.before(placeholder);
-            activeSaveCardDrag = {
-                card,
-                captureTarget: card,
-                list,
-                placeholder,
-                saveId: save.id,
-                originalIndex: saveIndex,
-                pointerId: event.pointerId,
-                startX: event.clientX,
-                startY: event.clientY,
-                offsetX: event.clientX - rect.left,
-                offsetY: event.clientY - rect.top,
-                moved: false
-            };
-            card.style.position = "fixed";
-            card.style.left = `${rect.left}px`;
-            card.style.top = `${rect.top}px`;
-            card.style.width = `${rect.width}px`;
-            card.style.zIndex = "5010";
-            card.style.pointerEvents = "none";
-            card.setPointerCapture(event.pointerId);
+            startSaveCardDrag(card, list, save, saveIndex, event.clientX, event.clientY, event.pointerId);
         });
+        card.addEventListener("touchstart", event => {
+            if (
+                activeSaveCardDrag ||
+                pendingSaveCardTouch ||
+                !saveManager ||
+                event.target.closest("button, a, input, select, textarea, [contenteditable='true']")
+            ) return;
+            const touch = event.changedTouches[0];
+            if (!touch) return;
+            const pending = {
+                card,
+                list,
+                save,
+                saveIndex,
+                touchId: touch.identifier,
+                startX: touch.clientX,
+                startY: touch.clientY,
+                clientX: touch.clientX,
+                clientY: touch.clientY,
+                timer: null
+            };
+            pending.timer = setTimeout(() => {
+                if (pendingSaveCardTouch !== pending) return;
+                pendingSaveCardTouch = null;
+                startSaveCardDrag(card, list, save, saveIndex, pending.clientX, pending.clientY);
+                activeSaveCardDrag.touchId = pending.touchId;
+            }, 400);
+            pendingSaveCardTouch = pending;
+        }, { passive: true });
         const info = document.createElement("div");
         info.className = "save-card-info";
         const titleRow = document.createElement("div");
@@ -1816,7 +1918,6 @@ let elapsedMs = 0;
 let startTime = 0;
 let timerId = null;
 let timerPaused = false;
-let hintCooldownCounter = 0;
 
 function startTimer() {
     clearInterval(timerId);
@@ -1826,37 +1927,32 @@ function startTimer() {
     timerId = setInterval(() => {
         elapsedMs = Date.now() - startTime;
 
-        winTime.textContent = formatTime(Math.floor(elapsedMs / 1000));
-        pauseTime.textContent = formatTime(Math.floor(elapsedMs / 1000));
-        continueTime.textContent = formatTime(Math.floor(elapsedMs / 1000));
-        timerEl.textContent = formatTime(Math.floor(elapsedMs / 1000));
+        const formattedTime = formatTime(Math.floor(elapsedMs / 1000));
+        winTime.textContent = formattedTime;
+        pauseTime.textContent = formattedTime;
+        continueTime.textContent = formattedTime;
+        timerEl.textContent = formattedTime;
+
         if (hintcounter == settings.hints.hintlimit.limit && !hintlimitreached) {
-            hintlimitreached = true
-            updateHintCooldownDisplay();
+            hintlimitreached = true;
         }
-        updateHintCooldownDisplay();
-        hintCooldownCounter++;
 
-        if (hintCooldownCounter >= 10) {
-            hintCooldownCounter = 0;
+        if (
+            settings.hints.cooldown.enabled &&
+            settings.hints.cooldown.cooldowntype === "time" &&
+            cooldowntime > 0
+        ) {
+            cooldowntime--;
 
-            if (
-                settings.hints.cooldown.enabled &&
-                settings.hints.cooldown.cooldowntype === "time" &&
-                cooldowntime > 0
-            ) {
-                cooldowntime--;
-
-                if (cooldowntime === 0 && !hintlimitreached) {
-                    hintcount = settings.hints.cooldown.hintsaftercooldown;
-                } else {
-                    hintcount = 0
-                }
-
-                updateHintCooldownDisplay();
+            if (cooldowntime === 0 && !hintlimitreached) {
+                hintcount = settings.hints.cooldown.hintsaftercooldown;
+            } else {
+                hintcount = 0;
             }
         }
-    }, 100);
+
+        updateHintCooldownDisplay();
+    }, 1000);
 }
 
 function pauseTimer() {
@@ -1868,7 +1964,6 @@ function pauseTimer() {
 
         elapsedMs = Date.now() - startTime;
 
-        pauseBtn.innerHTML = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor"><path d="M4 2C2.9 2 2 2.9 2 4V20C2 21.1 2.9 22 4 22C4.3 22 4.6 21.93 4.87 21.79L21.2 13.25C22.27 12.69 22.27 11.31 21.2 10.75L4.87 2.21C4.6 2.07 4.3 2 4 2Z"></path></svg>';
         pauseBtn2.innerHTML = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor"><path d="M4 2C2.9 2 2 2.9 2 4V20C2 21.1 2.9 22 4 22C4.3 22 4.6 21.93 4.87 21.79L21.2 13.25C22.27 12.69 22.27 11.31 21.2 10.75L4.87 2.21C4.6 2.07 4.3 2 4 2Z"></path></svg>';
         document.title = "Ceedoku - Paused";
 
@@ -1882,7 +1977,6 @@ function pauseTimer() {
 
         startTimer();
 
-        pauseBtn.innerHTML = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor"><path d="M2 4C2 2.9 2.9 2 4 2H8C9.1 2 10 2.9 10 4V20C10 21.1 9.1 22 8 22H4C2.9 22 2 21.1 2 20Z"/><path d="M14 4C14 2.9 14.9 2 16 2H20C21.1 2 22 2.9 22 4V20C22 21.1 21.1 22 20 22H16C14.9 22 14 21.1 14 20Z"/></svg>';
         pauseBtn2.innerHTML = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor"><path d="M2 4C2 2.9 2.9 2 4 2H8C9.1 2 10 2.9 10 4V20C10 21.1 9.1 22 8 22H4C2.9 22 2 21.1 2 20Z"/><path d="M14 4C14 2.9 14.9 2 16 2H20C21.1 2 22 2.9 22 4V20C22 21.1 21.1 22 20 22H16C14.9 22 14 21.1 14 20Z"/></svg>';
         document.title = `Ceedoku - ${getDifficultyLabel()}`
         hidepausescreen()
@@ -1899,7 +1993,6 @@ function lostfocuspause() {
 
             elapsedMs = Date.now() - startTime;
 
-            pauseBtn.innerHTML = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor"><path d="M2 4C2 2.9 2.9 2 4 2H8C9.1 2 10 2.9 10 4V20C10 21.1 9.1 22 8 22H4C2.9 22 2 21.1 2 20Z"/><path d="M14 4C14 2.9 14.9 2 16 2H20C21.1 2 22 2.9 22 4V20C22 21.1 21.1 22 20 22H16C14.9 22 14 21.1 14 20Z"/></svg>';
             pauseBtn2.innerHTML = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor"><path d="M2 4C2 2.9 2.9 2 4 2H8C9.1 2 10 2.9 10 4V20C10 21.1 9.1 22 8 22H4C2.9 22 2 21.1 2 20Z"/><path d="M14 4C14 2.9 14.9 2 16 2H20C21.1 2 22 2.9 22 4V20C22 21.1 21.1 22 20 22H16C14.9 22 14 21.1 14 20Z"/></svg>';
             document.title = "Ceedoku - Paused";
             showPauseScreen()
@@ -1917,8 +2010,6 @@ function winpauseTimer() {
 
         elapsedMs = Date.now() - startTime;
 
-        pauseBtn.innerHTML = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor"><path d="M4 2C2.9 2 2 2.9 2 4V20C2 21.1 2.9 22 4 22C4.3 22 4.6 21.93 4.87 21.79L21.2 13.25C22.27 12.69 22.27 11.31 21.2 10.75L4.87 2.21C4.6 2.07 4.3 2 4 2Z"></path></svg>';
-        pauseBtn.innerHTML = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor"><path d="M4 2C2.9 2 2 2.9 2 4V20C2 21.1 2.9 22 4 22C4.3 22 4.6 21.93 4.87 21.79L21.2 13.25C22.27 12.69 22.27 11.31 21.2 10.75L4.87 2.21C4.6 2.07 4.3 2 4 2Z"></path></svg>';
         document.title = "Ceedoku - Paused";
     }
 };
@@ -1930,7 +2021,6 @@ function resumeTimer() {
 
     startTimer();
 
-    pauseBtn.innerHTML = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor"><path d="M2 4C2 2.9 2.9 2 4 2H8C9.1 2 10 2.9 10 4V20C10 21.1 9.1 22 8 22H4C2.9 22 2 21.1 2 20Z"/><path d="M14 4C14 2.9 14.9 2 16 2H20C21.1 2 22 2.9 22 4V20C22 21.1 21.1 22 20 22H16C14.9 22 14 21.1 14 20Z"/></svg>';
     pauseBtn2.innerHTML = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor"><path d="M2 4C2 2.9 2.9 2 4 2H8C9.1 2 10 2.9 10 4V20C10 21.1 9.1 22 8 22H4C2.9 22 2 21.1 2 20Z"/><path d="M14 4C14 2.9 14.9 2 16 2H20C21.1 2 22 2.9 22 4V20C22 21.1 21.1 22 20 22H16C14.9 22 14 21.1 14 20Z"/></svg>';
     document.title = `Ceedoku - ${getDifficultyLabel()}`
     hidepausescreen()
@@ -2159,7 +2249,10 @@ function paintBoard() {
         for (const child of [...cell.childNodes]) {
             if (
                 child.nodeType === Node.ELEMENT_NODE &&
-                child.classList.contains("complete-effect")
+                (
+                    child.classList.contains("complete-effect") ||
+                    child.classList.contains("complete-number")
+                )
             ) {
                 continue;
             }
@@ -2360,7 +2453,15 @@ function hideimportexportgame() {
 const exportnamemenu = document.getElementById("namefileOverlay")
 const exportnamemenuinput = document.getElementById("savenameinput")
 const exportnameinput = exportnamemenuinput
+function updateExportNameButtonState() {
+    const hasFilename = exportnamemenuinput.value.trim().length > 0;
+    const button = document.getElementById("savenamebutton");
+    button.classList.toggle("disabled", !hasFilename);
+    button.disabled = !hasFilename;
+}
+
 function showexportnamemenu() {
+    updateExportNameButtonState();
 	exportnamemenu.hidden = false;
 	requestAnimationFrame(() => {
         exportnamemenu.classList.add("show");
@@ -2370,7 +2471,8 @@ function showexportnamemenu() {
 function hideexportnamemenu() {
 	exportnamemenu.hidden = true;
 	exportnamemenu.classList.remove("show");
-	exportnameinput.value = ""
+	exportnameinput.value = "";
+    updateExportNameButtonState();
 }
 function showimportexportmenu() {
 	importexportOverlay.hidden = false;
@@ -2383,7 +2485,7 @@ function hidedeleteGame() {
 }
 
 function hidemainmenu() {
-    document.getElementById("mainmenubutton").style.display = ""
+    document.getElementById("mainmenubutton").style.display = viewingCompletedSave && finished ? "none" : ""
     mainmenu.classList.remove("show");
     mainmenu.inert = true
 
@@ -2820,7 +2922,6 @@ function starthintcooldown() {
 
         if (settings.hints.cooldown.cooldowntype === "time") {
             cooldowntime = settings.hints.cooldown.cooldowntime;
-            hintCooldownCounter = 0;
             updateHintCooldownDisplay();
         }
     } else {
@@ -2831,7 +2932,6 @@ function starthintcooldown() {
 
             if (cooldowntypetouse === "time") {
                 cooldowntime = savecooldowntime;
-                hintCooldownCounter = 0;
                 updateHintCooldownDisplay();
             }
         } else {
@@ -2841,7 +2941,6 @@ function starthintcooldown() {
 
             if (settings.hints.cooldown.cooldowntype === "time") {
                 cooldowntime = settings.hints.cooldown.cooldowntime;
-                hintCooldownCounter = 0;
                 updateHintCooldownDisplay();
             }
         }
@@ -3006,11 +3105,10 @@ function animateIndexes(indexes, origin, kind) {
 
                 distancesPlayed.add(distance);
 
-                setTimeout(() => {
-                    playPop(
-                        Math.min(1 + distance * 0.5)
-                    );
-                }, distance * 60);
+                playPop(
+                    1 + distance * 0.5,
+                    distance * 0.06
+                );
             }
         }
 
@@ -3043,14 +3141,25 @@ function animateIndexes(indexes, origin, kind) {
             // Effect goes first.
             cell.appendChild(effect);
 
-            // Create a new number on top of the effect.
+            // Keep the existing cell number, but hide its original text while
+            // the correctly aligned overlay is shown above the animated square.
+            cell.classList.add("completion-number-hidden");
+
             const number = document.createElement("p");
-
+            number.className = "complete-number";
             number.textContent = values[index];
-
-            number.style.margin = "0px";
             number.style.position = "absolute";
+            number.style.inset = "0";
+            number.style.display = "grid";
+            number.style.placeItems = "center";
+            number.style.width = "100%";
+            number.style.height = "100%";
+            number.style.margin = "0";
+            number.style.padding = "0";
+            number.style.font = "inherit";
+            number.style.lineHeight = "inherit";
             number.style.zIndex = "2";
+            number.style.pointerEvents = "none";
 
             // Given cells get the heavier font weight.
             if (givens[index]) {
@@ -3059,42 +3168,50 @@ function animateIndexes(indexes, origin, kind) {
 
             // Match the cell's current state.
             if (cell.classList.contains("error")) {
-
                 number.style.color = "var(--danger)";
-
             } else if (cell.classList.contains("correct")) {
-
                 number.style.color = "var(--lime-text)";
-
             } else {
-
                 number.style.color = "var(--text)";
             }
 
-            // Number goes after the effect.
             cell.appendChild(number);
 
-            effect.addEventListener(
-                "animationend",
-                (e) => {
-
-                    // Remove the effect after fading.
-                    if (
-                        e.animationName !==
-                        "rippleFade"
-                    ) {
-                        return;
-                    }
-
-                    effect.remove();
-                    number.remove();
+            let cleanedUp = false;
+            const cleanup = () => {
+                if (cleanedUp) return;
+                cleanedUp = true;
+                clearTimeout(cleanupTimeout);
+                effect.remove();
+                number.remove();
+                if (!cell.querySelector(".complete-effect")) {
+                    cell.classList.remove("completion-number-hidden");
                 }
+            };
+
+            effect.addEventListener("animationend", (event) => {
+                if (
+                    event.animationName === "rippleFade" ||
+                    event.animationName === "boxGrow2"
+                ) {
+                    cleanup();
+                }
+            });
+
+            effect.addEventListener("animationcancel", cleanup);
+
+            // Safari can occasionally omit animationend/animationcancel.
+            const cleanupTimeout = setTimeout(
+                cleanup,
+                Math.max(
+                    distance * 60 + 500,
+                    fadeDelay + 350
+                ) + 100
             );
         }
     });
 }
 const allIndexes = [...Array(81).keys()];
-animateIndexes(allIndexes, selected, "board");
 
 function animateNewCompletions(previous, origin) {
     const next = getCompletedUnits();
@@ -3122,33 +3239,38 @@ function playBoardRipple() {
             if (!distancesPlayed.has(distance)) {
                 distancesPlayed.add(distance);
 
-                setTimeout(() => {
-                    playPop(Math.min(1 + distance * 0.25));
-                }, distance * 60);
+                playPop(
+                    1 + distance * 0.25,
+                    distance * 0.06
+                );
             }
         }
 
         // Animation
         if (settings.VFX.enabled && settings.VFX.completion) {
 
-            cell.classList.remove("complete-sweep", "board");
+            cell.classList.remove("complete-sweep");
 
             cell.style.setProperty(
                 "--sweep-delay",
                 `${distance * 60}ms`
             );
+            cell.style.setProperty("--fade-delay", "1000ms");
 
             requestAnimationFrame(() => {
-                cell.classList.add("complete-sweep", "board");
+                cell.classList.add("complete-sweep");
             });
 
+            // Keep the pseudo-element mounted until its 350ms fade finishes.
             setTimeout(() => {
-                cell.classList.remove("complete-sweep", "board");
+                cell.classList.remove("complete-sweep");
                 cell.style.removeProperty("--sweep-delay");
-            }, 1000 + distance * 60);
+                cell.style.removeProperty("--fade-delay");
+            }, 1450 + distance * 60);
         }
     });
 }
+
 document.addEventListener("pointerup", () => {
     updateHintCooldownDisplay();
 });
@@ -3188,7 +3310,6 @@ function checkWin() {
     if (finished) return;
 
     if (values.every((value, index) => value === solution[index])) {
-        popSound.playbackRate = 2;
         pauseBtn2.style.display = "none"
         runninggame = false
         finished = true;
@@ -3510,7 +3631,6 @@ function continueGame() {
     const completedSave = viewingCompletedSave && finished;
     runninggame = !completedSave;
     hidemainmenu();
-    pauseBtn.innerHTML = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor"><path d="M2 4C2 2.9 2.9 2 4 2H8C9.1 2 10 2.9 10 4V20C10 21.1 9.1 22 8 22H4C2.9 22 2 21.1 2 20Z"/><path d="M14 4C14 2.9 14.9 2 16 2H20C21.1 2 22 2.9 22 4V20C22 21.1 21.1 22 20 22H16C14.9 22 14 21.1 14 20Z"/></svg>';
     pauseBtn2.innerHTML = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor"><path d="M2 4C2 2.9 2.9 2 4 2H8C9.1 2 10 2.9 10 4V20C10 21.1 9.1 22 8 22H4C2.9 22 2 21.1 2 20Z"/><path d="M14 4C14 2.9 14.9 2 16 2H20C21.1 2 22 2.9 22 4V20C22 21.1 21.1 22 20 22H16C14.9 22 14 21.1 14 20Z"/></svg>';
 	document.title = `Ceedoku - ${getDifficultyLabel()}`;
     difficultyBadge.textContent = getDifficultyLabel();
@@ -3573,7 +3693,7 @@ async function newGame(
     difficulty = nextDifficulty;
     customDifficulty = difficulty === "custom" && customOptions
         ? {
-            holes: Math.max(1, Math.min(64, Math.trunc(Number(customOptions.holes) || 1))),
+            holes: Math.max(1, Math.min(55, Math.trunc(Number(customOptions.holes) || 1))),
             toolsEnabled: customOptions.toolsEnabled !== false
         }
         : null;
@@ -3592,8 +3712,7 @@ async function newGame(
     updateHintCooldownDisplay();
 
     if (window.matchMedia("(orientation: landscape)").matches) {
-        let scaleValue = difficulty === "impossible" ? "1.2" : "1.3";
-        document.querySelectorAll(".win-stat").forEach(el => el.style.scale = scaleValue);
+        document.querySelectorAll(".win-stat-scaled").forEach(el => el.style.setProperty("--win-stat-size", "1.2"));
     }
 
     const built = await makePuzzle(customDifficulty ? customDifficulty.holes : DIFFICULTIES[difficulty].holes);
@@ -3644,7 +3763,6 @@ async function newGame(
     winTime.textContent = "00:00";
     pauseTime.textContent = "00:00";
     continueTime.textContent = "00:00"
-    pauseBtn.innerHTML = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor"><path d="M2 4C2 2.9 2.9 2 4 2H8C9.1 2 10 2.9 10 4V20C10 21.1 9.1 22 8 22H4C2.9 22 2 21.1 2 20Z"/><path d="M14 4C14 2.9 14.9 2 16 2H20C21.1 2 22 2.9 22 4V20C22 21.1 21.1 22 20 22H16C14.9 22 14 21.1 14 20Z"/></svg>';
     pauseBtn2.innerHTML = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor"><path d="M2 4C2 2.9 2.9 2 4 2H8C9.1 2 10 2.9 10 4V20C10 21.1 9.1 22 8 22H4C2.9 22 2 21.1 2 20Z"/><path d="M14 4C14 2.9 14.9 2 16 2H20C21.1 2 22 2.9 22 4V20C22 21.1 21.1 22 20 22H16C14.9 22 14 21.1 14 20Z"/></svg>';
     title.textContent = "Ceedoku"
     hidewinscreen();
@@ -3659,6 +3777,94 @@ async function newGame(
     testhistorybuttons();
 }
 
+
+function fitWinStatText() {
+    document.querySelectorAll(".win-stat-scaled").forEach(panel => {
+        const heading = panel.querySelector(":scope > h2");
+        const container = panel.parentElement;
+        if (!heading || !container || !container.clientWidth) return;
+
+        // Measure the panel at its natural 1.2x size before applying any limit.
+        panel.style.width = "max-content";
+        panel.style.maxWidth = "none";
+        heading.style.width = "max-content";
+        heading.style.maxWidth = "none";
+        heading.style.fontSize = "";
+        const naturalWidth = panel.getBoundingClientRect().width;
+
+        // The stats panel must fit its actual parent, not just the viewport.
+        // This accounts for the win-card's padding on narrow screens.
+        const availableWidth = Math.min(
+            container.clientWidth,
+            document.documentElement.clientWidth - 48
+        );
+        if (availableWidth <= 0) return;
+
+        const panelWidth = Math.min(naturalWidth, availableWidth);
+        const panelStyle = getComputedStyle(panel);
+        const horizontalPadding =
+            Number.parseFloat(panelStyle.paddingLeft) +
+            Number.parseFloat(panelStyle.paddingRight);
+        const headingWidth = Math.max(0, panelWidth - horizontalPadding);
+
+        // Give the panel and heading explicit widths so percentage/max-content
+        // intrinsic sizing cannot leave the heading wider than its container.
+        panel.style.width = `${panelWidth}px`;
+        panel.style.maxWidth = `${availableWidth}px`;
+        heading.style.width = `${headingWidth}px`;
+
+        const baseFontSize = Number.parseFloat(getComputedStyle(heading).fontSize);
+        if (!Number.isFinite(baseFontSize) || heading.clientWidth <= 0) return;
+        if (heading.scrollWidth <= heading.clientWidth) return;
+
+        // Keep the panel fixed and find the largest font size that fits one line.
+        let low = 1;
+        let high = baseFontSize;
+
+        for (let i = 0; i < 24; i++) {
+            const fontSize = (low + high) / 2;
+            heading.style.fontSize = `${fontSize}px`;
+
+            if (heading.scrollWidth <= heading.clientWidth) {
+                low = fontSize;
+            } else {
+                high = fontSize;
+            }
+        }
+
+        heading.style.fontSize = `${low}px`;
+    });
+}
+
+// Viewport changes are handled by the window resize listener below.
+// Do not observe panel size: changing the fitted font also changes panel height.
+const winStatTextObserver = new MutationObserver(() => {
+    requestAnimationFrame(fitWinStatText);
+});
+
+document.querySelectorAll(".win-stat-scaled > h2").forEach(heading => {
+    winStatTextObserver.observe(heading, {
+        childList: true,
+        characterData: true,
+        subtree: true
+    });
+});
+
+// Refit when an overlay becomes visible. The win overlay starts hidden,
+// so measuring it only during initial page load returns a zero-width heading.
+const winStatOverlayObserver = new MutationObserver(() => {
+    requestAnimationFrame(fitWinStatText);
+});
+
+document.querySelectorAll(".win-overlay, .win-overlay2").forEach(overlay => {
+    winStatOverlayObserver.observe(overlay, {
+        attributes: true,
+        attributeFilter: ["class", "hidden", "style"]
+    });
+});
+
+window.addEventListener("resize", fitWinStatText);
+requestAnimationFrame(fitWinStatText);
 
 
 renderNumberPad();
@@ -4026,22 +4232,8 @@ const bestTimea = bestTimesa[selectedDifficulty];
 document.getElementById("besttimedisplay").textContent =
     typeof bestTimea === "number" ? formatTime(Math.floor(bestTimea / 1000)) : "**:**";
 renderKeybinds();
-exportnamemenuinput.addEventListener("input", () => {
-    if (exportnamemenuinput.value === "") {
-		document.getElementById("savenamebutton").classList.add("disabled")
-		document.getElementById("savenamebutton").disabled = true
-		return
-	}
-	if (exportnamemenuinput.value != "") {
-		document.getElementById("savenamebutton").classList.remove("disabled")
-		document.getElementById("savenamebutton").disabled = false
-		return
-	}
-});
-if (exportnamemenuinput.value === "") {
-	document.getElementById("savenamebutton").classList.add("disabled")
-	document.getElementById("savenamebutton").disabled = true
-}
+exportnamemenuinput.addEventListener("input", updateExportNameButtonState);
+updateExportNameButtonState();
 exportnamemenuinput.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
         if (!exportnamemenuinput.disabled && exportnamemenuinput.value !== "") {

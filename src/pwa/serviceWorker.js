@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ceedoku-cache-v18';
+const CACHE_NAME = 'ceedoku-cache-v28';
 
 const ASSETS_TO_CACHE = [
     '../../',

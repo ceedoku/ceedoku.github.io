@@ -19,7 +19,7 @@ if (releaseReady) {
 	
 	<!-- Sets the variable that declares the version -->
 	<script>
-		const version = "10.0.4"
+		const version = "10.0.5"
 	</script>
 	<!-- Loads FSJ as it is a dependency -->
 	<!-- https://github.com/ceebug/FSJ -->
@@ -238,10 +238,7 @@ if (releaseReady) {
 							<div class="number-grid" id="numberGrid" aria-label="Number pad"><button title="Use 1" class="number-button" type="button" data-value="1">1</button><button title="Use 2" class="number-button" type="button" data-value="2">2</button><button title="Use 3" class="number-button" type="button" data-value="3">3</button><button title="Use 4" class="number-button" type="button" data-value="4">4</button><button title="Use 5" class="number-button" type="button" data-value="5">5</button><button title="Use 6" class="number-button" type="button" data-value="6">6</button><button title="Use 7" class="number-button" type="button" data-value="7">7</button><button title="Use 8" class="number-button" type="button" data-value="8">8</button><button title="Use 9" class="number-button" type="button" data-value="9">9</button></div>
 						</div>
 					</aside>
-					<div class="foo" style="display:flex;position:absolute;right:20px;top:20px;gap:10px"><button title="Pause the game." class="hint-button bar" aria-label="Pause the game" id="pause-btn" onclick="pauseTimer()" style="justify-self:left;width:50px;height:50px;right:20px;top:20px">
-					<svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor">
-    <path d="M4 2C2.9 2 2 2.9 2 4V20C2 21.1 2.9 22 4 22C4.3 22 4.6 21.93 4.87 21.79L21.2 13.25C22.27 12.69 22.27 11.31 21.2 10.75L4.87 2.21C4.6 2.07 4.3 2 4 2Z"></path>
-</svg></button></div>
+					
 				</main>
 				<div class="win-overlay" id="winOverlay" aria-label="Win Overlay" hidden>
 					<div class="win-card">
@@ -249,8 +246,8 @@ if (releaseReady) {
 						<h1 style="color:var(--text2)" class="win-title">Puzzle Complete!</h1>
 						<div>
 							<div class="win-stats">
-								<div class="win-stat" style="width:fit-content;margin:33px auto;background-color:var(--surface-2);padding:5px 20px;border-radius:5px;scale:1.3;box-shadow:0 0 5px 5px var(--shadow-color2)">
-									<h2 style="text-align:left;width:fit-content;margin:0 auto;margin-top:5px;margin-bottom:10px"><strong style="color:var(--blue)">Difficulty: </strong><span style="color:var(--text3)" id="winDifficulty">Easy</span><strong style="color:var(--blue)"><br>Time: </strong><span class="font-mono" style="color:var(--text3)" id="winTime">00:00</span><strong style="color:var(--blue)"><br>Mistakes: </strong><span style="color:var(--text3)" id="winMistakes">0</span></h2>
+								<div class="win-stat win-stat-scaled" style="width:fit-content;margin:33px auto;background-color:var(--surface-2);">
+									<h2 style="text-align:left"><strong style="color:var(--blue)">Difficulty: </strong><span style="color:var(--text3)" id="winDifficulty">Easy</span><strong style="color:var(--blue)"><br>Time: </strong><span class="font-mono" style="color:var(--text3)" id="winTime">00:00</span><strong style="color:var(--blue)"><br>Mistakes: </strong><span style="color:var(--text3)" id="winMistakes">0</span></h2>
 								</div>
 							</div>
 						</div>
@@ -309,8 +306,8 @@ if (releaseReady) {
 						<h1 style="color:var(--text2)" class="win-title">Puzzle Paused</h1>
 						<div>
 							<div class="win-stats">
-								<div class="win-stat" style="width:fit-content;margin:33px auto;background-color:var(--surface-2);padding:5px 20px;border-radius:5px;scale:1.3;box-shadow:0 0 5px 5px var(--shadow-color2)">
-									<h2 style="text-align:left;width:fit-content;margin:0 auto;margin-top:5px;margin-bottom:10px"><strong style="color:var(--blue)">Difficulty: </strong><span style="color:var(--text3)" id="pauseDifficulty">Easy</span><strong style="color:var(--blue)"><br>Paused at: </strong><span style="color:var(--text3)" id="pauseTime" class="font-mono">00:00</span><strong style="color:var(--blue)"><br>Mistakes: </strong><span style="color:var(--text3)" id="pauseMistakes">0</span></h2>
+								<div class="win-stat win-stat-scaled" style="width:fit-content;margin:33px auto;background-color:var(--surface-2);">
+									<h2 style="text-align:left"><strong style="color:var(--blue)">Difficulty: </strong><span style="color:var(--text3)" id="pauseDifficulty">Easy</span><strong style="color:var(--blue)"><br>Paused at: </strong><span style="color:var(--text3)" id="pauseTime" class="font-mono">00:00</span><strong style="color:var(--blue)"><br>Mistakes: </strong><span style="color:var(--text3)" id="pauseMistakes">0</span></h2>
 								</div>
 							</div>
 						</div><button onclick="resumeTimer()" class="new-main2" style="width:100%;border-top-right-radius:999px;border-bottom-right-radius:999px;margin-bottom:5px">Continue Game</button>
@@ -420,7 +417,7 @@ if (releaseReady) {
 	<div class="win-overlay save-manager-overlay" id="playOverlay" hidden aria-label="Saved games and new game menu">
 		<div class="win-card save-manager-card">
 			<div class="save-manager-heading">
-				<h1 class="win-title">Play</h1>
+				<h1 style="color:var(--text2)" class="win-title">Play</h1>
 				<button class="save-close-button" type="button" aria-label="Close saved games" onclick="hidePlayMenu()">×</button>
 			</div>
 			<div id="saveCardList" class="save-card-list" aria-live="polite"></div>
@@ -487,7 +484,7 @@ if (releaseReady) {
 		<div class="win-card custom-difficulty-card">
 			<h1 id="customDifficultyTitle" class="win-title">Custom difficulty</h1>
 			<label class="custom-holes-label" for="customHolesInput">Number of empty cells <strong id="customHolesValue">36</strong></label>
-			<input id="customHolesInput" class="custom-holes-slider" type="range" min="1" max="64" step="1" value="36">
+			<input id="customHolesInput" class="custom-holes-slider" type="range" min="1" max="55" step="1" value="36">
 			<div class="setting-row custom-tools-row">
 				<strong class="setting-name">Enable tools for this game</strong>
 				<label class="toggle" aria-label="Enable tools for this game">
@@ -506,8 +503,8 @@ if (releaseReady) {
 			<h1 style="color:var(--text2)" class="win-title">Save Game Stats</h1>
 			<div>
 				<div class="win-stats">
-					<div class="win-stat" style="width:fit-content;margin:33px auto;background-color:var(--surface-2);padding:5px 20px;border-radius:5px;scale:1.3;box-shadow:0 0 5px 5px var(--shadow-color2)">
-						<h2 style="text-align:left;width:fit-content;margin:0 auto;margin-top:5px;margin-bottom:10px"><strong style="color:var(--blue)">Difficulty: </strong><span style="color:var(--text3)" id="continueDifficulty">Easy</span><strong style="color:var(--blue)"><br>Stopped at: </strong><span style="color:var(--text3)" id="continueTime" class="font-mono">00:00</span><strong style="color:var(--blue)"><br>Mistakes: </strong><span style="color:var(--text3)" id="continueMistakes">0</span></h2>
+					<div class="win-stat win-stat-scaled" style="width:fit-content;margin:33px auto;background-color:var(--surface-2);">
+						<h2 style="text-align:left"><strong style="color:var(--blue)">Difficulty: </strong><span style="color:var(--text3)" id="continueDifficulty">Easy</span><strong style="color:var(--blue)"><br>Stopped at: </strong><span style="color:var(--text3)" id="continueTime" class="font-mono">00:00</span><strong style="color:var(--blue)"><br>Mistakes: </strong><span style="color:var(--text3)" id="continueMistakes">0</span></h2>
 					</div>
 				</div>
 			</div><button title="Continue your save game." class="new-main2" onclick="continueGame()" style="width:100%;border-top-right-radius:999px;border-bottom-right-radius:999px;margin-bottom:5px">Continue Game</button><button title="Open the save deletion confirmation menu." class="new-main2 delete-button" onclick="showdeleteGame()" style="width:100%;border-top-right-radius:999px;border-bottom-right-radius:999px;margin-bottom:5px;background-color:var(--delete-save)">Delete Save File</button><button title="Cancel continuing your save game." class="number-button cancel-button" onclick="hidecontinuegame()" style="width:100%;border-top-right-radius:999px;border-bottom-right-radius:999px;margin-bottom:5px;font-size:1.02rem;min-height:58px">Cancel</button>
