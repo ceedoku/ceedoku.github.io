@@ -1,3 +1,13 @@
+- ### [10.0.6](https://ceedoku.github.io/changelog/release?v=10.0.6)
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - Touch devices now use pressed states instead of retaining desktop hover effects across the interface.
+  >>> - Save-menu buttons now have clearer pressed styling and improved touch targets.
+  >>> - Long save names no longer overlap the Export buttons in the save export picker.
+  >>> - The export save-naming dialog now appears above the save-selection menu.
+  >>> - The Cancel label in the export filename dialog now fits inside its button.
+  >>> - The New Game button in the save menu keeps its corner radius while pressed on mobile.
+  >>> - The export save picker title using the incorrect text color.
  [10.0.5](https://ceedoku.github.io/changelog/release?v=10.0.5)
   > #### Changes:
   >> ##### Fixed:
