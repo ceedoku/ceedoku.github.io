@@ -1,3 +1,21 @@
+- ### [10.0.5](https://ceedoku.github.io/changelog/release?v=10.0.5)
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - The Sudoku board scaling incorrectly when in portrait mode.
+  >>> - The game information panels overflowing their available space.
+  >>> - Custom games allowing too many empty cells.
+  >>> - The main menu button appearing alongside the Back button when viewing completed saves.
+  >>> - The save menu dropdown remaining open after its parent menu was closed.
+  >>> - The full-board completion animation making cells look wrong.
+  >>> - The full-board completion animation not playing.
+  >>> - Completion sounds causing lag and freezes.
+  >>> - Completion animation cleanup and timing, and incorrect hint cooldown timer intervals.
+  >>> - Mobile save cards interfering with scrolling and dragging.
+  >>> - Save menu buttons retaining hover effects after being tapped on mobile.
+  >>> - The New Game button's corner radius changing while pressed.
+  >>> - The export filename button not correctly reflecting whether a filename was entered.
+  >>> - Inconsistent corner rounding on the Sudoku board.
+  >>> - The Play menu title having a different text colour from other menu titles.
 - ### [10.0.4](https://ceedoku.github.io/changelog/release?v=10.0.4)
   > #### Changes:
   >> ##### Fixed:
