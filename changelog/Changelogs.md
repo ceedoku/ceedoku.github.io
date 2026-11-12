@@ -1,3 +1,11 @@
+- ### [10.0.7](https://ceedoku.github.io/changelog/release?v=10.0.7)
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - Closing Settings while capturing a keybind not cancelling keybind capture or removing focus from the keybind field.
+  >>> - The Edit save title heading having incorrect text colour.
+  >>> - The Edit save title dialog description having incorrect styling.
+  >>> - The Edit save title dialog having an incorrect description.
+  >>> - The Cancel button text in the Edit save title dialog overflowing its button.
 - ### [10.0.6](https://ceedoku.github.io/changelog/release?v=10.0.6)
   > #### Changes:
   >> ##### Fixed:
