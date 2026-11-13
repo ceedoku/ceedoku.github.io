@@ -1,3 +1,11 @@
+- ### [10.0.8](https://ceedoku.github.io/changelog/release?v=10.0.8)
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - Mouse hover styling not being applied on devices that support hover.
+  >>> - The top of buttons in the site controls being cut off.
+  >>> - The Back button not being shown when entering certain save games.
+  >>> - The Main Menu button not being hidden when entering certain save games.
+  >>> - The page title not updating after exiting a save game.
 - ### [10.0.7](https://ceedoku.github.io/changelog/release?v=10.0.7)
   > #### Changes:
   >> ##### Fixed:
