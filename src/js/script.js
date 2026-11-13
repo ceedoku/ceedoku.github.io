@@ -597,6 +597,7 @@ let menuOpen = false;
 let cooldowntypetouse = "just declaring var"
 
 function showmainmenu() {
+    document.title = "Ceedoku";
     printBtn.style.display = "none";
 	disableprint = true
     viewingCompletedSave = false;
@@ -3639,6 +3640,8 @@ function continueGame() {
     updateHintCooldownDisplay();
     const completedSave = viewingCompletedSave && finished;
     runninggame = !completedSave;
+    document.getElementById("mainmenubutton").style.display = completedSave ? "none" : "";
+    completedSaveBack.style.display = completedSave ? "" : "none";
     hidemainmenu();
     pauseBtn2.innerHTML = '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="currentColor"><path d="M2 4C2 2.9 2.9 2 4 2H8C9.1 2 10 2.9 10 4V20C10 21.1 9.1 22 8 22H4C2.9 22 2 21.1 2 20Z"/><path d="M14 4C14 2.9 14.9 2 16 2H20C21.1 2 22 2.9 22 4V20C22 21.1 21.1 22 20 22H16C14.9 22 14 21.1 14 20Z"/></svg>';
 	document.title = `Ceedoku - ${getDifficultyLabel()}`;
@@ -4179,9 +4182,14 @@ function deleteGame() {
 }
 
 const elementstoanimate = document.querySelectorAll(".whatdoievencallthis");
+let lastObservedIsDark = document.body.classList.contains("dark");
 
 const observer = new MutationObserver(() => {
     const isDark = document.body.classList.contains("dark");
+
+    // Ignore body class changes that do not actually change the theme.
+    if (isDark === lastObservedIsDark) return;
+    lastObservedIsDark = isDark;
 
     elementstoanimate.forEach(element => {
         element.animate(

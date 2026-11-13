@@ -19,7 +19,7 @@ if (releaseReady) {
 	
 	<!-- Sets the variable that declares the version -->
 	<script>
-		const version = "10.0.7"
+		const version = "10.0.8"
 	</script>
 	<!-- Loads FSJ as it is a dependency -->
 	<!-- https://github.com/ceebug/FSJ -->
@@ -42,7 +42,7 @@ if (releaseReady) {
 	<!-- loads the main stylesheet -->
 	<link href="./src/css/style.css" rel="stylesheet">
 	<!-- Loads the touch hover patching stylesheet that will be toggled on and of by the script at the bottom of the page depending on if the users input method supports hover or not - this is only needed because CSS IS FUCKING STUPID AND FOR DEVICES THAT DONT SUPPORT HOVER JUST KEEPS HOVER ON UNTIL THEY CLICK SOMEWHERE ELSE, FUCK CSS-->
-	<link href="./src/css/hoverPatch.css" rel="stylesheet" id="touchStyles">
+	<link href="./src/css/hoverPatch.css" rel="stylesheet" id="hoverStyles">
 	<!-- registers the serviceworker on supported devices -->
 	<script>        
 		"serviceWorker" in navigator && navigator.serviceWorker.register("./src/pwa/serviceWorker.js").then(() => console.log("Service Worker Registered")).catch(e => console.log("Service Worker Registration Failed", e))
@@ -364,7 +364,7 @@ if (releaseReady) {
 				<div style="margin-top:5px"><button title="Import and/or export save files." class="new-main2" type="button" id="importexportbutton" onclick="showimportexportmenu()" style="width:100%;border-top-right-radius:999px;border-bottom-right-radius:999px;margin-top:10px">Import/Export Saves</button><button title="Change the settings." class="new-main2" type="button" id="settingsbutton" aria-expanded="false" onclick="opensettingsmenu()" style="width:100%;border-top-right-radius:999px;border-bottom-right-radius:999px;margin-top:10px">Settings</button></div>
 			</div>
 		</div>
-		<div style="z-index:10000;width:fit-content;position:absolute;top:0;right:0;background-color:var(--surface);padding:5px 5px 10px 10px;display:flex;gap:5px;border-bottom-left-radius:32px;border:1px solid var(--outline);border-top:0;border-right:0" id="sitecontrols" aria-label="site controls"><button title="Pause the game." class="hint-button bar" aria-label="Pause the game" id="pause-btn2" onclick="pauseTimer()" style="justify-self:left;width:50px;height:50px;right:20px;top:20px">▶</button><button title="Return to the main menu." class="hint-button bar" aria-label="Return to the main menu" id="completedSaveBack" onclick="showmainmenu()" style="display:none;font-size:22px;width:50px;height:50px!important;padding:10px"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"></path><path d="m12 19-7-7 7-7"></path></svg></button>
+		<div style="z-index:10000;width:fit-content;position:absolute;top:0;right:0;background-color:var(--surface);padding:15px 5px 10px 10px;display:flex;gap:5px;border-bottom-left-radius:32px;border:1px solid var(--outline);border-top:0;border-right:0" id="sitecontrols" aria-label="site controls"><button title="Pause the game." class="hint-button bar" aria-label="Pause the game" id="pause-btn2" onclick="pauseTimer()" style="justify-self:left;width:50px;height:50px;right:20px;top:20px">▶</button><button title="Return to the main menu." class="hint-button bar" aria-label="Return to the main menu" id="completedSaveBack" onclick="showmainmenu()" style="display:none;font-size:22px;width:50px;height:50px!important;padding:10px"><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"></path><path d="m12 19-7-7 7-7"></path></svg></button>
 		<button title="Print the currently active sudoku game." class="hint-button bar" aria-label="Print the currently active sudoku game" id="print" onclick="window.print()" style="font-size:22px;width:50px;height:50px!important">
 <svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
     <path d="M6 8V2H18V8"/>
@@ -604,14 +604,16 @@ if (releaseReady) {
 			<button onclick="window.open('https://github.com/Ceebug/Ceedoku/issues/new?template=bug_report.yml', '_blank')" class="restart-button"><strong>Report Crash</strong></button>
 		</div>
 	</div>
-	<!-- Toggles touch styles depending on if using touch or not -->
+	<!-- Toggles hover styles depending on the active pointer type. -->
 	<script>
-		const touchStyles = document.getElementById("touchStyles");
-		touchStyles.disabled = !window.matchMedia("(hover: none) and (pointer: coarse)").matches, window.addEventListener("pointermove", e => {
-			"mouse" === e.pointerType && (touchStyles.disabled = !0)
-		}), window.addEventListener("pointerdown", e => {
-			"touch" === e.pointerType && (touchStyles.disabled = !1)
-		})
+		const hoverStyles = document.getElementById("hoverStyles");
+		hoverStyles.disabled = !window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+		window.addEventListener("pointermove", e => {
+			if (e.pointerType === "mouse") hoverStyles.disabled = false;
+		});
+		window.addEventListener("pointerdown", e => {
+			if (e.pointerType === "touch") hoverStyles.disabled = true;
+		});
 	</script>
 	<!-- Sets the version and the link for the version thingo -->
 	<script>
