@@ -1,3 +1,7 @@
+- ### [10.0.9](https://ceedoku.github.io/changelog/release?v=10.0.9)
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - The site controls having too much spacing at the top
 - ### [10.0.8](https://ceedoku.github.io/changelog/release?v=10.0.8)
   > #### Changes:
   >> ##### Fixed:
