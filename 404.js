@@ -1,3 +1,10 @@
+// Show the URL that led to this 404 page.
+
+const requestedUrl = document.getElementById("requested-url");
+
+if (requestedUrl) {
+    requestedUrl.textContent = window.location.href;
+}
 
 // go home button
 
