@@ -1,3 +1,7 @@
+- ### [10.0.10](https://ceedoku.github.io/changelog/release?v=10.0.10)
+  > #### Changes:
+  >> ##### Fixed:
+  >>> - PWA not loading correctly
 - ### [10.0.9](https://ceedoku.github.io/changelog/release?v=10.0.9)
   > #### Changes:
   >> ##### Fixed:
